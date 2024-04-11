@@ -4,8 +4,13 @@ const PORT = 3000
 
 const app = express();
 
-app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../../dist/bundle.js'));
-});
+// serve static files from the build file
+app.use(express.static('build'));
 
-app.listen(PORT, () => console.log(`Server listening on ${3000}`));
+// app.get('/', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, '../../dist/bundle.js'));
+// });
+
+app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
+
+module.exports = app;
