@@ -1,13 +1,14 @@
-console.log("Hello World!");
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import TestComponent from './components/test.jsx';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App.jsx';
 
-const domNode = document.getElementById('root');
-const root = createRoot(domNode);
+const root = createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <TestComponent />
+    <BrowserRouter> 
+        <App/> 
+    </BrowserRouter>
   </React.StrictMode>
 );
