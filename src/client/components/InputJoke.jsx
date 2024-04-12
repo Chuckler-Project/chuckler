@@ -4,6 +4,7 @@ import React, { useState } from "react";
 
 export default function InputJoke() {
     const [joke, setJoke] = useState('')
+    const [user, setUser] = useState('paloma');
 
 
     const handleInputChange = (e) => {
@@ -16,6 +17,13 @@ export default function InputJoke() {
     async function submit() {
         //Make a post req to store the joke + user to the db
         console.log('Store the joke in db', joke)
+        try {
+            await fetch('/api/joke', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user: user, content: joke })
+            })
+        } catch (err) { console.error('Error occured trying to post joke', err) };
 
     }
     
