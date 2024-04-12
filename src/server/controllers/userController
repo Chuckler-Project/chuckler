@@ -4,7 +4,7 @@ const userController = {};
 
 userController.createUser = async (req, res, next) => {
   try {
-    const username = 'will';
+    const username = 'paloma';
 
     const response = await sql`INSERT INTO users (username) VALUES (${username})`;
 
