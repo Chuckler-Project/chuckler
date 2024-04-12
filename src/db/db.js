@@ -1,12 +1,7 @@
-const { Pool } = require('pg');
+require('dotenv').config();
+const postgres = require('postgres');
 
-const DB_URL = process.env.DATABASE_URL;
+const connectionString = process.env.DATABASE_URL;
+const sql = postgres(connectionString);
 
-const pool = new Pool({ connectionString: DB_URL });
-
-module.exports = {
-  query: (text, params, callback) => {
-    console.log('executed query', text);
-    return pool.query(text, params, callback);
-  },
-};
+module.exports = sql;

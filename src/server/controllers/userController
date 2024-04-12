@@ -1,16 +1,14 @@
-const db = require('../../db/db');
+const sql = require('../../db/db');
 
 const userController = {};
 
 userController.createUser = async (req, res, next) => {
   try {
     const username = 'will';
-    
-    const text = 'INSERT INTO  users (username) VALUES ($1)';
 
-    const params = username;
+    const response = await sql`INSERT INTO users (username) VALUES (${username})`;
 
-    await db.query(text, params);
+    console.log(response);
 
     return next();
 
