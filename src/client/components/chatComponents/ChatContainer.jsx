@@ -15,8 +15,8 @@ const ChatContainer = () => {
 
   return (
     <div>
-      <SentMessages usersData={usersData} socket={socket}></SentMessages>
-      <TypeMessages usersData={usersData} socket={socket}></TypeMessages>
+      <SentMessages usersData={usersData} socket={socket} />
+      <TypeMessages usersData={usersData} socket={socket} />
     </div>
 
   );
