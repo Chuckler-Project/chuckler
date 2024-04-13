@@ -1,8 +1,9 @@
 const express = require('express');
+require('dotenv').config();
 const jokeRouter = require('./routes/jokeRouter');
 const userRouter = require('./routes/userRouter');
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 const app = express();
 

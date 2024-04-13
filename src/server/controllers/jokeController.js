@@ -15,10 +15,11 @@ jokeController.getJoke = async (req, res, next) => {
     if (userIdResult.length === 0) return next({ log: `No user named ${user} found`, message: 'An error occured looking up this user'});
     const userId = userIdResult[0].id;
     // retrieve joke
-    const jokeResponse = await sql`SELECT content FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
+    const jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
     // handle joke retrieval error
     if (jokeResponse.length === 0) return next({ log: `No joke found`, message: 'An error occured getting a joke'});
-    res.locals.joke = jokeResponse[0].content;
+    res.locals.joke = jokeResponse[0];
+    console.log(res.locals.joke);
     return next();
   } catch (err) { 
     next({
