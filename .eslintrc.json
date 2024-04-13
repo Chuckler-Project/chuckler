@@ -1,15 +1,36 @@
 {
-    "root": true,
-    "extends": [
-        "airbnb-base",
-        "eslint:recommended",
-        "plugin:import/errors",
-        "plugin:react/recommended",
-        "plugin:jsx-a11y/recommended"
-    ],
-    "plugins": ["react", "import", "jsx-a11y"],
-    "env": {
-      "browser": true,
-      "node": true
+  "root": true,
+  "extends": [
+    "airbnb",
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "plugins": [
+    "react",
+    "import",
+    "jsx-a11y"
+  ],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2015,
+    "ecmaFeatures": {
+      "jsx": true
     }
+  },
+  "rules": {
+    "arrow-body-style": ["error", "always"],
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ]
+  }
 }
