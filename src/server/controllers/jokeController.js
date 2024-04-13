@@ -50,4 +50,31 @@ jokeController.postJoke = async (req, res, next) => {
     }
 }
 
+// like a joke in the database
+jokeController.likeJoke = async (req, res, next) => {
+  try {
+    // get stored ids from front end, eliminate request for user id
+    // const { userId, jokeId } = req.body;
+    // temporary hard-coded user
+    const user = 'paloma'
+    // use once front-end sends user
+    // const { user } = req.body.user;
+    // retrieve the user's id
+    const userIdResult = await sql`SELECT id FROM users WHERE username=${user}`;
+    // handle id retrieval error
+    if (userIdResult.length === 0) return next({ log: `No user named ${user} found`, message: 'An error occured looking up this user'});
+    const userId = userIdResult[0].id;
+    // add userId to joke's liked_by array
+    const likeJokeResponse = await sql`INSERT INTO jokes (liked_by)`
+    console.log(`User ${user} liked joke ${jokeId}`)
+  } catch (err) {
+    next({
+      log: `Error in likeJoke middleware: ${err}`,
+      message: `Error liking joke: ${err}`
+    })
+  }  
+
+
+}
+
 module.exports = jokeController;
