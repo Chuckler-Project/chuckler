@@ -66,7 +66,8 @@ jokeController.likeJoke = async (req, res, next) => {
     // if (userIdResult.length === 0) return next({ log: `No user named ${user} found`, message: 'An error occured looking up this user'});
     // const userId = userIdResult[0].id;
     // add userId to joke's liked_by array
-    const likeJokeResponse = await sql`UPDATE jokes SET liked_by=ARRAY_APPEND(liked_by, ${userId}) WHERE id=${jokeId}`;
+    await sql`UPDATE jokes SET liked_by=ARRAY_APPEND(liked_by, ${userId}) WHERE id=${jokeId}`;
+    await sql`UPDATE users SET jokes_liked=ARRAY_APPEND(jokes_liked, ${jokeId}) WHERE id=${userId}`;
     res.locals.likeMessage = `User ${userId} liked joke ${jokeId}`;
     console.log(res.locals.likeMessage);
     return next();
