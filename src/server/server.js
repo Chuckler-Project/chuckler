@@ -16,17 +16,19 @@ app.use(express.static('build'));
 app.use('/api/user', userRouter);
 app.use('/api/joke', jokeRouter);
 
+// catch-all route handler
 app.use((req, res) => { res.status(404).send('!!Page not found!!'); });
 
-app.use((err, req, res) => {
+// global error handler
+app.use((err, req, res, next) => {
   const defaultErr = {
-    log: 'Server error handler caught unknow middleware error',
+    log: 'Express error handler caught unknown middleware error',
     status: 500,
-    message: { err: 'A server error occurred' },
+    message: { err: 'An error occurred' },
   };
-  const errorObj = Object.assign(defaultErr, err);
+  const errorObj = Object.assign({}, defaultErr, err);
   console.log(errorObj.log);
-  res.status(errorObj.status).json(errorObj.message);
+  return res.status(errorObj.status).json(errorObj.message);
 });
 
 app.listen(PORT, () => { console.log(`Server listening on ${PORT}`); });
