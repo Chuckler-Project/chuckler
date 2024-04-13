@@ -4,6 +4,8 @@ import TestComponent from "../components/test.jsx";
 import Main from "../pages/Main.jsx";
 import Joke from "../components/Joke.jsx";
 import LandingPage from "../pages/LandingPage.jsx";
+import Login from "../pages/Login.jsx";
+import Signup from "../pages/Signup.jsx";
 
 
 
@@ -14,6 +16,8 @@ export default function Router () {
             <Route path="/main"  element={<Main/>}/> 
             <Route path="/main"  element={<Joke/>}/> 
             <Route path="/"  element={<LandingPage/>}/> 
+            <Route path="/login"  element={<Login />}/>
+            <Route path="/signup"  element={<Signup />}/>
 
         </Routes>
     ); 

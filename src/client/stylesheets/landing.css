@@ -1,0 +1,77 @@
+/* FIND A GOOGLEFONT */
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+
+.chuckler-container {
+    background-image: url('../images/cover.png') ;
+    background-size: cover; 
+    background-repeat: no-repeat;
+    background-position: center;
+    font-family: 'Varela Round';
+}
+   
+.chuckler-container button {
+    background-color: #43c0ea;
+    width: 20%;
+    height: 60px;
+    border-radius: 50px;
+    color: white;
+    text-shadow: 1px 1px black;
+    cursor: pointer;
+}
+.chuckler-container button:hover {
+    background-color: #35c7f8;
+}
+
+.btn-login {
+    margin-top: 20px;
+    background-color: #43c0ea;
+    width: 12%;
+    height: 50px;
+    border-radius: 50px;
+    color: whitesmoke;
+    text-shadow: 1px 1px black;
+    cursor: pointer;
+}
+
+.link-login {
+    color: white;
+    text-decoration: none;
+}
+
+.about {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+
+.header-landing button {
+    width: 10%;
+    height: 40px;
+    margin-right: 20px;
+    margin: 10px;
+
+
+}
+
+.link {
+    text-decoration: none;
+    color: whitesmoke;
+    text-shadow: 1px 1px black;
+    padding: 20px;
+    height: 100%;
+}
+.link:hover {
+    text-decoration: underline;
+
+}
+
+.create {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+} 
