@@ -10,6 +10,7 @@ const ChatContainer = () => {
     receiver: '',
   });
 
+  // create connetion to wss to be used by all child props
   const socket = new WebSocket('ws://localhost:3000');
 
   return (

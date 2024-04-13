@@ -1,5 +1,3 @@
-/* eslint-disable prefer-arrow-callback */
-/* eslint-disable import/no-extraneous-dependencies */
 const WebSocket = require('ws');
 const express = require('express');
 const http = require('http');

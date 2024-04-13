@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const TypeMessages = ({ usersData, socket }) => {
   const [error, setError] = useState('');
   const [messageContent, setMessageContent] = useState('');
-  // const [sender, receiver] = [usersData.sender, usersData.receiver];
+  // const [sender, receiver] = [usersData.sender, usersData.receiver]; // uncomment when defined
 
   const sendMessage = async (e) => {
     e.preventDefault();
