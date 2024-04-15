@@ -1,12 +1,24 @@
 const express = require('express');
+
 require('dotenv').config();
+
+const app = express();
+
+const WebSocket = require('ws');
+const path = require('path');
+const http = require('http');
+
+const PORT = 3000;
+
+// require in controllers and routers
+const userController = require('./controllers/userController');
 const jokeRouter = require('./routes/jokeRouter');
 const userRouter = require('./routes/userRouter');
 const matchRouter = require('./routes/matchRouter');
 
-const PORT = process.env.PORT;
-
+// create the express server
 const app = express();
+const server = http.createServer(app);
 
 // parse incoming json
 app.use(express.json());
@@ -34,6 +46,26 @@ app.use((err, req, res, next) => {
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-app.listen(PORT, () => { console.log(`Server listening on ${PORT}`); });
+// set up the server to handle websocket connections
+const wss = new WebSocket.WebSocketServer({ server });
+
+// array to store all connected client sockets
+const clients = [];
+
+wss.on('connection', (socket) => {
+  clients.push(socket);
+
+  // for now, just a test event handler to send the same message back to all clients
+  socket.on('message', (e) => {
+    clients.forEach((client) => {
+      client.send(e.toString());
+    });
+  });
+});
+
+// set up the server to listen for http requests
+server.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
+});
 
 module.exports = app;
