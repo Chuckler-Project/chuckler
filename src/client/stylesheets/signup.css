@@ -1,0 +1,94 @@
+ /* how to make the background blur? */
+.modalBackground {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+    background: #43c0ea;
+    width: 500px;
+    height: 70%;
+    margin: auto;
+    border-radius: 5px;
+    padding-top: 10px;
+    box-shadow: 0px 0px 10px rgb(93, 93, 93);
+}
+
+.closeModal {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.closeModal button {
+  background-color: transparent;
+  border: none;
+  font-size: 25px;
+}
+.logo-title  {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  align-self: center;
+  margin: 10px 70px;
+}
+
+.title {
+    color: #ffffff;
+    font-size: 48px;
+    text-align: center;
+}
+  
+.inputs {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+  
+.input {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  height: 60px;
+  width: 80%;
+  background: #ffffff;
+  border-radius: 6px;
+}
+
+.input img {
+  margin: 0px 15px;
+}
+  
+.input input {
+  height: 50px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #000000;
+}
+  
+.signup-btn {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #423b4c;
+  margin: 20px auto;
+  
+}
+
+.signup-btn button {
+  width: 40%;
+  background-color: #ffffff;
+  /* margin-bottom: 30px; */
+  
+}

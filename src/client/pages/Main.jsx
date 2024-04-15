@@ -8,7 +8,8 @@ export default function Main () {
 
     
     return (
-        <div id="main-container">
+       <div className='background'>
+         <div id="main-container">
             <div id="jokes">
                 <Jokes />
             </div> 
@@ -22,6 +23,7 @@ export default function Main () {
             </div>
             <InputJoke />
         </div>
+       </div>
     ); 
 }
 
