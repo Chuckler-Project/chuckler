@@ -2,8 +2,6 @@ const express = require('express');
 
 require('dotenv').config();
 
-const app = express();
-
 const WebSocket = require('ws');
 const path = require('path');
 const http = require('http');

@@ -2,9 +2,9 @@ import React, { useState } from "react";
 
 
 
-export default function InputJoke() {
+export default function InputJoke({userId}) {
     const [joke, setJoke] = useState('')
-    const [user, setUser] = useState('will');
+    // const [user, setUser] = useState('will');
 
 
     const handleInputChange = (e) => {
@@ -21,7 +21,7 @@ export default function InputJoke() {
             await fetch('/api/joke', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user: user, content: joke })
+                body: JSON.stringify({ userId: userId, content: joke })
             })
         } catch (err) { console.error('Error occured trying to post joke', err) };
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../stylesheets/landing.css';
 import chuckler from '../images/chuckler-word.png';
-import Signup from "../components/Signup.jsx";
+import Signup from '../components/Signup.jsx';
 import Signin from "../components/Signin.jsx";
 
 
