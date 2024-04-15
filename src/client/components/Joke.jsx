@@ -3,20 +3,20 @@ import laughingFace from '../images/laughing-face.png';
 
 
 //Returns a joke from database
-export default function Joke() {
-    const [joke, setJoke] = useState('');
+export default function Joke(props) {
+    // const [joke, setJoke] = useState('');
 
-    useEffect(() => {
-        const getJoke = async () => {
-            try {
-                const joke = await fetch('/api/joke');
-                const parsedJoke = await joke.json();
-                console.log('joke here ->', parsedJoke);
-                setJoke(parsedJoke);
-            } catch (error) {console.log('Error trying to fetch joke', error)}
-        };
-        getJoke();
-    }, [])
+    // // useEffect(() => {
+    //     const getJoke = async () => {
+    //         try {
+    //             const joke = await fetch('/api/joke');
+    //             const parsedJoke = await joke.json();
+    //             console.log('joke here ->', parsedJoke);
+    //             setJoke(parsedJoke);
+    //         } catch (error) {console.log('Error trying to fetch joke', error)}
+    //     };
+    // //     getJoke();
+    // // }, [])
 
 
 
@@ -26,7 +26,7 @@ export default function Joke() {
             <img src={laughingFace} alt="laughing-face" style={{width:'100px'}} />
 
             <h2>RANDOM JOKE HERE</h2>
-            <p>{joke}</p>
+            <p>{props.joke}</p>
         </div>
     )
 }
