@@ -1,17 +1,12 @@
-/* #main-container, #jokes {
-    width: 50%;
-    height: 90vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 30px auto;
-    border: 1px solid black; 
-   
 
- 
-} */
-
-/* main page */
+.background {
+    /* background-color: blue; */
+    width: 100%;
+    height: 100vh;
+}
+#main-container {
+    /* background-color: red; */
+}
 #main-container,
 #jokes{ 
     height: 600px;

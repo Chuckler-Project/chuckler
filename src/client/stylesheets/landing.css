@@ -19,9 +19,9 @@
     text-shadow: 1px 1px black;
     cursor: pointer;
 }
-.chuckler-container button:hover {
+/* .chuckler-container button:hover {
     background-color: #35c7f8;
-}
+} */
 
 .btn-login {
     margin-top: 20px;
@@ -33,6 +33,7 @@
     text-shadow: 1px 1px black;
     cursor: pointer;
 }
+
 
 .link-login {
     color: white;
@@ -46,13 +47,11 @@
     align-items: center;
 }
 
-
 .header-landing button {
     width: 10%;
     height: 40px;
     margin-right: 20px;
     margin: 10px;
-
 
 }
 

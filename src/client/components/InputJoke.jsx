@@ -9,7 +9,7 @@ export default function InputJoke() {
 
     const handleInputChange = (e) => {
         const { value } = e.target;
-        //should I attach the user name to the joke?
+        //should we attach the user name to the joke?
         setJoke(
            value
         )
