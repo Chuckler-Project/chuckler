@@ -14,7 +14,7 @@ jokeController.getJoke = async (req, res, next) => {
     // handle id retrieval error
     if (userIdResult.length === 0) return next({ log: `No user named ${user} found`, message: 'An error occured looking up this user'});
     const userId = userIdResult[0].id;
-    // retrieve joke
+    // retrieve a random joke that the user did not write
     const jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
     // handle joke retrieval error
     if (jokeResponse.length === 0) return next({ log: `No joke found`, message: 'An error occured getting a joke'});
