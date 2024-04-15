@@ -2,8 +2,9 @@ const express = require('express');
 const WebSocket = require('ws');
 const path = require('path');
 const http = require('http');
+require('dotenv').config();
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 // require in controllers and routers
 const userController = require('./controllers/userController');
