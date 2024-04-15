@@ -40,8 +40,9 @@ jokeController.postJoke = async (req, res, next) => {
       const userId = userIdResult[0].id;
       // add joke to db
       const addJokeResponse = await sql`INSERT INTO jokes (content, creator_id) VALUES (${content}, ${userId})`;
+      // add joke to user jokes_posted array
+      await sql`UPDATE users SET jokes_posted=ARRAY_APPEND(jokes_posted, ${jokeId}) WHERE id=${userId}`;
       return next();
-    
     } catch (err) { 
       next({
         log: `Error in postJoke middleware: ${err}`,
@@ -67,6 +68,7 @@ jokeController.likeJoke = async (req, res, next) => {
     // const userId = userIdResult[0].id;
     // add userId to joke's liked_by array
     await sql`UPDATE jokes SET liked_by=ARRAY_APPEND(liked_by, ${userId}) WHERE id=${jokeId}`;
+    // add jokeId to users jokes_liked array
     await sql`UPDATE users SET jokes_liked=ARRAY_APPEND(jokes_liked, ${jokeId}) WHERE id=${userId}`;
     res.locals.likeMessage = `User ${userId} liked joke ${jokeId}`;
     console.log(res.locals.likeMessage);
