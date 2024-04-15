@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 export default function InputJoke() {
     const [joke, setJoke] = useState('')
-    const [user, setUser] = useState('paloma');
+    const [user, setUser] = useState('will');
 
 
     const handleInputChange = (e) => {
