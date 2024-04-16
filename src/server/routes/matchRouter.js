@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post('/',
   matchController.checkForMatch,
+  matchController.addMatch,
   (req, res) => { res.status(200).json(res.locals.message); }
 );
 
