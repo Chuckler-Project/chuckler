@@ -15,7 +15,7 @@ export default function Signup({closeModal}) {
     const [joke, setJoke] = useState('');
 
     const signupAction = () => {
-        Axios.post('localhost:8080/signup', {
+        Axios.post('/api/user/signup', {
           username: username,
           password: password,
           joke: joke,

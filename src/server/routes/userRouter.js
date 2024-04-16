@@ -3,9 +3,9 @@ const userController = require('../controllers/userController')
 
 const router = express.Router();
 
-router.post('/user', 
+router.post('/signup', 
   userController.createUser,
-  (req, res) => res.status(200).send('hi from user router')
+  (req, res) => res.status(200).json('hi from user router')
 );
 
 

@@ -4,11 +4,12 @@ const userController = {};
 
 userController.createUser = async (req, res, next) => {
   try {
-    const username = 'paloma';
-
-    const response = await sql`INSERT INTO users (username) VALUES (${username})`;
-
-    console.log(response);
+    const { username, password, joke } = req.body;
+    const createUserResponse = await sql`INSERT INTO users (username, password) VALUES (${username}, ${password}) RETURNING id, username`;
+    console.log('createUserResponse', createUserResponse);
+    // const userInfo = createUserResponse[0];
+    // console.log(userInfo);
+    // res.locals.userInfo = userInfo;
 
     return next();
 
