@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Axios from 'axios';
 import '../stylesheets/signup.css';
 import user from '../images/user.png';
 import password from '../images/password.png';
@@ -7,6 +8,19 @@ import logo from '../images/logo.png';
 
 
 export default function Signin({closeModal}) {
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const signinAction = () => {
+    Axios.post('/api/user/login', {
+      username: username,
+      password: password,
+    }).then((response) => {
+      console.log(response);
+    });
+  };
+
 
     return (
         <div className="modalBackground">
@@ -24,15 +38,23 @@ export default function Signin({closeModal}) {
                 <div className="inputs">
                     <div className="input">
                         <img src={user} alt="" style={{width:'30px'}}/>
-                        <input type="text" placeholder="Name" />
+                        <input type="text" placeholder="Name" 
+                          onChange={(e) => {
+                            setUsername(e.target.value);
+                          }}
+                        />
                     </div>
                     <div className="input">
                         <img src={password} alt="password-icon"  style={{width:'30px'}}/>
-                        <input type="password" placeholder="Password" />
+                        <input type="password" placeholder="Password"
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                          }}
+                        />
                     </div>
                 </div>
                 <div className="signup-btn">
-                    <button>
+                    <button onClick={signinAction}>
                         <Link className="signup-btn" to='/main'>Login</Link>
                     </button>
                 </div>
