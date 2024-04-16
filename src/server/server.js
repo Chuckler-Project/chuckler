@@ -5,6 +5,7 @@ require('dotenv').config();
 const WebSocket = require('ws');
 const path = require('path');
 const http = require('http');
+const cookieParser = require('cookie-parser');
 
 const PORT = 3000;
 
