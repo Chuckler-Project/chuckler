@@ -25,7 +25,7 @@ matchController.checkForMatch = async (req, res, next) => {
     if (matched) {
       message = `${userId} matched with ${creatorId}!`;
       res.locals.userId = userId;
-      res.locals. creatorId = creatorId;
+      res.locals.creatorId = creatorId;
     }
     res.locals.message = message;
     return next();
@@ -39,7 +39,10 @@ matchController.checkForMatch = async (req, res, next) => {
 
 matchController.addMatch = async (req, res, next) => {
   try {
-    const addMatchResponse = await sql`INSERT INTO matches (first_user_id, second_user_id) VALUES (${res.locals.userId}, ${res.locals.creatorId})`;
+    // add joke creator's id to users matches array and vice versa
+    await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.creatorId}) WHERE id=${res.locals.userId}`;
+    await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.userId}) WHERE id=${res.locals.creatorId}`;
+    console.log(`match between ${res.locals.creatorId} and ${res.locals.userId} noted in db`)
     return next();
   } catch (err) {
     next({
@@ -48,5 +51,37 @@ matchController.addMatch = async (req, res, next) => {
     });
   };
 }
+
+matchController.retrieveMatches = async (req, res, next) => {
+  try {
+    const {userId} = req.body;
+    const matchesResponse = await sql`SELECT matches FROM users WHERE id=${userId}`;
+    const matchesArray = matchesResponse[0].matches;
+    res.locals.matchesArray = matchesArray;
+    return next();
+  } catch (err) {
+    next({
+      log: `Error in retrieveMatches middleware: ${err}`,
+      message: `Error retrieving matches: ${err}`
+    });
+  };
+};
+
+matchController.checkIsOnline = async (req, res, next) => {
+  try {
+    const matchesObj = {};
+    for (const match of res.locals.matchesArray) {
+      const isOnlineResponse = await sql`SELECT is_online FROM users WHERE id=${match}`;
+      matchesObj[match] = isOnlineResponse[0];
+    }
+    res.locals.matchesObj = matchesObj;
+    return next();
+  } catch (err) {
+    next({
+      log: `Error in checkIsOnline middleware: ${err}`,
+      message: `Error checking if matches are online: ${err}`
+    });
+  };
+};
 
 module.exports = matchController;
