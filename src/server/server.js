@@ -11,6 +11,7 @@ const PORT = 3000;
 
 // require in controllers and routers
 const userController = require('./controllers/userController');
+const sessionController = require('./controllers/sessionController');
 const jokeRouter = require('./routes/jokeRouter');
 const userRouter = require('./routes/userRouter');
 const matchRouter = require('./routes/matchRouter');

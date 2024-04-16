@@ -13,7 +13,7 @@ export default function Signin({closeModal}) {
   const [password, setPassword] = useState('');
 
   const signinAction = () => {
-    Axios.post('localhost:8080/login', {
+    Axios.post('/api/user/login', {
       username: username,
       password: password,
     }).then((response) => {
@@ -48,7 +48,7 @@ export default function Signin({closeModal}) {
                         <img src={password} alt="password-icon"  style={{width:'30px'}}/>
                         <input type="password" placeholder="Password"
                           onChange={(e) => {
-                            setUsername(e.target.value);
+                            setPassword(e.target.value);
                           }}
                         />
                     </div>
