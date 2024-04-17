@@ -6,12 +6,31 @@ const jokeController = {};
 jokeController.getJoke = async (req, res, next) => {
   try {
     const {userId} = req.body;
-    // retrieve a random joke that the current user did not write
-    const jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
+    // get the jokes that the user has already seen to exclude from the sql query
+    const viewedJokesResponse = await sql`SELECT jokes_viewed FROM users WHERE id=${userId}`;
+    let viewedJokesArray = viewedJokesResponse[0].jokes_viewed;
+    console.log('viewed array', viewedJokesArray);
+    let jokeResponse;
+    jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
+    // trying to filter out viewed jokes
+    // if (viewedJokesArray === null) {
+    //   jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
+    // } else {
+    //   jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} AND NOT EXISTS (
+    //     SELECT 1
+    //     FROM unnest(${viewedJokesArray}) AS viewed_joke
+    //     WHERE viewed_joke = jokes.id
+    //   ) ORDER BY RANDOM() LIMIT 1`;
+
+      
+    //   // const placeholders = viewedJokesArray.map((_, index) => `$${index + 2}`).join(',');
+    //   // query = `SELECT * FROM jokes WHERE creator_id != $1 AND id NOT IN (${placeholders}) ORDER BY RANDOM() LIMIT 1`;
+    //   // values = [userId, ...viewedJokesArray];
+    // }
+    console.log('joke response', jokeResponse);
     // handle joke retrieval error
-    if (jokeResponse.length === 0) return next({ log: `No joke found`, message: 'An error occured getting a joke'});
+    if (jokeResponse.length === 0) return next({ log: `No joke found`, message: 'No more jokes in the database'});
     res.locals.joke = jokeResponse[0];
-    console.log(res.locals.joke);
     return next();
   } catch (err) { 
     next({
@@ -19,7 +38,21 @@ jokeController.getJoke = async (req, res, next) => {
       message: 'An error occurred getting the joke'
     }) 
   }
-}
+};
+
+jokeController.addJokeToViewed = async (req, res, next) => {
+  try {
+    const {userId} = req.body;
+    console.log(res.locals.joke.id);
+    await sql`UPDATE users SET jokes_viewed=ARRAY_APPEND(jokes_viewed, ${res.locals.joke.id}) WHERE id=${userId}`;
+    return next();
+  } catch (err) {
+    next({
+      log: `Error in addJokeToViewed middleware: ${err}`,
+      message: 'An error occurred adding the joke to the users jokes viewed list'
+    }) 
+  };
+};
 
 // post a joke to the database
 jokeController.postJoke = async (req, res, next) => {
