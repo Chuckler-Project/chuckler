@@ -19,6 +19,13 @@ router.post('/login',
   (req, res) => {
     res.locals.authenticated ? res.status(200).json(res.locals.userObj) : res.status(200).json('incorrect password');
   }
-)
+);
+
+router.get('/logout',
+  sessionController.removeSSIDCookie,
+  (req, res) => {
+    res.status(200).json('Logged out');
+  }
+);
 
 module.exports = router;

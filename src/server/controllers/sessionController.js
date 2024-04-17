@@ -19,4 +19,9 @@ sessionController.verifySession = (req, res, next) => {
     if (ssid) return next;
 }
 
+sessionController.removeSSIDCookie = (req, res, next) => {
+    res.clearCookie('ssid');
+    return next();
+}
+
 module.exports = sessionController;
