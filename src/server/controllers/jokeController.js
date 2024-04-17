@@ -5,16 +5,8 @@ const jokeController = {};
 // get a joke from the database that the requesting user did not write
 jokeController.getJoke = async (req, res, next) => {
   try {
-    // temporary hard-coded user
     const {userId} = req.body;
-    // use once front-end sends user
-    // const { user } = req.body.user;
-    // retrieve the user's id
-    // const userIdResult = await sql`SELECT id FROM users WHERE username=${user}`;
-    // // handle id retrieval error
-    // if (userIdResult.length === 0) return next({ log: `No user named ${user} found`, message: 'An error occured looking up this user'});
-    // const userId = userIdResult[0].id;
-    // retrieve joke
+    // retrieve a random joke that the current user did not write
     const jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
     // handle joke retrieval error
     if (jokeResponse.length === 0) return next({ log: `No joke found`, message: 'An error occured getting a joke'});
@@ -33,15 +25,11 @@ jokeController.getJoke = async (req, res, next) => {
 jokeController.postJoke = async (req, res, next) => {
   try {
       const { userId, content } = req.body;
-      // retrieve the user's id
-      // const userIdResult = await sql`SELECT id FROM users WHERE username=${user}`;
-      // // handle id retrieval error
-      // if (userIdResult.length === 0) return next({ log: `No user named ${user} found`, message: 'An error occured looking up this user'});
-      // const userId = userIdResult[0].id;
-      // add joke to db
-      const addJokeResponse = await sql`INSERT INTO jokes (content, creator_id) VALUES (${content}, ${userId})`;
+      // add joke to db and return the joke id
+      const jokeIdResponse = await sql`INSERT INTO jokes (content, creator_id) VALUES (${content}, ${userId}) RETURNING id`;
+      const jokeId = jokeIdResponse[0].id;
       // add joke to user jokes_posted array
-      // await sql`UPDATE users SET jokes_posted=ARRAY_APPEND(jokes_posted, ${jokeId}) WHERE id=${userId}`;
+      await sql`UPDATE users SET jokes_posted=ARRAY_APPEND(jokes_posted, ${jokeId}) WHERE id=${userId}`;
       return next();
     } catch (err) { 
       next({
@@ -55,17 +43,7 @@ jokeController.postJoke = async (req, res, next) => {
 jokeController.likeJoke = async (req, res, next) => {
   try {
     // get stored ids from front end, eliminate request for user id
-    const { userId, jokeId } = req.body;
-    // temporary hard-coded values
-    // const user = 'paloma';
-    // const jokeId = 10;
-    // use once front-end sends user
-    // const { user } = req.body.user;
-    // retrieve the user's id
-    // const userIdResult = await sql`SELECT id FROM users WHERE username=${user}`;
-    // handle id retrieval error
-    // if (userIdResult.length === 0) return next({ log: `No user named ${user} found`, message: 'An error occured looking up this user'});
-    // const userId = userIdResult[0].id;
+    const { userId, jokeId } = req.body;;
     // add userId to joke's liked_by array
     await sql`UPDATE jokes SET liked_by=ARRAY_APPEND(liked_by, ${userId}) WHERE id=${jokeId}`;
     // add jokeId to users jokes_liked array
