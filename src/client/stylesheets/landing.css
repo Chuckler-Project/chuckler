@@ -1,5 +1,5 @@
 /* FIND A GOOGLEFONT */
-@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;500;600;700;800;900&family=Outfit:wght@100;200;300;400;500;600;700;800&display=swap');
 
 
 .chuckler-container {
@@ -7,7 +7,7 @@
     background-size: cover; 
     background-repeat: no-repeat;
     background-position: center;
-    font-family: 'Varela Round';
+    font-family: 'Inter', sans-serif;
 }
    
 .chuckler-container button {
@@ -19,9 +19,7 @@
     text-shadow: 1px 1px black;
     cursor: pointer;
 }
-/* .chuckler-container button:hover {
-    background-color: #35c7f8;
-} */
+
 
 .btn-login {
     margin-top: 20px;

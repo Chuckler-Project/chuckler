@@ -1,24 +1,28 @@
 
 .background {
-    /* background-color: blue; */
+    display: flex;
     width: 100%;
     height: 100vh;
-}
-#main-container {
-    /* background-color: red; */
+    background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
 }
 #main-container,
 #jokes{ 
-    height: 600px;
+    height: 700px;
     border: 1px solid black; 
-     /* background-color: #fad758; */
     border-radius: 15px;
-     width: 400px;
+    width: 450px;
     margin: auto;
 }
+#main-container {
+    background-image: url('../images/haha.png');
+    background-color: #f6d86e;
+    background-size: 20%;
+
+}
+
 
 #jokes {
-    width: 300px;
+    width: 350px;
     height: 400px;
     margin-top: 30px;
     background-color: white;
@@ -28,25 +32,73 @@
     display: flex;
     justify-content: space-around;
 }
-button {
-    margin-top: 20px;
-    background-color: #43c0ea;
-    width: 30%;
-    height: 50px;
-    border-radius: 10px;
-    color: whitesmoke;
-    text-shadow: 1px 1px black;
+.like-btn {
+    margin-top: 10px;
+    border-radius: 50%;
     cursor: pointer;
+    background-image: url('../images/like.png');
+    width: 100px;
+    height: 100px;
+    border: none;
+    box-shadow: 0px 0px 5px black;
+    background-size: cover; 
+    background-repeat: no-repeat;
+    background-position: center;
+
 }
 
-#submit {
-    height: 40px;
-    background-color: rgb(7, 190, 7);
+.dislike-btn {
+    margin-top: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    background-image: url('../images/dislike.png');
+    width: 100px;
+    height: 100px;
+    border: none;
+    box-shadow: 0px 0px 5px black;
+    background-size: cover; 
+    background-repeat: no-repeat;
+    background-position: center;
+
+}
+/*  */
+
+
+.App {
+	text-align: center;
+	margin: auto;
+}
+.geeks {
+	color: green;
 }
 
-#input-joke {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+.tabs-container {
+	width: 400px;
+	margin: 20px auto;
 }
+
+.tabs {
+	display: flex;
+}
+
+.tab {
+	cursor: pointer;
+	padding: 10px;
+	margin-right: 10px;
+	border: 1px solid #ddd;
+	border-bottom: none;
+	background-color: #f1f1f1;
+}
+
+.tab.active {
+	background-color: #ddd;
+}
+
+.tab-content {
+	border: 1px solid #ddd;
+	padding: 10px;
+}
+
+
+
  
