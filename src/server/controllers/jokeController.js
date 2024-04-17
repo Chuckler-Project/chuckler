@@ -10,17 +10,22 @@ jokeController.getJoke = async (req, res, next) => {
     const viewedJokesResponse = await sql`SELECT jokes_viewed FROM users WHERE id=${userId}`;
     let viewedJokesArray = viewedJokesResponse[0].jokes_viewed;
     console.log('viewed array', viewedJokesArray);
+    const param = [...viewedJokesArray];
     let jokeResponse;
+    // working version wo seen jokes filetering
     jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
     // trying to filter out viewed jokes
     // if (viewedJokesArray === null) {
     //   jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
     // } else {
-    //   jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} AND NOT EXISTS (
-    //     SELECT 1
-    //     FROM unnest(${viewedJokesArray}) AS viewed_joke
-    //     WHERE viewed_joke = jokes.id
-    //   ) ORDER BY RANDOM() LIMIT 1`;
+
+    //   jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != $1 AND id NOT IN (${placeholders}) ORDER BY RANDOM() LIMIT 1`;
+
+      // jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} AND NOT EXISTS (
+      //   SELECT 1
+      //   FROM unnest(${viewedJokesArray}) AS viewed_joke
+      //   WHERE viewed_joke = jokes.id
+      // ) ORDER BY RANDOM() LIMIT 1`;
 
       
     //   // const placeholders = viewedJokesArray.map((_, index) => `$${index + 2}`).join(',');
