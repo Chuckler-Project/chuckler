@@ -1,21 +1,19 @@
 import React, { useState } from "react";
+import '../stylesheets/inputJoke.css';
 
 
 
 export default function InputJoke({userId}) {
     const [joke, setJoke] = useState('')
-    // const [user, setUser] = useState('will');
-
 
     const handleInputChange = (e) => {
         const { value } = e.target;
-        //should we attach the user name to the joke?
         setJoke(
            value
         )
     };
+
     async function submit() {
-        //Make a post req to store the joke + user to the db
         console.log('Store the joke in db', joke)
         try {
             await fetch('/api/joke', {
@@ -24,7 +22,6 @@ export default function InputJoke({userId}) {
                 body: JSON.stringify({ userId: userId, content: joke })
             })
         } catch (err) { console.error('Error occured trying to post joke', err) };
-
     }
     
     return (
