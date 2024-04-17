@@ -6,9 +6,8 @@ import App from './App.jsx';
 const root = createRoot(document.getElementById('root'));
 
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode> was causing useEffect to run twice. We should uncomment in the prod phase.
     <BrowserRouter> 
         <App/> 
     </BrowserRouter>
-  </React.StrictMode>
 );
