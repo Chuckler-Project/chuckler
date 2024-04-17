@@ -2,13 +2,22 @@ import React, { useState, useEffect } from 'react';
 import '../stylesheets/main.css';
 import Joke from '../components/Joke.jsx';
 import InputJoke from "../components/InputJoke.jsx";
+import ChatBox from '../components/chatComponents/Tabs.jsx';
+import Tabs from '../components/chatComponents/Tabs.jsx';
 
 
 export default function Main () {
     const [joke, setJoke] = useState('');
-    const [userId, setUser] = useState(3);
+    const [userId, setUser] = useState(15);
 
-    // useEffect(() => {
+    const tabData = [
+        { label: "Home" },
+        { label: "Chat" },
+        { label: "Profile" },
+    ];
+
+
+    useEffect(() => {
         const getJoke = async () => {
             try {
                 const joke = await fetch('/api/joke/retrieveJoke', {
@@ -21,8 +30,8 @@ export default function Main () {
                 setJoke(parsedJoke);
             } catch (error) {console.log('Error trying to fetch joke', error)}
         };
-    //     getJoke();
-    // }, [])
+        getJoke();
+    }, [])
 
     const handleYesClick = async (e) => {
         e.preventDefault();
@@ -55,26 +64,23 @@ export default function Main () {
 
     
     return (
-       <div className='background'>
-         <div id="main-container">
-            <div id="jokes">
-                <Joke joke={joke.content}/>
-            </div> 
-            <div className="buttons">
-                <button onClick={getJoke}>
-                    {/* generates a new joke */}
-                    NO
-                </button>
-                <button onClick={handleYesClick}>
-                  
-                    YES
-                </button>
-                <button onClick={getJoke}> TEST</button>
-
+        <div className='background'>
+            <div id="main-container">
+                <div id="jokes">
+                    <Joke joke={joke.content}/>
+                </div> 
+                <div className="buttons">
+                    <button className='dislike-btn'></button>
+                    <button className='like-btn' onClick={handleYesClick}></button>
+                </div>
+                <InputJoke userId={userId}/>
+                <Tabs 
+                    tabs={tabData} 
+                />
             </div>
-            <InputJoke userId={userId}/>
+
+
         </div>
-       </div>
     ); 
 }
 
