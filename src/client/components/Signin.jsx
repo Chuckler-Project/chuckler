@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import '../stylesheets/signup.css';
 import user from '../images/user.png';
@@ -8,16 +8,29 @@ import logo from '../images/logo.png';
 
 
 export default function Signin({closeModal}) {
+  let navigate = useNavigate();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loginStatus, setLoginStatus] = useState('');
 
   const signinAction = () => {
+    if (username === '' || password === '') {
+      setLoginStatus('Please complete every field');
+      return;
+  } else setLoginStatus('');
+
+
     Axios.post('/api/user/login', {
       username: username,
       password: password,
     }).then((response) => {
-      console.log(response);
+      if (response.data === 'incorrect password') {
+        setLoginStatus('Incorrect username password combination');
+      } else {
+        setLoginStatus('');
+        navigate('/main');
+      }
     });
   };
 
@@ -32,7 +45,7 @@ export default function Signin({closeModal}) {
                         onClick={() => closeModal(false)}> X </button>
                 </div>
                 <div className="logo-title">
-                    <div className="title">Get Started</div>
+                    <div className="title">Welcome Back</div>
                 </div>
                
                 <div className="inputs">
@@ -55,9 +68,10 @@ export default function Signin({closeModal}) {
                 </div>
                 <div className="signup-btn">
                     <button onClick={signinAction}>
-                        <Link className="signup-btn" to='/main'>Login</Link>
+                        <div className="signup-btn" to='/main'>Login</div>
                     </button>
                 </div>
+                <h1>{loginStatus}</h1>
             </div>
         </div>
     )

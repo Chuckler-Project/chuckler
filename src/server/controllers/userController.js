@@ -5,6 +5,14 @@ const userController = {};
 userController.createUser = async (req, res, next) => {
   try {
     const { username, password, joke } = req.body;
+
+    // check if username is already exists
+    const userResponse = await sql`SELECT username FROM users WHERE username=${username}`;
+    res.locals.userExists = false;
+    if (userResponse.length !== 0) {
+      res.locals.userExists = true;
+      return next();
+    }
     const createUserResponse = await sql`INSERT INTO users (username, password) VALUES (${username}, ${password}) RETURNING id, username`;
     const userInfo = createUserResponse[0];
     res.locals.userInfo = userInfo;
