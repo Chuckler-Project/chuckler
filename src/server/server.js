@@ -5,9 +5,10 @@ require('dotenv').config();
 const WebSocket = require('ws');
 const path = require('path');
 const http = require('http');
+require('dotenv').config();
 const cookieParser = require('cookie-parser');
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 // require in controllers and routers
 const userController = require('./controllers/userController');
@@ -35,7 +36,7 @@ app.use('/api/match', matchRouter);
 app.use((req, res) => { res.status(404).send('!!Page not found!!'); });
 
 // global error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
     status: 500,
