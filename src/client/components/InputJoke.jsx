@@ -1,9 +1,13 @@
 import React, { useState } from "react";
+import {useLocation} from 'react-router-dom';
 
 
 
 export default function InputJoke({userId}) {
     const [joke, setJoke] = useState('')
+
+    const location = useLocation();
+    const userData = location.state;
 
     const handleInputChange = (e) => {
         const { value } = e.target;
@@ -13,14 +17,14 @@ export default function InputJoke({userId}) {
     };
 
     async function submit() {
-        console.log('Store the joke in db', joke)
         try {
             await fetch('/api/joke', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: userId, content: joke })
+                body: JSON.stringify({ userId: userData.id, content: joke })
             })
         } catch (err) { console.error('Error occured trying to post joke', err) };
+        alert('joke submitted');
     }
     
     return (

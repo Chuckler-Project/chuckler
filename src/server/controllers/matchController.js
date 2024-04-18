@@ -11,9 +11,11 @@ matchController.checkForMatch = async (req, res, next) => {
     // get array of jokes user has written
     const userJokesResponse = await sql`SELECT jokes_posted FROM users WHERE id=${userId}`;
     const userJokesArray = userJokesResponse[0].jokes_posted;
+    console.log('user jokes array', userJokesArray)
     // get array of jokes creator has liked
     const creatorLikesResponse = await sql`SELECT jokes_liked FROM users WHERE id=${creatorId}`;
     const creatorLikesArray = creatorLikesResponse[0].jokes_liked;
+    console.log('creator likes array', creatorLikesArray)
     // check to see if joke creator has liked any jokes the user has written
     let matched = false;
     let message = 'No matches yet!'
@@ -45,14 +47,20 @@ matchController.addMatch = async (req, res, next) => {
       // first check to see if the match already exists in the db
       const matchesResponse = await sql`SELECT matches FROM users WHERE id=${res.locals.userId}`;
       const usersMatchesArray = matchesResponse[0].matches;
-      if (usersMatchesArray.includes(res.locals.creatorId)) res.locals.message = `match between ${res.locals.creatorId} and ${res.locals.userId} previously noted in db`
-      // if the match is not already in the db, record it
-      else {
+      
+      if (usersMatchesArray === null || (Array.isArray(usersMatchesArray) && !(usersMatchesArray.includes(res.locals.creatorId)))) {
         await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.creatorId}) WHERE id=${res.locals.userId}`;
         await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.userId}) WHERE id=${res.locals.creatorId}`;
-        res.locals.message = `match between ${res.locals.creatorId} and ${res.locals.userId} noted in db`;
-      };
-    } else res.locals.message = 'No match';
+        res.locals.message = `You have a new match with ${res.locals.creatorId}!`;
+      } 
+      else if (Array.isArray(usersMatchesArray) && usersMatchesArray.includes(res.locals.creatorId)) {
+        res.locals.message = 'No new matches';
+      }
+      else {
+        res.locals.message = 'No new matches';
+      }
+    } else res.locals.message = 'No new matches'; 
+
     return next();
   } catch (err) {
     next({

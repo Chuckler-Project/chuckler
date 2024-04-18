@@ -52,10 +52,13 @@ export default function Home () {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId: userData.id, creatorId: joke.creator_id }) 
             });
-
-            const matchResponseMessage = await matchResponse.json();
-            setMatch(matchResponseMessage)
-            console.log('match response', matchResponseMessage);
+            if (!matchResponse.ok) {
+                throw new Error('Failed to fetch match data');
+            }
+        
+            const message = await matchResponse.json();
+            console.log('Match message:', message);
+            if (message !== 'No new matches') alert(message);
         } catch (err) { console.log('error checking for match', err) };
         getJoke();
     }
