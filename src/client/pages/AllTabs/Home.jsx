@@ -50,13 +50,14 @@ export default function Home () {
             const matchResponse = await fetch('/api/match', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: userData.userId, creatorId: joke.creator_id }) 
+                body: JSON.stringify({ userId: userData.id, creatorId: joke.creator_id }) 
             });
 
             const matchResponseMessage = await matchResponse.json();
             setMatch(matchResponseMessage)
             console.log('match response', matchResponseMessage);
         } catch (err) { console.log('error checking for match', err) };
+        getJoke();
     }
     
     return (
