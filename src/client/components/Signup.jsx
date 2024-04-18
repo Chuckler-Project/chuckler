@@ -35,17 +35,20 @@ const Signup = ({ closeModal }) => {
       password,
       joke,
     }).then((response) => {
-      console.log('RESPONSE SIGNUP', response);
-      setCurrUser({
-        id: response.data.id,
-        username: response.data.username,
-      });
-      if (response.data === 'username exists') {
-          setSignUpStatus('Username taken');
-        } else {
-          setSignUpStatus('');
-          navigate('/main');
-        }
+      if (response.data === 'username exists') alert('Username already exists')
+      else {
+        console.log('RESPONSE SIGNUP', response);
+        setCurrUser({
+          id: response.data.id,
+          username: response.data.username,
+        });
+    }
+      // if (response.data === 'username exists') {
+      //     setSignUpStatus('Username taken');
+      //   } else {
+      //     setSignUpStatus('');
+      //     navigate('/main');
+      //   }
     });
   };
 
