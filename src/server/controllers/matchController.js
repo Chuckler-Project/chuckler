@@ -17,18 +17,17 @@ matchController.checkForMatch = async (req, res, next) => {
     // check to see if joke creator has liked any jokes the user has written
     let matched = false;
     let message = 'No matches yet!'
-    for (const joke of userJokesArray) {
-      if (creatorLikesArray) {
-        if (creatorLikesArray.includes(joke)) matched = true;
+    if (creatorLikesArray === null) matched = false;
+    else {
+      for (const joke of userJokesArray) {
+        if (creatorLikesArray) {
+          if (creatorLikesArray.includes(joke)) matched = true;
+        };
       };
-    };
-    if (matched) {
-      message = `${userId} matched with ${creatorId}!`;
-      res.locals.userId = userId;
-      res.locals.creatorId = creatorId;
-    }
-    //CHANGED THE RESPONSE TO BOOLEAN
-    res.locals.message = matched;
+    }; 
+    res.locals.userId = userId;
+    res.locals.creatorId = creatorId;
+    res.locals.matched = matched;
     return next();
   } catch (err) {
     next({
@@ -41,9 +40,11 @@ matchController.checkForMatch = async (req, res, next) => {
 matchController.addMatch = async (req, res, next) => {
   try {
     // add joke creator's id to users matches array and vice versa
-    await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.creatorId}) WHERE id=${res.locals.userId}`;
-    await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.userId}) WHERE id=${res.locals.creatorId}`;
-    console.log(`match between ${res.locals.creatorId} and ${res.locals.userId} noted in db`)
+    if (res.locals.matched) {
+      await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.creatorId}) WHERE id=${res.locals.userId}`;
+      await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.userId}) WHERE id=${res.locals.creatorId}`;
+      res.locals.message = `match between ${res.locals.creatorId} and ${res.locals.userId} noted in db`;
+    } else res.locals.message = 'No match';
     return next();
   } catch (err) {
     next({
