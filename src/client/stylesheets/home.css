@@ -1,18 +1,23 @@
+.home {
+    margin-top: 60px;
+}
 
 #jokes {
-    width: 350px;
-    height: 400px;
+    width: 370px;
+    height: 410px;
     margin: auto;
     background-color: white;
     border-radius: 10px;
 }
 .joke {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 100%; 
+    width: 100%;
     font-size: 30px;
-    margin: 30px;
-    line-height: 1.5;
-    letter-spacing: 1.1px;
-    text-align: center;
 }
+
 .buttons{
     display: flex;
     justify-content: space-around;
@@ -50,7 +55,7 @@
 #input-joke {
     display: flex;
     justify-content: space-evenly;
-    margin: 30px auto;
+    margin: 23px auto;
 }
 
 #input-joke input {

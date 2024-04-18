@@ -47,7 +47,6 @@ export default function Matches({userData}) {
         renderMatches = matches;
     }
    
-  console.log('MATCHES current state', matches)
     return (
         <div id="matches">
             {renderMatches}
