@@ -40,12 +40,12 @@ const Signup = ({ closeModal }) => {
         id: response.data.id,
         username: response.data.username,
       });
-      // if (response.data === 'username exists') {
-      //     setSignUpStatus('Username taken');
-      //   } else {
-      //     setSignUpStatus('');
-      //     navigate('/main');
-      //   }
+      if (response.data === 'username exists') {
+          setSignUpStatus('Username taken');
+        } else {
+          setSignUpStatus('');
+          navigate('/main');
+        }
     });
   };
 
@@ -107,7 +107,6 @@ const Signup = ({ closeModal }) => {
           <button onClick={signupAction}>
             {/* <div className="signup-btn" to='/main'>Sign Up</div> */}
           </button>
-          <button onClick={handleClick}>TESTING</button>
         </div>
       </div>
     </div>

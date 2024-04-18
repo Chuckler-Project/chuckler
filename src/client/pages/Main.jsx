@@ -4,6 +4,7 @@ import '../stylesheets/main.css';
 import homeIcon from '../images/home.png';
 import profileIcon from '../images/profileIcon.png';
 import chatIcon from '../images/chatIcon.png';
+import logout from '../images/logout.png';
 import Tabs from "./Tabs.jsx";
 import TabNavItem from "./Components/TabNavItem.jsx";
 import Axios from 'axios';
@@ -11,16 +12,15 @@ import Axios from 'axios';
     
 export default function Main() {
     const [activeTab, setActiveTab] = useState("tab1");
-
+    
+    const navigate = useNavigate();
     const location = useLocation();
-    const data = location.state;
+    const userData = location.state;
 
-    let navigate = useNavigate();
 
-    console.log(location, 'DATA MAIN LINE 16', data)
 
     const handleLogOut = async () => {
-		Axios.post('/api/user/logout', { username: data.username })
+		Axios.post('/api/user/logout', { username: userData.username })
 			.then((response) => {
 				navigate('/');
 			})
@@ -33,8 +33,12 @@ export default function Main() {
     return (
         <div className='background'>
         <div id="main-container">
-            <button onClick={handleLogOut}>LogOut</button>
-                <Tabs data={data} activeTab={activeTab}/>
+            <a className="button" href="" onClick={handleLogOut}>
+                <img src={logout} style={{width:'30px'}}/>
+                <div className="logout">LOGOUT</div>
+            </a>
+            <button className="logout-btn" onClick={handleLogOut}>Logout</button>
+                <Tabs userData={userData} activeTab={activeTab}/>
             <ul className="nav">
                 <TabNavItem title={homeIcon} id="tab1" activeTab={activeTab} setActiveTab={setActiveTab}/>
                 <TabNavItem title={chatIcon} id="tab2" activeTab={activeTab} setActiveTab={setActiveTab}/>

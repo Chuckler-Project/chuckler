@@ -17,8 +17,19 @@
     background-image: url('../images/haha.png');
     background-color: #f6d86e;
     background-size: 20%;
-} 
+    /* background-color: red; */
 
+} 
+.logout-btn {
+  color:#8F8F8F;
+  width: 100%;
+  text-align: end;
+	border: none;
+	padding: 5px;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
   /* Tab Navigation */
   ul.nav {
     width: 100%;

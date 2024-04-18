@@ -5,19 +5,19 @@ import Home from './AllTabs/Home.jsx'
 import Matches from "./AllTabs/Matches.jsx";
 import UserProfile from "./AllTabs/UserProfile.jsx";
  
-const Tabs = ({data, activeTab}) => {
+const Tabs = ({userData, activeTab}) => {
  
   return (
     <div className="tabs">
       <div className="outlet">
         <TabContent id="tab1" activeTab={activeTab}>
-          <Home data={data}/>
+          <Home userData={userData}/>
         </TabContent>
         <TabContent id="tab2" activeTab={activeTab}>
-          <Matches data={data}/>
+          <Matches userData={userData}/>
         </TabContent>
         <TabContent id="tab3" activeTab={activeTab}>
-          <UserProfile data={data}/>
+          <UserProfile userData={userData}/>
          
         </TabContent>
       </div>
