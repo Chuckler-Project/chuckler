@@ -20,7 +20,7 @@ export default function Main() {
     console.log(location, 'DATA MAIN LINE 16', data)
 
     const handleLogOut = async () => {
-		Axios.get('/api/user/logout')
+		Axios.post('/api/user/logout', { username: data.username })
 			.then((response) => {
 				navigate('/');
 			})
