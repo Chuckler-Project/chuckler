@@ -51,24 +51,15 @@ matchController.addMatch = async (req, res, next) => {
       if (usersMatchesArray === null || (Array.isArray(usersMatchesArray) && !(usersMatchesArray.includes(res.locals.creatorId)))) {
         await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.creatorId}) WHERE id=${res.locals.userId}`;
         await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.userId}) WHERE id=${res.locals.creatorId}`;
-        res.locals.message = `match between ${res.locals.creatorId} and ${res.locals.userId} noted in db`;
+        res.locals.message = `You have a new match with ${res.locals.creatorId}!`;
       } 
       else if (Array.isArray(usersMatchesArray) && usersMatchesArray.includes(res.locals.creatorId)) {
-        res.locals.message = `match between ${res.locals.creatorId} and ${res.locals.userId} noted in db`;
+        res.locals.message = 'No new matches';
       }
       else {
-        res.locals.message = 'No match';
+        res.locals.message = 'No new matches';
       }
-
-    //   if (usersMatchesArray.includes(res.locals.creatorId)) res.locals.message = `match between ${res.locals.creatorId} and ${res.locals.userId} previously noted in db`
-    //   // if the match is not already in the db, record it
-    //   else {
-    //     await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.creatorId}) WHERE id=${res.locals.userId}`;
-    //     await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.userId}) WHERE id=${res.locals.creatorId}`;
-    //     res.locals.message = `match between ${res.locals.creatorId} and ${res.locals.userId} noted in db`;
-    //   };
-    // } else res.locals.message = 'No match';
-    };  
+    } else res.locals.message = 'No new matches'; 
 
     return next();
   } catch (err) {
