@@ -19,6 +19,7 @@ export default function LandingPage() {
                 {/* <Link to='/about' className="link">About {test}</Link> */}
 
                 <button 
+                    id='login-btn'
                     className='btn-login'  
                     onClick={() => {
                         setOpenSignIn(true)

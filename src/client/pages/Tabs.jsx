@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-// import '../stylesheets/mainPage.css';
+import React from "react";
 import TabContent from "./Components/TabContent.jsx";
 import Home from './AllTabs/Home.jsx'
 import Matches from "./AllTabs/Matches.jsx";
-import UserProfile from "./AllTabs/UserProfile.jsx";
+import Profile from "./AllTabs/Profile.jsx";
  
 const Tabs = ({userData, activeTab}) => {
  
@@ -17,8 +16,7 @@ const Tabs = ({userData, activeTab}) => {
           <Matches userData={userData}/>
         </TabContent>
         <TabContent id="tab3" activeTab={activeTab}>
-          <UserProfile userData={userData}/>
-         
+          <Profile userData={userData}/>
         </TabContent>
       </div>
     </div>
