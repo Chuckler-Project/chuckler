@@ -4,7 +4,7 @@ import '../stylesheets/main.css';
 import homeIcon from '../images/home.png';
 import profileIcon from '../images/profileIcon.png';
 import chatIcon from '../images/chatIcon.png';
-import logout from '../images/logout.png';
+import logout from '../images/logout1.png';
 import Tabs from "./Tabs.jsx";
 import TabNavItem from "./Components/TabNavItem.jsx";
 import Axios from 'axios';
@@ -21,9 +21,6 @@ export default function Main() {
 
     const handleLogOut = async () => {
 		Axios.post('/api/user/logout', { username: userData.username })
-			.then((response) => {
-				navigate('/');
-			})
 	};
 
 
@@ -33,11 +30,12 @@ export default function Main() {
     return (
         <div className='background'>
         <div id="main-container">
-            <a className="button" href="" onClick={handleLogOut}>
+           <div className="navigation">
+            <a className="button" href="/" onClick={handleLogOut}>
                 <img src={logout} style={{width:'30px'}}/>
                 <div className="logout">LOGOUT</div>
             </a>
-            <button className="logout-btn" onClick={handleLogOut}>Logout</button>
+           </div>
                 <Tabs userData={userData} activeTab={activeTab}/>
             <ul className="nav">
                 <TabNavItem title={homeIcon} id="tab1" activeTab={activeTab} setActiveTab={setActiveTab}/>

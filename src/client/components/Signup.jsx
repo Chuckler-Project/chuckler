@@ -60,7 +60,7 @@ const Signup = ({ closeModal }) => {
           <img src={logo} alt="chuckler" className="logo" style={{ width: '150px' }} />
           <button
             className="closeModal-btn"
-            onClick={() => { return closeModal(false); }}
+            onClick={() => closeModal(false)}
           >
             {' '}
             X
