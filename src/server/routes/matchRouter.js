@@ -6,7 +6,7 @@ const router = express.Router();
 router.post('/matches',
   matchController.retrieveMatches,
   matchController.checkIsOnline,
-  (req, res) => { res.status(200).json(res.locals.matchesObj); }
+  (req, res) => { res.status(200).json(res.locals.matchesArray); }
 );
 
 router.post('/',

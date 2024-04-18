@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {useLocation} from 'react-router-dom';
 import '../../stylesheets/home.css';
 import InputJoke from "../../components/InputJoke.jsx";
 import MatchMessage from '../../components/MatchMessage.jsx';
@@ -8,13 +9,17 @@ export default function Home () {
     const [joke, setJoke] = useState('');
     const [userId, setUser] = useState(15);
     const [match, setMatch] = useState(false);
+    
+    const location = useLocation();
+    const data = location.state;
 
     const getJoke = async () => {
+        console.log('DATA', data)
         try {
             const joke = await fetch('/api/joke/retrieveJoke', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: userId }) 
+                body: JSON.stringify({ userId: data.id }) 
             });
             const parsedJoke = await joke.json();
             console.log('joke here ->', parsedJoke);
@@ -32,7 +37,7 @@ export default function Home () {
             const likeResponse = await fetch('/api/joke/like', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: userId, jokeId: joke.id }) 
+                body: JSON.stringify({ userId: data.id, jokeId: joke.id }) 
             });
 
             const likeResponseMessage = await likeResponse.json();
@@ -44,7 +49,7 @@ export default function Home () {
             const matchResponse = await fetch('/api/match', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: userId, creatorId: joke.creator_id }) 
+                body: JSON.stringify({ userId: data.userId, creatorId: joke.creator_id }) 
             });
 
             const matchResponseMessage = await matchResponse.json();
@@ -52,8 +57,6 @@ export default function Home () {
             console.log('match response', matchResponseMessage);
         } catch (err) { console.log('error checking for match', err) };
     }
-
-    console.log('current state', joke.content, joke.creator_id, userId, match)
     
     return (
         <div>
@@ -69,7 +72,7 @@ export default function Home () {
             </div>
             {match && <MatchMessage 
                 match={match} 
-                userId={userId} 
+                userId={data.userId} 
                 jokeCreator={joke.creator_id}
                 closeModal={setMatch}
                 />}

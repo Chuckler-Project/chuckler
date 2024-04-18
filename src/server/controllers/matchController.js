@@ -54,11 +54,13 @@ matchController.addMatch = async (req, res, next) => {
 }
 
 matchController.retrieveMatches = async (req, res, next) => {
+  // get the array of ids for the user's matches
   try {
     const {userId} = req.body;
     const matchesResponse = await sql`SELECT matches FROM users WHERE id=${userId}`;
     const matchesArray = matchesResponse[0].matches;
     res.locals.matchesArray = matchesArray;
+    console.log(matchesArray);
     return next();
   } catch (err) {
     next({
@@ -69,13 +71,22 @@ matchController.retrieveMatches = async (req, res, next) => {
 };
 
 matchController.checkIsOnline = async (req, res, next) => {
+  // build out an object with the names of the user's matches and their online status
   try {
-    const matchesObj = {};
+    const matchesArray = [];
     for (const match of res.locals.matchesArray) {
-      const isOnlineResponse = await sql`SELECT is_online FROM users WHERE id=${match}`;
-      matchesObj[match] = isOnlineResponse[0];
+      const matchUsernameResponse = await sql`SELECT username FROM users WHERE id=${match}`;
+      const matchUsername = matchUsernameResponse[0].username;
+      const matchIsOnlineResponse = await sql`SELECT is_online FROM users WHERE id=${match}`;
+      const matchIsOnline = matchIsOnlineResponse[0].is_online;
+      const matchObj = {
+        id: match,
+        username: matchUsername,
+        isOnline: matchIsOnline
+      }
+      matchesArray.push(matchObj);
     }
-    res.locals.matchesObj = matchesObj;
+    res.locals.matchesArray = matchesArray;
     return next();
   } catch (err) {
     next({

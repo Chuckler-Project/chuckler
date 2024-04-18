@@ -13,9 +13,11 @@ userController.createUser = async (req, res, next) => {
       res.locals.userExists = true;
       return next();
     }
+    // add user to db
     const createUserResponse = await sql`INSERT INTO users (username, password) VALUES (${username}, ${password}) RETURNING id, username`;
     const userInfo = createUserResponse[0];
     res.locals.userInfo = userInfo;
+    // add users first joke to db
     const createFirstJokeResponse = await sql`INSERT INTO jokes (content, creator_id) VALUES (${joke}, ${res.locals.userInfo.id}) RETURNING id`;
     const firstJokeId = createFirstJokeResponse[0].id;
     await sql`UPDATE users SET jokes_posted=ARRAY_APPEND(jokes_posted, ${firstJokeId}) WHERE id=${res.locals.userInfo.id}`;
@@ -40,4 +42,31 @@ userController.verifyUser = async (req, res, next) => {
     return next();
   } catch (error) {console.log('error in userController verifyUser', error)}
 }
+
+userController.setIsOnlineTrue = async (req, res, next) => {
+  try {
+    const {username} = req.body;
+    await sql`UPDATE users SET is_online=true WHERE username=${username} `;
+    return next();
+  } catch (err) {
+    next({
+      log: `Error in userController.setIsOnlineTrue middleware: ${err}`,
+      message: `Error setting user isOnline status: ${err}`
+    });
+  };
+};
+
+userController.setIsOnlineFalse = async (req, res, next) => {
+  try {
+    const {username} = req.body;
+    await sql`UPDATE users SET is_online=false WHERE username=${username} `;
+    return next();
+  } catch (err) {
+    next({
+      log: `Error in userController.setIsOnlineTrue middleware: ${err}`,
+      message: `Error setting user isOnline status: ${err}`
+    });
+  };
+}
+
 module.exports = userController;

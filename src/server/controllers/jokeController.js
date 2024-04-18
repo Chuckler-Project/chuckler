@@ -6,12 +6,50 @@ const jokeController = {};
 jokeController.getJoke = async (req, res, next) => {
   try {
     const {userId} = req.body;
-    // retrieve a random joke that the current user did not write
-    const jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
-    // handle joke retrieval error
-    if (jokeResponse.length === 0) return next({ log: `No joke found`, message: 'An error occured getting a joke'});
+    const lookForUnseenJoke = async () => {
+      // get the jokes that the user has already seen
+      const viewedJokesResponse = await sql`SELECT jokes_viewed FROM users WHERE id=${userId}`;
+      let viewedJokesArray = viewedJokesResponse[0].jokes_viewed;
+      console.log('viewed jokes array', viewedJokesArray)
+      // get all the jokes that the user didn't write
+      const otherUsersJokesArrayOfIds = await sql`SELECT id FROM jokes WHERE creator_id != ${userId}`;
+      // loop through the jokes that the user didn't write until reaching one the user hasn't seen
+      console.log('other users jokes', otherUsersJokesArrayOfIds)
+      let chosenJokeId;
+      if (viewedJokesArray === null) chosenJokeId = otherUsersJokesArrayOfIds[0].id
+      else {
+        for (const joke of otherUsersJokesArrayOfIds) {
+          if (!viewedJokesArray.includes(joke.id)) {
+            chosenJokeId = joke.id;
+            break;
+          }
+        };
+      };
+      console.log('chosen joke id to be retured', chosenJokeId)
+      return chosenJokeId;
+    };
+    let chosenJokeId = await lookForUnseenJoke();
+    console.log('first attampt', chosenJokeId)
+    // if there is no chosen joke, reset the users jokes_viewed array and try again
+    if (!chosenJokeId) {console.log('triggered')
+      await sql`UPDATE users SET jokes_viewed=null WHERE id=${userId}`;
+      chosenJokeId = await lookForUnseenJoke();
+      console.log('second attempt', chosenJokeId);
+    }
+    const jokeResponse = await sql`SELECT * FROM jokes WHERE id=${chosenJokeId}`;
+
+
+    // working version wo seen jokes filetering
+    // jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
+
+
+    // console.log('other users jokes',otherUsersJokes);
+    // get all the jokes that the viewer has seen
+    // sort in js and give joke back that way
+
+    // res.locals.joke = 'joke';
+   
     res.locals.joke = jokeResponse[0];
-    console.log(res.locals.joke);
     return next();
   } catch (err) { 
     next({
@@ -19,7 +57,20 @@ jokeController.getJoke = async (req, res, next) => {
       message: 'An error occurred getting the joke'
     }) 
   }
-}
+};
+
+jokeController.addJokeToViewed = async (req, res, next) => {
+  try {
+    const {userId} = req.body;
+    await sql`UPDATE users SET jokes_viewed=ARRAY_APPEND(jokes_viewed, ${res.locals.joke.id}) WHERE id=${userId}`;
+    return next();
+  } catch (err) {
+    next({
+      log: `Error in addJokeToViewed middleware: ${err}`,
+      message: 'An error occurred adding the joke to the users jokes viewed list'
+    }) 
+  };
+};
 
 // post a joke to the database
 jokeController.postJoke = async (req, res, next) => {
@@ -49,7 +100,6 @@ jokeController.likeJoke = async (req, res, next) => {
     // add jokeId to users jokes_liked array
     await sql`UPDATE users SET jokes_liked=ARRAY_APPEND(jokes_liked, ${jokeId}) WHERE id=${userId}`;
     res.locals.likeMessage = `User ${userId} liked joke ${jokeId}`;
-    console.log(res.locals.likeMessage);
     return next();
   } catch (err) {
     next({
