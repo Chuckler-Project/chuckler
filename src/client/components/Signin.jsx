@@ -18,7 +18,6 @@ const Signin = ({closeModal}) => {
   })
 
 
-  const [loginStatus, setLoginStatus] = useState('');
 
   useEffect(() => {
     // console.log('user state', currUser);
@@ -26,10 +25,7 @@ const Signin = ({closeModal}) => {
   }, [currUser]);
 
   const signinAction = async () => {
-    if (username === '' || password === '') {
-      setLoginStatus('Please complete every field');
-      return;
-    } else setLoginStatus('');
+    if (username === '' || password === '') alert('Please complete every field')
 
     try {
       const response = await Axios.post('api/user/login', {
@@ -45,7 +41,7 @@ const Signin = ({closeModal}) => {
 
   return (
       <div className="modalBackground">
-          <div className="login-container">
+          <div id='login-container' className="login-container">
               <div className="closeModal">
                   <img src={logo} alt="chuckler" className='logo' style={{width:'150px'}} />
                   <button 
@@ -74,10 +70,9 @@ const Signin = ({closeModal}) => {
                       />
                   </div>
               </div>
-              <div className="signup-btn">
-                  <button onClick={signinAction}>LOGIN</button>
+              <div  className="signup-btn">
+                  <button onClick={signinAction}>Sign in</button>
               </div>
-              <h1>{loginStatus}</h1>
           </div>
       </div>
   )

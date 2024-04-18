@@ -20,15 +20,11 @@ const Signup = ({ closeModal }) => {
   });
 
   useEffect(() => {
-    console.log('user state', currUser);
     if (currUser.username !== '') navigate('/main', { state: currUser });
   }, [currUser]);
 
   const signupAction = () => {
-    if (username === '' || password === '' || joke === '') {
-      setSignUpStatus('Please complete every field');
-      return;
-    } setSignUpStatus('');
+    if (username === '' || password === '' || joke === '') alert('Please complete every field')
 
     Axios.post('/api/user/signup', {
       username,
@@ -42,19 +38,10 @@ const Signup = ({ closeModal }) => {
           id: response.data.id,
           username: response.data.username,
         });
-    }
-      // if (response.data === 'username exists') {
-      //     setSignUpStatus('Username taken');
-      //   } else {
-      //     setSignUpStatus('');
-      //     navigate('/main');
-      //   }
+      }
     });
   };
 
-  const handleClick = () => {
-    navigate('/main', { state: currUser });
-  };
 
   return (
     <div className="modalBackground">
@@ -72,7 +59,6 @@ const Signup = ({ closeModal }) => {
         <div className="logo-title">
           <div className="title">Get Started</div>
         </div>
-
         <div className="inputs">
           <div className="input">
             <img src={userIcon} alt="" style={{ width: '30px' }} />
@@ -105,11 +91,9 @@ const Signup = ({ closeModal }) => {
             />
           </div>
         </div>
-        <h1>{signUpStatus}</h1>
+        <p className='signUpStatus'>{signUpStatus}</p>
         <div className="signup-btn">
-          <button onClick={signupAction}>
-            {/* <div className="signup-btn" to='/main'>Sign Up</div> */}
-          </button>
+          <button onClick={signupAction}>Sign up</button>
         </div>
       </div>
     </div>
