@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {useLocation} from 'react-router-dom';
 import '../../stylesheets/home.css';
 import InputJoke from "../../components/InputJoke.jsx";
 import MatchMessage from '../../components/MatchMessage.jsx';
@@ -8,13 +9,16 @@ export default function Home () {
     const [joke, setJoke] = useState('');
     const [userId, setUser] = useState(15);
     const [match, setMatch] = useState(false);
+    
+    const location = useLocation();
+    const data = location.state;
 
     const getJoke = async () => {
         try {
             const joke = await fetch('/api/joke/retrieveJoke', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: userId }) 
+                body: JSON.stringify({ userId: data.id }) 
             });
             const parsedJoke = await joke.json();
             console.log('joke here ->', parsedJoke);

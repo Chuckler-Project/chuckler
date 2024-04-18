@@ -6,6 +6,7 @@ const jokeController = {};
 jokeController.getJoke = async (req, res, next) => {
   try {
     const {userId} = req.body;
+    console.log('userId', userId)
     // get the jokes that the user has already seen to exclude from the sql query
     const viewedJokesResponse = await sql`SELECT jokes_viewed FROM users WHERE id=${userId}`;
     let viewedJokesArray = viewedJokesResponse[0].jokes_viewed;
