@@ -6,26 +6,49 @@ const jokeController = {};
 jokeController.getJoke = async (req, res, next) => {
   try {
     const {userId} = req.body;
-    console.log('userId', userId)
-    // get the jokes that the user has already seen to exclude from the sql query
-    const viewedJokesResponse = await sql`SELECT jokes_viewed FROM users WHERE id=${userId}`;
-    let viewedJokesArray = viewedJokesResponse[0].jokes_viewed;
-    console.log('viewed jokes array', viewedJokesArray);
-    const param = [...viewedJokesArray];
-    let jokeResponse;
+    const lookForUnseenJoke = async () => {
+      // get the jokes that the user has already seen
+      const viewedJokesResponse = await sql`SELECT jokes_viewed FROM users WHERE id=${userId}`;
+      let viewedJokesArray = viewedJokesResponse[0].jokes_viewed;
+      console.log('viewed jokes array', viewedJokesArray)
+      // get all the jokes that the user didn't write
+      const otherUsersJokesArrayOfIds = await sql`SELECT id FROM jokes WHERE creator_id != ${userId}`;
+      // loop through the jokes that the user didn't write until reaching one the user hasn't seen
+      console.log('other users jokes', otherUsersJokesArrayOfIds)
+      let chosenJokeId;
+      if (viewedJokesArray === null) chosenJokeId = otherUsersJokesArrayOfIds[0].id
+      else {
+        for (const joke of otherUsersJokesArrayOfIds) {
+          if (!viewedJokesArray.includes(joke.id)) {
+            chosenJokeId = joke.id;
+            break;
+          }
+        };
+      };
+      console.log('chosen joke id to be retured', chosenJokeId)
+      return chosenJokeId;
+    };
+    let chosenJokeId = await lookForUnseenJoke();
+    console.log('first attampt', chosenJokeId)
+    // if there is no chosen joke, reset the users jokes_viewed array and try again
+    if (!chosenJokeId) {console.log('triggered')
+      await sql`UPDATE users SET jokes_viewed=null WHERE id=${userId}`;
+      chosenJokeId = await lookForUnseenJoke();
+      console.log('second attempt', chosenJokeId);
+    }
+    const jokeResponse = await sql`SELECT * FROM jokes WHERE id=${chosenJokeId}`;
+
+
     // working version wo seen jokes filetering
-    jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
+    // jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
 
 
-    // get all the jokes that the user didn't write
-    const otherUsersJokesResponse = await sql`SELECT id FROM jokes WHERE creator_id != ${userId}`;
-    const otherUsersJokes = otherUsersJokesResponse[0];
-    console.log('other users jokes',otherUsersJokes);
+    // console.log('other users jokes',otherUsersJokes);
     // get all the jokes that the viewer has seen
     // sort in js and give joke back that way
 
     // res.locals.joke = 'joke';
-    if (jokeResponse.length === 0) return next({ log: `No joke found`, message: 'No more jokes in the database'});
+   
     res.locals.joke = jokeResponse[0];
     return next();
   } catch (err) { 

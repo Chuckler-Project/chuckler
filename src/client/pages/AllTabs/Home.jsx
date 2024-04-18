@@ -14,6 +14,7 @@ export default function Home () {
     const data = location.state;
 
     const getJoke = async () => {
+        console.log('DATA', data)
         try {
             const joke = await fetch('/api/joke/retrieveJoke', {
                 method: 'POST',
@@ -36,7 +37,7 @@ export default function Home () {
             const likeResponse = await fetch('/api/joke/like', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: userId, jokeId: joke.id }) 
+                body: JSON.stringify({ userId: data.id, jokeId: joke.id }) 
             });
 
             const likeResponseMessage = await likeResponse.json();
@@ -48,7 +49,7 @@ export default function Home () {
             const matchResponse = await fetch('/api/match', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: userId, creatorId: joke.creator_id }) 
+                body: JSON.stringify({ userId: data.userId, creatorId: joke.creator_id }) 
             });
 
             const matchResponseMessage = await matchResponse.json();
@@ -56,8 +57,6 @@ export default function Home () {
             console.log('match response', matchResponseMessage);
         } catch (err) { console.log('error checking for match', err) };
     }
-
-    console.log('current state', joke.content, joke.creator_id, userId, match)
     
     return (
         <div>
@@ -73,7 +72,7 @@ export default function Home () {
             </div>
             {match && <MatchMessage 
                 match={match} 
-                userId={userId} 
+                userId={data.userId} 
                 jokeCreator={joke.creator_id}
                 closeModal={setMatch}
                 />}
