@@ -1,0 +1,30 @@
+#matches {
+    width: 350px;
+    height: 570px;
+    margin: 30px auto;
+    padding-top: 10px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+
+.user-profile {
+    display: flex;
+    margin: 10px 30px;
+    cursor: pointer;
+    /* background-color: red; */
+}
+
+.user-profile:hover {
+    background-color: rgb(245, 244, 244);
+}
+.profile-link {
+    text-decoration: none;
+    color:#606060;
+}
+
+.name-container {
+    margin: 0px 10px;
+    /* padding-top: 5px; */
+
+}

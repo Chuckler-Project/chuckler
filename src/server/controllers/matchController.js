@@ -27,7 +27,8 @@ matchController.checkForMatch = async (req, res, next) => {
       res.locals.userId = userId;
       res.locals.creatorId = creatorId;
     }
-    res.locals.message = message;
+    //CHANGED THE RESPONSE TO BOOLEAN
+    res.locals.message = matched;
     return next();
   } catch (err) {
     next({

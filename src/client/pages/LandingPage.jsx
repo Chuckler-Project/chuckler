@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../stylesheets/landing.css';
 import chuckler from '../images/chuckler-word.png';
 import Signup from '../components/Signup.jsx';
@@ -11,11 +11,13 @@ export default function LandingPage() {
     const [openSignUp, setOpenSignUp] = useState(false);
     const [openSignIn, setOpenSignIn] = useState(false);
 
+   
 
     return (
         <div className="chuckler-container">
             <div className="about">
-                <Link to='/about' className="link">About</Link>
+                {/* <Link to='/about' className="link">About {test}</Link> */}
+
                 <button 
                     className='btn-login'  
                     onClick={() => {

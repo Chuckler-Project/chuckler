@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Axios from 'axios';
 import '../stylesheets/signup.css';
-import user from '../images/user.png';
-import password from '../images/password.png';
+import userIcon from '../images/user.png';
+import passwordIcon from '../images/password.png';
 import logo from '../images/logo.png';
 
 
@@ -12,6 +12,12 @@ export default function Signin({closeModal}) {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [currUser, setCurrUser] = useState({
+    id:'',
+    username:''
+  })
+
+
   const [loginStatus, setLoginStatus] = useState('');
 
   const signinAction = () => {
@@ -20,19 +26,36 @@ export default function Signin({closeModal}) {
       return;
   } else setLoginStatus('');
 
-
     Axios.post('/api/user/login', {
       username: username,
       password: password,
-    }).then((response) => {
-      if (response.data === 'incorrect password') {
-        setLoginStatus('Incorrect username password combination');
-      } else {
-        setLoginStatus('');
-        navigate('/main');
-      }
-    });
+    })
+      .then((response) => {
+        console.log('response from signin LINE 24', response.data);
+        setCurrUser({
+          id: response.data.id, 
+          username: response.data.username
+        });
+        return response;
+      })
+      // .then((response) => {
+      //   console.log('currUser', currUser,'RESPONSEEEEE',  response.data);
+      //   handleClick();
+      // })
+  
+
+      
+       
+      
+  }
+
+
+  const handleClick = () => {
+    navigate("/main", { state: currUser });
+      console.log('CHECK FOR THIS current user ', currUser)
   };
+
+
 
 
     return (
@@ -50,7 +73,7 @@ export default function Signin({closeModal}) {
                
                 <div className="inputs">
                     <div className="input">
-                        <img src={user} alt="" style={{width:'30px'}}/>
+                        <img src={userIcon} alt="" style={{width:'30px'}}/>
                         <input type="text" placeholder="Name" 
                           onChange={(e) => {
                             setUsername(e.target.value);
@@ -58,7 +81,7 @@ export default function Signin({closeModal}) {
                         />
                     </div>
                     <div className="input">
-                        <img src={password} alt="password-icon"  style={{width:'30px'}}/>
+                        <img src={passwordIcon} alt="password-icon"  style={{width:'30px'}}/>
                         <input type="password" placeholder="Password"
                           onChange={(e) => {
                             setPassword(e.target.value);
@@ -67,9 +90,10 @@ export default function Signin({closeModal}) {
                     </div>
                 </div>
                 <div className="signup-btn">
-                    <button onClick={signinAction}>
-                        <div className="signup-btn" to='/main'>Login</div>
+                    <button onClick={signinAction}> LOGIN
+                        {/* <Link className="signup-btn" to='/main'>Login</Link> */}
                     </button>
+                    <button onClick={handleClick}>TESTING</button>
                 </div>
                 <h1>{loginStatus}</h1>
             </div>
