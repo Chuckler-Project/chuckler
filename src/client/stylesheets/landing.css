@@ -72,3 +72,8 @@
     align-items: center;
     height: 100vh;
 } 
+
+#login-btn {
+    width: 10%;
+    margin-right: 10px;
+  }

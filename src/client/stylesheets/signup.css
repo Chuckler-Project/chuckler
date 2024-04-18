@@ -1,7 +1,7 @@
  /* how to make the background blur? */
 .modalBackground {
   width: 100vw;
-  height: 100vh;
+  height: 90vh;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -13,10 +13,16 @@
     width: 500px;
     height: 70%;
     margin: auto;
-    border-radius: 5px;
-    padding-top: 10px;
+    border-radius: 20px;
+    padding: 20px;
     box-shadow: 0px 0px 10px rgb(93, 93, 93);
 }
+#login-container {
+  padding-top: 30px;
+  height: 65%;
+}
+
+
 
 .closeModal {
   display: flex;
@@ -81,14 +87,14 @@
   flex-direction: column;
   align-items: center;
   text-decoration: none;
-  color: #423b4c;
-  margin: 20px auto;
+  margin: 50px auto;
   
 }
 
 .signup-btn button {
   width: 40%;
   background-color: #ffffff;
-  /* margin-bottom: 30px; */
+  color: #6c6969;
   
 }
+
