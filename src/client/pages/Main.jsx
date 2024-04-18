@@ -14,6 +14,7 @@ export default function Main () {
         { label: "Home" },
         { label: "Chat" },
         { label: "Profile" },
+        { label: "Log Out" },
     ];
 
 
