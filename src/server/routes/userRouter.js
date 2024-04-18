@@ -23,10 +23,9 @@ router.post('/login',
   }
 );
 
-router.get('/logout',
+router.post('/logout',
   sessionController.removeSSIDCookie,
-  // change to post request to get access to username?
-  // userController.setIsOnlineFalse,
+  userController.setIsOnlineFalse,
   (req, res) => {
     res.status(200).json('Logged out');
   }

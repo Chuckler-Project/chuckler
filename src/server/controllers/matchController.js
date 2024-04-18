@@ -59,6 +59,7 @@ matchController.retrieveMatches = async (req, res, next) => {
     const matchesResponse = await sql`SELECT matches FROM users WHERE id=${userId}`;
     const matchesArray = matchesResponse[0].matches;
     res.locals.matchesArray = matchesArray;
+    console.log(matchesArray);
     return next();
   } catch (err) {
     next({
