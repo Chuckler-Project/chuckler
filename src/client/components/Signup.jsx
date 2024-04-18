@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import '../stylesheets/signup.css';
-import user from '../images/user.png';
-import password from '../images/password.png';
+import userIcon from '../images/user.png';
+import passwordIcon from '../images/password.png';
+import jokeIcon from '../images/joke.png';
 import logo from '../images/logo.png';
-import joke from '../images/joke.png';
 
 
 export default function Signup({closeModal}) {
@@ -15,6 +15,10 @@ export default function Signup({closeModal}) {
     const [password, setPassword] = useState('');
     const [signUpStatus, setSignUpStatus] = useState('');
     const [joke, setJoke] = useState('');
+    const [currUser, setCurrUser] = useState({
+        id:'',
+        username:''
+      })
 
     const signupAction = () => {
         if (username === '' || password === '' || joke === '') {
@@ -27,14 +31,23 @@ export default function Signup({closeModal}) {
           password: password,
           joke: joke,
         }).then((response) => {
-          if (response.data === 'username exists') {
-            setSignUpStatus('Username taken');
-          } else {
-            setSignUpStatus('');
-            navigate('/main');
-          }
+            console.log('RESPONSE SIGNUP', response)
+            setCurrUser({
+                id: response.data.id, 
+                username: response.data.username
+              });
+            // if (response.data === 'username exists') {
+            //     setSignUpStatus('Username taken');
+            //   } else {
+            //     setSignUpStatus('');
+            //     navigate('/main');
+            //   }
         });
       };
+
+    const handleClick = () => {
+    navigate("/main", { state: currUser });
+    };
 
     return (
         <div className="modalBackground">
@@ -51,7 +64,7 @@ export default function Signup({closeModal}) {
                
                 <div className="inputs">
                     <div className="input">
-                        <img src={user} alt="" style={{width:'30px'}}/>
+                        <img src={userIcon} alt="" style={{width:'30px'}}/>
                         <input type="text" placeholder="Name" 
                            onChange={(e) => {
                             setUsername(e.target.value);
@@ -59,7 +72,7 @@ export default function Signup({closeModal}) {
                         />
                     </div>
                     <div className="input">
-                        <img src={password} alt="password-icon"  style={{width:'30px'}}/>
+                        <img src={passwordIcon} alt="password-icon"  style={{width:'30px'}}/>
                         <input type="password" placeholder="Password"
                            onChange={(e) => {
                             setPassword(e.target.value);
@@ -67,7 +80,7 @@ export default function Signup({closeModal}) {
                         />
                     </div>
                     <div className="input">
-                        <img src={joke} alt="joke-emoji" style={{width:'30px'}}/>
+                        <img src={jokeIcon} alt="joke-emoji" style={{width:'30px'}}/>
                         <input type="text" placeholder="Please enter a joke"
                            onChange={(e) => {
                             setJoke(e.target.value);
@@ -78,8 +91,9 @@ export default function Signup({closeModal}) {
                 <h1>{signUpStatus}</h1>
                 <div className="signup-btn">
                     <button onClick={signupAction}>
-                        <div className="signup-btn" to='/main'>Sign Up</div>
+                        {/* <div className="signup-btn" to='/main'>Sign Up</div> */}
                     </button>
+                    <button onClick={handleClick}>TESTING</button>
                 </div>
             </div>
         </div>
