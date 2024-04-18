@@ -4,9 +4,9 @@ import InputJoke from "../../components/InputJoke.jsx";
 import MatchMessage from '../../components/MatchMessage.jsx';
 
 
-export default function Main ({data}) {
+export default function Home () {
     const [joke, setJoke] = useState('');
-    const [userId, setUser] = useState(data.id);
+    const [userId, setUser] = useState(15);
     const [match, setMatch] = useState(false);
 
     const getJoke = async () => {

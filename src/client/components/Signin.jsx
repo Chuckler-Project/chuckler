@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Axios from 'axios';
 import '../stylesheets/signup.css';
 import userIcon from '../images/user.png';
@@ -8,6 +8,7 @@ import logo from '../images/logo.png';
 
 
 export default function Signin({closeModal}) {
+  let navigate = useNavigate();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -17,29 +18,44 @@ export default function Signin({closeModal}) {
   })
 
 
+  const [loginStatus, setLoginStatus] = useState('');
 
   const signinAction = () => {
+    if (username === '' || password === '') {
+      setLoginStatus('Please complete every field');
+      return;
+  } else setLoginStatus('');
+
     Axios.post('/api/user/login', {
       username: username,
       password: password,
-    }).then((response) => {
-      console.log('response from signin LINE 24', response.data);
-      setCurrUser({
-        id: response.data.id, 
-        username: response.data.username
+    })
+      .then((response) => {
+        console.log('response from signin LINE 24', response.data);
+        setCurrUser({
+          id: response.data.id, 
+          username: response.data.username
+        });
+        return response;
       })
-    });
+      // .then((response) => {
+      //   console.log('currUser', currUser,'RESPONSEEEEE',  response.data);
+      //   handleClick();
+      // })
+  
 
-  };
+      
+       
+      
+  }
 
 
-  const navigate = useNavigate();
   const handleClick = () => {
     navigate("/main", { state: currUser });
-    console.log('current user ', currUser)
+      console.log('CHECK FOR THIS current user ', currUser)
   };
 
-  
+
 
 
     return (
@@ -52,7 +68,7 @@ export default function Signin({closeModal}) {
                         onClick={() => closeModal(false)}> X </button>
                 </div>
                 <div className="logo-title">
-                    <div className="title">Get Started</div>
+                    <div className="title">Welcome Back</div>
                 </div>
                
                 <div className="inputs">
@@ -74,12 +90,12 @@ export default function Signin({closeModal}) {
                     </div>
                 </div>
                 <div className="signup-btn">
-                    <button onClick={signinAction}>
-                      LOGIN
-                        {/* <Link className="signup-btn" to={{pathname:'/main',  state:data}}>Login</Link> */}
+                    <button onClick={signinAction}> LOGIN
+                        {/* <Link className="signup-btn" to='/main'>Login</Link> */}
                     </button>
-                    <button onClick={handleClick}>TESTINg</button>
+                    <button onClick={handleClick}>TESTING</button>
                 </div>
+                <h1>{loginStatus}</h1>
             </div>
         </div>
     )

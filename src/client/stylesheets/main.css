@@ -6,7 +6,7 @@
 }
 
 #main-container{ 
-  height: 708px;
+  height: 720px;
   border: 1px solid black; 
   border-radius: 15px;
   width: 450px;
@@ -36,7 +36,7 @@
     justify-content: center;
     align-items: center;
     width: 50%;
-    padding: 1rem;
+    /* padding: 1rem; */
     list-style: none;
     text-align: center;
     cursor: pointer;

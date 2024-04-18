@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import '../stylesheets/signup.css';
 import userIcon from '../images/user.png';
@@ -9,22 +9,42 @@ import logo from '../images/logo.png';
 
 
 export default function Signup({closeModal}) {
+    let navigate = useNavigate();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [signUpStatus, setSignUpStatus] = useState('');
     const [joke, setJoke] = useState('');
+    const [currUser, setCurrUser] = useState({
+        id:'',
+        username:''
+      })
 
     const signupAction = () => {
+        if (username === '' || password === '' || joke === '') {
+            setSignUpStatus('Please complete every field');
+            return;
+        } else setSignUpStatus('');
+
         Axios.post('/api/user/signup', {
           username: username,
           password: password,
           joke: joke,
         }).then((response) => {
-          console.log(response);
+            console.log('RESPONSE SIGNUP', response)
+            setCurrUser({
+                id: response.data.id, 
+                username: response.data.username
+              });
+            // if (response.data === 'username exists') {
+            //     setSignUpStatus('Username taken');
+            //   } else {
+            //     setSignUpStatus('');
+            //     navigate('/main');
+            //   }
         });
       };
 
-    const navigate = useNavigate();
     const handleClick = () => {
     navigate("/main", { state: currUser });
     };
@@ -68,12 +88,13 @@ export default function Signup({closeModal}) {
                         />
                     </div>
                 </div>
+                <h1>{signUpStatus}</h1>
                 <div className="signup-btn">
                     <button onClick={signupAction}>
-                        <Link className="signup-btn" to='/main'>Sign Up</Link>
+                        {/* <div className="signup-btn" to='/main'>Sign Up</div> */}
                     </button>
+                    <button onClick={handleClick}>TESTING</button>
                 </div>
-               
             </div>
         </div>
     )
