@@ -1,104 +1,60 @@
-
 .background {
     display: flex;
     width: 100%;
     height: 100vh;
     background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
 }
-#main-container,
-#jokes{ 
-    height: 700px;
-    border: 1px solid black; 
-    border-radius: 15px;
-    width: 450px;
-    margin: auto;
+
+#main-container{ 
+  height: 708px;
+  border: 1px solid black; 
+  border-radius: 15px;
+  width: 450px;
+  margin: auto;
 }
+
 #main-container {
     background-image: url('../images/haha.png');
     background-color: #f6d86e;
     background-size: 20%;
+} 
 
-}
-
-
-#jokes {
-    width: 350px;
-    height: 400px;
-    margin-top: 30px;
-    background-color: white;
-}
-
-.buttons{
+  /* Tab Navigation */
+  ul.nav {
+    width: 100%;
+    margin: 0 auto 2rem;
     display: flex;
-    justify-content: space-around;
-}
-.like-btn {
-    margin-top: 10px;
-    border-radius: 50%;
+    align-items: center;
+    justify-content: space-between;
+    /* border: 1px solid #d6b645; */
+    border-radius: 10px;
+
+  }
+   
+  ul.nav li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    padding: 1rem;
+    list-style: none;
+    text-align: center;
     cursor: pointer;
-    background-image: url('../images/like.png');
-    width: 100px;
-    height: 100px;
-    border: none;
-    box-shadow: 0px 0px 5px black;
-    background-size: cover; 
-    background-repeat: no-repeat;
-    background-position: center;
-
-}
-
-.dislike-btn {
-    margin-top: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    background-image: url('../images/dislike.png');
-    width: 100px;
-    height: 100px;
-    border: none;
-    box-shadow: 0px 0px 5px black;
-    background-size: cover; 
-    background-repeat: no-repeat;
-    background-position: center;
-
-}
-/*  */
+    transition: all 0.7s;
+  }
 
 
-.App {
-	text-align: center;
-	margin: auto;
-}
-.geeks {
-	color: green;
-}
+  ul.nav li:hover {
+    background: rgba(50, 224, 196, 0.15);
+  }
+  ul.nav li.active {
+    background: #ddc055;
+    border-radius: 10px;
+    height: 60px;
+  } 
 
-.tabs-container {
-	width: 400px;
-	margin: 20px auto;
-}
-
-.tabs {
-	display: flex;
-}
-
-.tab {
-	cursor: pointer;
-	padding: 10px;
-	margin-right: 10px;
-	border: 1px solid #ddd;
-	border-bottom: none;
-	background-color: #f1f1f1;
-}
-
-.tab.active {
-	background-color: #ddd;
-}
-
-.tab-content {
-	border: 1px solid #ddd;
-	padding: 10px;
-}
-
-
-
- 
+    
+  /* Tab Content Styles  */
+  .TabContent {
+    text-align: center;
+  }

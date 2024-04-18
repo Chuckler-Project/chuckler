@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import '../stylesheets/signup.css';
-import user from '../images/user.png';
-import password from '../images/password.png';
+import userIcon from '../images/user.png';
+import passwordIcon from '../images/password.png';
+import jokeIcon from '../images/joke.png';
 import logo from '../images/logo.png';
-import joke from '../images/joke.png';
 
 
 export default function Signup({closeModal}) {
@@ -24,6 +24,11 @@ export default function Signup({closeModal}) {
         });
       };
 
+    const navigate = useNavigate();
+    const handleClick = () => {
+    navigate("/main", { state: currUser });
+    };
+
     return (
         <div className="modalBackground">
             <div className="login-container">
@@ -39,7 +44,7 @@ export default function Signup({closeModal}) {
                
                 <div className="inputs">
                     <div className="input">
-                        <img src={user} alt="" style={{width:'30px'}}/>
+                        <img src={userIcon} alt="" style={{width:'30px'}}/>
                         <input type="text" placeholder="Name" 
                            onChange={(e) => {
                             setUsername(e.target.value);
@@ -47,7 +52,7 @@ export default function Signup({closeModal}) {
                         />
                     </div>
                     <div className="input">
-                        <img src={password} alt="password-icon"  style={{width:'30px'}}/>
+                        <img src={passwordIcon} alt="password-icon"  style={{width:'30px'}}/>
                         <input type="password" placeholder="Password"
                            onChange={(e) => {
                             setPassword(e.target.value);
@@ -55,7 +60,7 @@ export default function Signup({closeModal}) {
                         />
                     </div>
                     <div className="input">
-                        <img src={joke} alt="joke-emoji" style={{width:'30px'}}/>
+                        <img src={jokeIcon} alt="joke-emoji" style={{width:'30px'}}/>
                         <input type="text" placeholder="Please enter a joke"
                            onChange={(e) => {
                             setJoke(e.target.value);

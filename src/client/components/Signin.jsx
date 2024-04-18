@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import '../stylesheets/signup.css';
-import user from '../images/user.png';
-import password from '../images/password.png';
+import userIcon from '../images/user.png';
+import passwordIcon from '../images/password.png';
 import logo from '../images/logo.png';
 
 
@@ -11,15 +11,35 @@ export default function Signin({closeModal}) {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [currUser, setCurrUser] = useState({
+    id:'',
+    username:''
+  })
+
+
 
   const signinAction = () => {
     Axios.post('/api/user/login', {
       username: username,
       password: password,
     }).then((response) => {
-      console.log(response);
+      console.log('response from signin LINE 24', response.data);
+      setCurrUser({
+        id: response.data.id, 
+        username: response.data.username
+      })
     });
+
   };
+
+
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate("/main", { state: currUser });
+    console.log('current user ', currUser)
+  };
+
+  
 
 
     return (
@@ -37,7 +57,7 @@ export default function Signin({closeModal}) {
                
                 <div className="inputs">
                     <div className="input">
-                        <img src={user} alt="" style={{width:'30px'}}/>
+                        <img src={userIcon} alt="" style={{width:'30px'}}/>
                         <input type="text" placeholder="Name" 
                           onChange={(e) => {
                             setUsername(e.target.value);
@@ -45,7 +65,7 @@ export default function Signin({closeModal}) {
                         />
                     </div>
                     <div className="input">
-                        <img src={password} alt="password-icon"  style={{width:'30px'}}/>
+                        <img src={passwordIcon} alt="password-icon"  style={{width:'30px'}}/>
                         <input type="password" placeholder="Password"
                           onChange={(e) => {
                             setPassword(e.target.value);
@@ -55,8 +75,10 @@ export default function Signin({closeModal}) {
                 </div>
                 <div className="signup-btn">
                     <button onClick={signinAction}>
-                        <Link className="signup-btn" to='/main'>Login</Link>
+                      LOGIN
+                        {/* <Link className="signup-btn" to={{pathname:'/main',  state:data}}>Login</Link> */}
                     </button>
+                    <button onClick={handleClick}>TESTINg</button>
                 </div>
             </div>
         </div>
