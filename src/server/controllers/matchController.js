@@ -40,10 +40,18 @@ matchController.checkForMatch = async (req, res, next) => {
 matchController.addMatch = async (req, res, next) => {
   try {
     // add joke creator's id to users matches array and vice versa
+    // if (res.locals.matched) {
     if (res.locals.matched) {
-      await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.creatorId}) WHERE id=${res.locals.userId}`;
-      await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.userId}) WHERE id=${res.locals.creatorId}`;
-      res.locals.message = `match between ${res.locals.creatorId} and ${res.locals.userId} noted in db`;
+      // first check to see if the match already exists in the db
+      const matchesResponse = await sql`SELECT matches FROM users WHERE id=${res.locals.userId}`;
+      const usersMatchesArray = matchesResponse[0].matches;
+      if (usersMatchesArray.includes(res.locals.creatorId)) res.locals.message = `match between ${res.locals.creatorId} and ${res.locals.userId} previously noted in db`
+      // if the match is not already in the db, record it
+      else {
+        await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.creatorId}) WHERE id=${res.locals.userId}`;
+        await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.userId}) WHERE id=${res.locals.creatorId}`;
+        res.locals.message = `match between ${res.locals.creatorId} and ${res.locals.userId} noted in db`;
+      };
     } else res.locals.message = 'No match';
     return next();
   } catch (err) {
@@ -61,7 +69,6 @@ matchController.retrieveMatches = async (req, res, next) => {
     const matchesResponse = await sql`SELECT matches FROM users WHERE id=${userId}`;
     const matchesArray = matchesResponse[0].matches;
     res.locals.matchesArray = matchesArray;
-    console.log(matchesArray);
     return next();
   } catch (err) {
     next({
