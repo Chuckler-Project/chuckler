@@ -10,7 +10,7 @@ router.post('/signup',
   userController.setIsOnlineTrue,
   (req, res) => {
     res.locals.userExists ? res.status(200).json('username exists') :
-    res.status(200).json(`${res.locals.userInfo.username} account created successfully`)
+    res.status(200).json(res.locals.userInfo)
   }
 );
 
