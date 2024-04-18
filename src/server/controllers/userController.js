@@ -25,13 +25,18 @@ userController.createUser = async (req, res, next) => {
 
 userController.verifyUser = async (req, res, next) => {
   try {
-    // const ssid = req.cookies.ssid;
-    // if (ssid) return next();
-    
     const { username, password } = req.body;
+    res.locals.authenticated = false;
+
     const passwordResponse = await sql`SELECT password FROM users WHERE username=${username}`;
+    
+    // return falsy authentication if username does not exist
+    if (passwordResponse.length === 0) {
+      return next();
+    }
+    
     const truePassword = passwordResponse[0].password;
-    res.locals.authenticated = false;  
+    
     if (password === truePassword) {
       res.locals.authenticated = true;
       const userObjResponse = await sql`SELECT * FROM users WHERE username=${username}`;

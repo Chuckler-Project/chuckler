@@ -36,7 +36,13 @@ export default function Signin({closeModal}) {
           id: response.data.id, 
           username: response.data.username
         });
-        return response;
+        if (response.data === 'incorrect password or username') {
+          setLoginStatus('Incorrect username password combination');
+        } else {
+          setLoginStatus('');
+          navigate('/main');
+        }
+         return response;
       })
       // .then((response) => {
       //   console.log('currUser', currUser,'RESPONSEEEEE',  response.data);

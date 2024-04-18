@@ -36,12 +36,12 @@ export default function Signup({closeModal}) {
                 id: response.data.id, 
                 username: response.data.username
               });
-            // if (response.data === 'username exists') {
-            //     setSignUpStatus('Username taken');
-            //   } else {
-            //     setSignUpStatus('');
-            //     navigate('/main');
-            //   }
+            if (response.data === 'username exists') {
+                setSignUpStatus('Username taken');
+              } else {
+                setSignUpStatus('');
+                navigate('/main');
+              }
         });
       };
 
