@@ -21,7 +21,7 @@ const Signin = ({closeModal}) => {
   const [loginStatus, setLoginStatus] = useState('');
 
   useEffect(() => {
-    console.log('user state', currUser);
+    // console.log('user state', currUser);
     if (currUser.username != '') navigate("/main", { state: currUser });
   }, [currUser]);
 

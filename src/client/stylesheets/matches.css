@@ -5,6 +5,9 @@
     padding-top: 10px;
     background-color: white;
     border-radius: 10px;
+    overflow:scroll;
+    overflow-x:hidden;
+
 }
 
 

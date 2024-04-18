@@ -10,16 +10,17 @@ export default function Home () {
     const [userId, setUser] = useState(15);
     const [match, setMatch] = useState(false);
     
+    //CHECK IF WE NEED THIS 
     const location = useLocation();
-    const data = location.state;
+    const userData = location.state;
 
     const getJoke = async () => {
-        console.log('DATA', data)
+        // console.log('CURRENT USER DATA', userData)
         try {
             const joke = await fetch('/api/joke/retrieveJoke', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: data.id }) 
+                body: JSON.stringify({ userId: userData.id }) 
             });
             const parsedJoke = await joke.json();
             console.log('joke here ->', parsedJoke);
@@ -37,7 +38,7 @@ export default function Home () {
             const likeResponse = await fetch('/api/joke/like', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: data.id, jokeId: joke.id }) 
+                body: JSON.stringify({ userId: userData.id, jokeId: joke.id }) 
             });
 
             const likeResponseMessage = await likeResponse.json();
@@ -49,7 +50,7 @@ export default function Home () {
             const matchResponse = await fetch('/api/match', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: data.userId, creatorId: joke.creator_id }) 
+                body: JSON.stringify({ userId: userData.userId, creatorId: joke.creator_id }) 
             });
 
             const matchResponseMessage = await matchResponse.json();
@@ -72,7 +73,7 @@ export default function Home () {
             </div>
             {match && <MatchMessage 
                 match={match} 
-                userId={data.userId} 
+                userId={userData.userId} 
                 jokeCreator={joke.creator_id}
                 closeModal={setMatch}
                 />}

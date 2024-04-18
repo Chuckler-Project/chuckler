@@ -96,4 +96,38 @@ matchController.checkIsOnline = async (req, res, next) => {
   };
 };
 
+
+matchController.findMatches = async (req, res, next) => {
+  console.log('im here people', req.params)
+  const allMatches = []; //user names here
+  const { id } = req.params;
+  try {
+    const matches = await sql`SELECT matches FROM users WHERE id=${id}`;
+    console.log('matches', matches);
+    const matchesArr = matches[0].matches;
+    if (matchesArr === null) {
+      res.locals.matches = 'No matches yet!';
+    } else {
+      const allUsers = await sql`SELECT id, username, is_online FROM users`;
+      allUsers.forEach(user => {
+        if (matchesArr.includes(user.id)) {
+          allMatches.push({username: user.username, isOnline: user.is_online})
+        }
+      })
+      console.log('MIDDLEWARE MATCHES  ---->', allMatches)
+
+      res.locals.matches = allMatches;
+    }
+
+
+
+    return next();
+  } catch (err) {
+    next({
+      log: `Error in retrieveMatches middleware: ${err}`,
+      message: `Error retrieving matches: ${err}`
+    });
+  };
+}
+
 module.exports = matchController;
