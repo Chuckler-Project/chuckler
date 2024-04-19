@@ -1,13 +1,25 @@
 const express = require('express');
+const jokeController = require('../controllers/jokeController');
+
 const router = express.Router();
-const jokeController = require('../controllers/jokeController.js');
 
+// get a joke from the database
+router.post('/retrieveJoke',
+  jokeController.getJoke,
+  jokeController.addJokeToViewed,
+  (req, res) => { res.status(200).json(res.locals.joke); }
+);
 
+// like a joke
+router.post('/like',
+  jokeController.likeJoke,
+  (req, res) => { res.status(200).json(res.locals.likeMessage); }
+);
 
-router.get('/', jokeController.getJoke, (req, res, next) => {
-    return res.status(200).json(res.locals.joke)
-})
-
-router.post('/', jokeController.postJoke, (req, res) => res.status(200).json('joke posted'));
+// post a joke to the database
+router.post('/',
+  jokeController.postJoke,
+  (req, res) => { res.status(200).json('joke posted'); }
+);
 
 module.exports = router;

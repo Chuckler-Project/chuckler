@@ -1,57 +1,118 @@
-/* #main-container, #jokes {
-    width: 50%;
-    height: 90vh;
+.background {
     display: flex;
-    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+}
+
+#main-container{ 
+  height: 720px;
+  border: 1px solid black; 
+  border-radius: 15px;
+  width: 450px;
+  margin: auto;
+}
+
+#main-container {
+    background-image: url('../images/haha.png');
+    background-color: #f6d86e;
+    background-size: 20%;
+    /* background-color: red; */
+
+} 
+
+/* logout button */
+
+.navigation {
+  width: 100%;
+}
+
+img {
+  width: 25px;
+  float: left;
+}
+
+.logout {
+  font-size: .5em;
+	position: relative;
+  right: -18px;
+  bottom: -4px;
+  overflow: hidden;
+  letter-spacing: 3px;
+  opacity: 0;
+  transition: opacity .45s;
+  -webkit-transition: opacity .35s;
+  
+}
+
+.button {
+	text-decoration: none;
+	float: right;
+  padding: 8px;
+  margin: 10px;
+  color: #999393;
+  width: 45px;
+  transition: width .55s;
+  -webkit-transition: width .55s;
+  overflow: hidden
+}
+
+a:hover {
+  width: 130px;
+}
+
+a:hover .logout{
+  opacity: .9;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+
+
+
+
+
+
+
+  /* Tab Navigation */
+  ul.nav {
+    width: 100%;
+    margin: 0 auto 2rem;
+    display: flex;
     align-items: center;
-    margin: 30px auto;
-    border: 1px solid black; 
-   
-
- 
-} */
-
-/* main page */
-#main-container,
-#jokes{ 
-    height: 600px;
-    border: 1px solid black; 
-     /* background-color: #fad758; */
-    border-radius: 15px;
-     width: 400px;
-    margin: auto;
-}
-
-#jokes {
-    width: 300px;
-    height: 400px;
-    margin-top: 30px;
-    background-color: white;
-}
-
-.buttons{
-    display: flex;
-    justify-content: space-around;
-}
-button {
-    margin-top: 20px;
-    background-color: #43c0ea;
-    width: 30%;
-    height: 50px;
+    justify-content: space-between;
+    /* border: 1px solid #d6b645; */
     border-radius: 10px;
-    color: whitesmoke;
-    text-shadow: 1px 1px black;
-    cursor: pointer;
-}
 
-#submit {
-    height: 40px;
-    background-color: rgb(7, 190, 7);
-}
-
-#input-joke {
+  }
+   
+  ul.nav li {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
-}
- 
+    width: 50%;
+    /* padding: 1rem; */
+    list-style: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.7s;
+  }
+
+
+  ul.nav li:hover {
+    background: rgba(50, 224, 196, 0.15);
+  }
+  ul.nav li.active {
+    background: #ddc055;
+    border-radius: 10px;
+    height: 60px;
+  } 
+
+    
+  /* Tab Content Styles  */
+  .TabContent {
+    text-align: center;
+  }

@@ -1,30 +1,30 @@
 import React, { useState } from "react";
+import {useLocation} from 'react-router-dom';
 
 
 
-export default function InputJoke() {
+export default function InputJoke({userId}) {
     const [joke, setJoke] = useState('')
-    const [user, setUser] = useState('paloma');
 
+    const location = useLocation();
+    const userData = location.state;
 
     const handleInputChange = (e) => {
         const { value } = e.target;
-        //should I attach the user name to the joke?
         setJoke(
            value
         )
     };
+
     async function submit() {
-        //Make a post req to store the joke + user to the db
-        console.log('Store the joke in db', joke)
         try {
             await fetch('/api/joke', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user: user, content: joke })
+                body: JSON.stringify({ userId: userData.id, content: joke })
             })
         } catch (err) { console.error('Error occured trying to post joke', err) };
-
+        alert('joke submitted');
     }
     
     return (
