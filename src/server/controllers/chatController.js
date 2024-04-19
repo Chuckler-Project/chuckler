@@ -40,6 +40,12 @@ module.exports = {
       
       // verify that userid from jwt matches the given user id stored in client id 
       if (userId != userIdFromJWT) throw new Error('user not authorized to view this chat');
+ 
+      // verify that the user and receiver are matched
+      const getMatches = await sql`SELECT matches FROM users WHERE id=${userId}`;
+      const userMatches = getMatches[0].matches;
+      console.log(receiverId.toString(), userMatches);
+      if (!userMatches.includes(receiverId)) throw new Error('user is not matched with recipient');
 
       // get previous messages in this chat. only 10 for faster load times 
       // (need to add functionality later for loading more comments)
