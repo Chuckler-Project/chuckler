@@ -4,17 +4,24 @@ import '../stylesheets/landing.css';
 import chuckler from '../images/chuckler-word.png';
 import Signup from '../components/Signup.jsx';
 import Signin from "../components/Signin.jsx";
+import Axios from 'axios'
 
 
 
 export default function LandingPage() {
     const [openSignUp, setOpenSignUp] = useState(false);
     const [openSignIn, setOpenSignIn] = useState(false);
+    let navigate = useNavigate();
 
-   
+   const sessionCheck = () => {
+    Axios.get('/api/user/session')
+      .then((response) => {
+        if (response.data === 'authorized') navigate('/main');
+      })
+   }
 
     return (
-        <div className="chuckler-container">
+        <div className="chuckler-container" onLoad={sessionCheck}>
             <div className="about">
                 {/* <Link to='/about' className="link">About {test}</Link> */}
 

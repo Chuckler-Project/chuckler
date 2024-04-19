@@ -31,4 +31,12 @@ router.post('/logout',
   }
 );
 
+router.get('/session',
+  sessionController.verifySession,
+  (req, res) => {
+    res.locals.authorized ? res.status(200).json('authorized') :
+    res.status(200).json('unauthorized');
+  }
+);
+
 module.exports = router;

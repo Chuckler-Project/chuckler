@@ -21,8 +21,11 @@ sessionController.setSSIDCookieSignUp = (req, res, next) => {
 };
 
 sessionController.verifySession = (req, res, next) => {
-    const { ssid } = res.cookie;
-    if (!ssid) res.send(401).json('unauthorized');
+    const token = jwt.verify(res.cookie.ssid, secretKey);
+    res.locals.authorized = false;
+
+    if (token) res.locals.authorized = true;
+
     res.locals.userID = jwt.verify(ssid, secretKey);
     return next();
 };
