@@ -40,7 +40,7 @@ module.exports = {
       
       // verify that userid from jwt matches the given user id stored in client id 
       if (userId != userIdFromJWT) throw new Error('user not authorized to view this chat');
-
+ 
       // verify that the user and receiver are matched
       const getMatches = await sql`SELECT matches FROM users WHERE id=${userId}`;
       const userMatches = getMatches[0].matches;
