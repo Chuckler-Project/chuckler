@@ -53,9 +53,10 @@ export default function Home () {
                 body: JSON.stringify({ userId: userData.id, creatorId: joke.creator_id }) 
             });
 
+            // CAN THIS RESPONSE BE A BOOLEAN?
             const matchResponseMessage = await matchResponse.json();
             setMatch(matchResponseMessage)
-            console.log('match response', matchResponseMessage);
+            console.log('match response --->', matchResponseMessage);
         } catch (err) { console.log('error checking for match', err) };
         getJoke();
     }
