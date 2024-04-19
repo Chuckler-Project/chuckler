@@ -1,0 +1,77 @@
+.home {
+    margin-top: 60px;
+}
+
+#jokes {
+    width: 370px;
+    height: 410px;
+    margin: auto;
+    background-color: white;
+    border-radius: 10px;
+}
+.joke {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 100%; 
+    width: 100%;
+    font-size: 30px;
+}
+
+.buttons{
+    display: flex;
+    justify-content: space-around;
+}
+
+.like-btn {
+    margin-top: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    background-image: url('../images/like.png');
+    width: 90px;
+    height: 90px;
+    border: none;
+    box-shadow: 0px 0px 5px black;
+    background-size: cover; 
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.dislike-btn {
+    margin-top: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    background-image: url('../images/dislike.png');
+    width: 90px;
+    height: 90px;
+    border: none;
+    box-shadow: 0px 0px 5px black;
+    background-size: cover; 
+    background-repeat: no-repeat;
+    background-position: center;
+
+}
+
+#input-joke {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 23px auto;
+}
+
+#input-joke input {
+    width: 70%;
+    border-radius: 5px;
+    padding-left: 10px;
+
+}
+
+#submit {
+    background-color: #43c0ea;
+    width: 20%;
+    height: 40px;
+    color: whitesmoke;
+    border-radius: 10px;
+    text-shadow: 1px 1px black;
+    cursor: pointer;
+}
+

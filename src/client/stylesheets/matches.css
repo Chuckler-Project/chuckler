@@ -1,0 +1,33 @@
+#matches {
+    width: 350px;
+    height: 550px;
+    margin-top: 70px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 35px;
+    padding-top: 10px;
+    background-color: white;
+    border-radius: 10px;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+.user-profile {
+    display: flex;
+    margin: 10px 30px;
+    cursor: pointer;
+}
+
+.user-profile:hover {
+    background-color: rgb(245, 244, 244);
+}
+.profile-link {
+    text-decoration: none;
+    color:#606060;
+}
+
+.name-container {
+    margin: 0px 10px;
+    /* padding-top: 5px; */
+
+}
