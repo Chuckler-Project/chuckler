@@ -19,7 +19,7 @@ router.post('/login',
   sessionController.setSSIDCookieLogin,
   userController.setIsOnlineTrue,
   (req, res) => {
-    res.locals.authenticated ? res.status(200).json(res.locals.userObj) : res.status(200).json('incorrect password');
+    res.locals.authenticated ? res.status(200).json(res.locals.userObj) : res.status(200).json('incorrect password or username');
   }
 );
 

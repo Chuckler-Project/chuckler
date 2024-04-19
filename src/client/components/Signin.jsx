@@ -32,6 +32,15 @@ const Signin = ({closeModal}) => {
         username,
         password
       });
+      if (response.data === 'incorrect password or username') {
+        alert('Incorrect username or password')
+        return;
+      }
+      //   setLoginStatus('Incorrect username password combination');
+      // } else {
+      //   setLoginStatus('');
+      //   navigate('/main');
+      // }
       await setCurrUser({
         id: response.data.id, 
         username: response.data.username
