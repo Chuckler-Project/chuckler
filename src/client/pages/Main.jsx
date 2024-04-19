@@ -29,7 +29,7 @@ export default function Main() {
 
     return (
         <div className='background'>
-        <div id="main-container">
+        <div className="main-container">
            <div className="navigation">
             <a className="button" href="/" onClick={handleLogOut}>
                 <img src={logout} style={{width:'30px'}}/>

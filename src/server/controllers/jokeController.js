@@ -27,10 +27,9 @@ jokeController.getJoke = async (req, res, next) => {
     };
     let chosenJokeId = await lookForUnseenJoke();
     // if there is no chosen joke, reset the users jokes_viewed array and try again
-    if (!chosenJokeId) {console.log('triggered')
+    if (!chosenJokeId) {
       await sql`UPDATE users SET jokes_viewed=null WHERE id=${userId}`;
       chosenJokeId = await lookForUnseenJoke();
-      console.log('second attempt', chosenJokeId);
     }
     const jokeResponse = await sql`SELECT * FROM jokes WHERE id=${chosenJokeId}`;
 
@@ -81,13 +80,32 @@ jokeController.postJoke = async (req, res, next) => {
 // like a joke in the database
 jokeController.likeJoke = async (req, res, next) => {
   try {
-    // get stored ids from front end, eliminate request for user id
-    const { userId, jokeId } = req.body;;
-    // add userId to joke's liked_by array
-    await sql`UPDATE jokes SET liked_by=ARRAY_APPEND(liked_by, ${userId}) WHERE id=${jokeId}`;
+    // get stored ids from front end,
+    const { userId, jokeId } = req.body;
+    // check if joke is already in joke's liked_by array
+    const likedByResponse = await sql`SELECT liked_by FROM jokes WHERE id=${jokeId}`;
+    const likedByArray = likedByResponse[0].liked_by;
+    if (likedByArray === null) {
+      // add userId to joke's liked_by array
+      await sql`UPDATE jokes SET liked_by=ARRAY_APPEND(liked_by, ${userId}) WHERE id=${jokeId}`;
+    }
+    else if (!(likedByArray.includes(userId))) {
+      // add userId to joke's liked_by array
+      await sql`UPDATE jokes SET liked_by=ARRAY_APPEND(liked_by, ${userId}) WHERE id=${jokeId}`;
+    };
+    // check to see if joke is already in user's jokes_liked array
+    const jokesLikedResponse = await sql`SELECT jokes_liked FROM users WHERE id=${userId}`;
+    const jokesLikedArray = jokesLikedResponse[0].jokes_liked;
+    if (jokesLikedArray === null) {
+      // add jokeId to users jokes_liked array
+      await sql`UPDATE users SET jokes_liked=ARRAY_APPEND(jokes_liked, ${jokeId}) WHERE id=${userId}`;
+      res.locals.likeMessage = `User ${userId} liked joke ${jokeId}`;
+    }
+    else if (!jokesLikedArray.includes(jokeId)) {
     // add jokeId to users jokes_liked array
-    await sql`UPDATE users SET jokes_liked=ARRAY_APPEND(jokes_liked, ${jokeId}) WHERE id=${userId}`;
-    res.locals.likeMessage = `User ${userId} liked joke ${jokeId}`;
+      await sql`UPDATE users SET jokes_liked=ARRAY_APPEND(jokes_liked, ${jokeId}) WHERE id=${userId}`;
+      res.locals.likeMessage = `User ${userId} liked joke ${jokeId}`;
+    } else res.locals.likeMessage = `User ${userId} already liked joke ${jokeId}`
     return next();
   } catch (err) {
     next({

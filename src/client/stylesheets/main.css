@@ -5,7 +5,7 @@
     background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
 }
 
-#main-container{ 
+.main-container{ 
   height: 720px;
   border: 1px solid black; 
   border-radius: 15px;
@@ -13,12 +13,10 @@
   margin: auto;
 }
 
-#main-container {
+.main-container {
     background-image: url('../images/haha.png');
     background-color: #f6d86e;
     background-size: 20%;
-    /* background-color: red; */
-
 } 
 
 /* logout button */
