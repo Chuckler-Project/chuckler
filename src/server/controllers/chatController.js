@@ -1,6 +1,9 @@
 const WebSocket = require('ws');
 const cookieParser = require('cookie-parser');
 const sql = require('../../db/db');
+const jwt = require('jsonwebtoken');
+
+const secretKey = process.env.JWT_SECRET;
 
 module.exports = {
   // grab the user id of the message sender and reciever from params and use to set id
@@ -30,10 +33,10 @@ module.exports = {
         const jwt = removeTrailingSemicolon(jwtCookie);
         return jwt;
       }
-      const jwt = getJWTFromCookies(cookies);
+      const token = getJWTFromCookies(cookies);
 
       // get userid from jwt
-      const userIdFromJWT = 16; // hardcoded value for now until auth ready 
+      const userIdFromJWT = jwt.verify(token, secretKey);
       
       // verify that userid from jwt matches the given user id stored in client id 
       if (userId != userIdFromJWT) throw new Error('user not authorized to view this chat');
