@@ -15,6 +15,7 @@ const config = {
     entry: './src/client/index.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
+        publicPath: '/',
     },
     devServer: {
         static: {

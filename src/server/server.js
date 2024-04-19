@@ -16,6 +16,7 @@ const sessionController = require('./controllers/sessionController');
 const jokeRouter = require('./routes/jokeRouter');
 const userRouter = require('./routes/userRouter');
 const matchRouter = require('./routes/matchRouter');
+const websocketRouter = require('./routes/websocketsRouter');
 
 // create the express server
 const app = express();
@@ -50,18 +51,8 @@ app.use((err, req, res) => {
 // set up the server to handle websocket connections
 const wss = new WebSocket.WebSocketServer({ server });
 
-// array to store all connected client sockets
-const clients = [];
-
-wss.on('connection', (socket) => {
-  clients.push(socket);
-
-  // for now, just a test event handler to send the same message back to all clients
-  socket.on('message', (e) => {
-    clients.forEach((client) => {
-      client.send(e.toString());
-    });
-  });
+wss.on('connection', (socket, request) => {
+  websocketRouter(socket, request, wss);
 });
 
 // set up the server to listen for http requests

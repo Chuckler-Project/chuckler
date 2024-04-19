@@ -11,24 +11,25 @@ matchController.checkForMatch = async (req, res, next) => {
     // get array of jokes user has written
     const userJokesResponse = await sql`SELECT jokes_posted FROM users WHERE id=${userId}`;
     const userJokesArray = userJokesResponse[0].jokes_posted;
+    console.log('user jokes array', userJokesArray)
     // get array of jokes creator has liked
     const creatorLikesResponse = await sql`SELECT jokes_liked FROM users WHERE id=${creatorId}`;
     const creatorLikesArray = creatorLikesResponse[0].jokes_liked;
+    console.log('creator likes array', creatorLikesArray)
     // check to see if joke creator has liked any jokes the user has written
     let matched = false;
     let message = 'No matches yet!'
-    for (const joke of userJokesArray) {
-      if (creatorLikesArray) {
-        if (creatorLikesArray.includes(joke)) matched = true;
+    if (creatorLikesArray === null) matched = false;
+    else {
+      for (const joke of userJokesArray) {
+        if (creatorLikesArray) {
+          if (creatorLikesArray.includes(joke)) matched = true;
+        };
       };
-    };
-    if (matched) {
-      message = `${userId} matched with ${creatorId}!`;
-      res.locals.userId = userId;
-      res.locals.creatorId = creatorId;
-    }
-    //CHANGED THE RESPONSE TO BOOLEAN
-    res.locals.message = matched;
+    }; 
+    res.locals.userId = userId;
+    res.locals.creatorId = creatorId;
+    res.locals.matched = matched;
     return next();
   } catch (err) {
     next({
@@ -41,9 +42,25 @@ matchController.checkForMatch = async (req, res, next) => {
 matchController.addMatch = async (req, res, next) => {
   try {
     // add joke creator's id to users matches array and vice versa
-    await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.creatorId}) WHERE id=${res.locals.userId}`;
-    await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.userId}) WHERE id=${res.locals.creatorId}`;
-    console.log(`match between ${res.locals.creatorId} and ${res.locals.userId} noted in db`)
+    // if (res.locals.matched) {
+    if (res.locals.matched) {
+      // first check to see if the match already exists in the db
+      const matchesResponse = await sql`SELECT matches FROM users WHERE id=${res.locals.userId}`;
+      const usersMatchesArray = matchesResponse[0].matches;
+      
+      if (usersMatchesArray === null || (Array.isArray(usersMatchesArray) && !(usersMatchesArray.includes(res.locals.creatorId)))) {
+        await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.creatorId}) WHERE id=${res.locals.userId}`;
+        await sql`UPDATE users SET matches=ARRAY_APPEND(matches, ${res.locals.userId}) WHERE id=${res.locals.creatorId}`;
+        res.locals.message = `You have a new match with ${res.locals.creatorId}!`;
+      } 
+      else if (Array.isArray(usersMatchesArray) && usersMatchesArray.includes(res.locals.creatorId)) {
+        res.locals.message = 'No new matches';
+      }
+      else {
+        res.locals.message = 'No new matches';
+      }
+    } else res.locals.message = 'No new matches'; 
+
     return next();
   } catch (err) {
     next({
@@ -54,6 +71,7 @@ matchController.addMatch = async (req, res, next) => {
 }
 
 matchController.retrieveMatches = async (req, res, next) => {
+  // get the array of ids for the user's matches
   try {
     const {userId} = req.body;
     const matchesResponse = await sql`SELECT matches FROM users WHERE id=${userId}`;
@@ -69,13 +87,22 @@ matchController.retrieveMatches = async (req, res, next) => {
 };
 
 matchController.checkIsOnline = async (req, res, next) => {
+  // build out an object with the names of the user's matches and their online status
   try {
-    const matchesObj = {};
+    const matchesArray = [];
     for (const match of res.locals.matchesArray) {
-      const isOnlineResponse = await sql`SELECT is_online FROM users WHERE id=${match}`;
-      matchesObj[match] = isOnlineResponse[0];
+      const matchUsernameResponse = await sql`SELECT username FROM users WHERE id=${match}`;
+      const matchUsername = matchUsernameResponse[0].username;
+      const matchIsOnlineResponse = await sql`SELECT is_online FROM users WHERE id=${match}`;
+      const matchIsOnline = matchIsOnlineResponse[0].is_online;
+      const matchObj = {
+        id: match,
+        username: matchUsername,
+        isOnline: matchIsOnline
+      }
+      matchesArray.push(matchObj);
     }
-    res.locals.matchesObj = matchesObj;
+    res.locals.matchesArray = matchesArray;
     return next();
   } catch (err) {
     next({
@@ -84,5 +111,39 @@ matchController.checkIsOnline = async (req, res, next) => {
     });
   };
 };
+
+
+matchController.findMatches = async (req, res, next) => {
+  console.log('im here people', req.params)
+  const allMatches = []; //user names here
+  const { id } = req.params;
+  try {
+    const matches = await sql`SELECT matches FROM users WHERE id=${id}`;
+    console.log('matches', matches);
+    const matchesArr = matches[0].matches;
+    if (matchesArr === null) {
+      res.locals.matches = 'No matches yet!';
+    } else {
+      const allUsers = await sql`SELECT id, username, is_online FROM users`;
+      allUsers.forEach(user => {
+        if (matchesArr.includes(user.id)) {
+          allMatches.push({username: user.username, isOnline: user.is_online})
+        }
+      })
+      console.log('MIDDLEWARE MATCHES  ---->', allMatches)
+
+      res.locals.matches = allMatches;
+    }
+
+
+
+    return next();
+  } catch (err) {
+    next({
+      log: `Error in retrieveMatches middleware: ${err}`,
+      message: `Error retrieving matches: ${err}`
+    });
+  };
+}
 
 module.exports = matchController;

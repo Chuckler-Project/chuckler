@@ -6,6 +6,7 @@ const router = express.Router();
 // get a joke from the database
 router.post('/retrieveJoke',
   jokeController.getJoke,
+  jokeController.addJokeToViewed,
   (req, res) => { res.status(200).json(res.locals.joke); }
 );
 
