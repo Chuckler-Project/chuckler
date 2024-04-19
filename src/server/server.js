@@ -12,7 +12,7 @@ const PORT = process.env.PORT;
 
 // require in controllers and routers
 const userController = require('./controllers/userController');
-const sessionController = require('./controllers/sessionController');
+const sessionController = require('./controllers/tokenController');
 const jokeRouter = require('./routes/jokeRouter');
 const userRouter = require('./routes/userRouter');
 const matchRouter = require('./routes/matchRouter');
@@ -54,7 +54,7 @@ const wss = new WebSocket.WebSocketServer({ server });
 wss.on('connection', (socket, request) => {
   websocketRouter(socket, request, wss);
 });
- 
+
 // set up the server to listen for http requests
 server.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);

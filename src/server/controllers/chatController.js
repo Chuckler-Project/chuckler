@@ -1,6 +1,9 @@
 const WebSocket = require('ws');
 const cookieParser = require('cookie-parser');
 const sql = require('../../db/db');
+const jwt = require('jsonwebtoken');
+
+const secretKey = process.env.JWT_SECRET;
 
 module.exports = {
   // grab the user id of the message sender and reciever from params and use to set id
@@ -30,13 +33,19 @@ module.exports = {
         const jwt = removeTrailingSemicolon(jwtCookie);
         return jwt;
       }
-      const jwt = getJWTFromCookies(cookies);
+      const token = getJWTFromCookies(cookies);
 
       // get userid from jwt
-      const userIdFromJWT = 16; // hardcoded value for now until auth ready 
+      const userIdFromJWT = jwt.verify(token, secretKey);
       
       // verify that userid from jwt matches the given user id stored in client id 
       if (userId != userIdFromJWT) throw new Error('user not authorized to view this chat');
+ 
+      // verify that the user and receiver are matched
+      const getMatches = await sql`SELECT matches FROM users WHERE id=${userId}`;
+      const userMatches = getMatches[0].matches;
+      console.log(receiverId.toString(), userMatches);
+      if (!userMatches.includes(receiverId)) throw new Error('user is not matched with recipient');
 
       // get previous messages in this chat. only 10 for faster load times 
       // (need to add functionality later for loading more comments)
