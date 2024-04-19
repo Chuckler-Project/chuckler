@@ -33,8 +33,6 @@ userController.createUser = async (req, res, next) => {
 userController.verifyUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;
-
-    // get hashed password from database
     const passwordResponse = await sql`SELECT password FROM users WHERE username=${username}`;
     const hashedPassword = passwordResponse[0].password;
 
