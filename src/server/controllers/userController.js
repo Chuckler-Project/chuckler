@@ -1,4 +1,6 @@
 const sql = require('../../db/db');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const userController = {};
 
@@ -6,17 +8,20 @@ userController.createUser = async (req, res, next) => {
   try {
     const { username, password, joke } = req.body;
 
-    // check if username is already exists
+    // check if username already exists
     const userResponse = await sql`SELECT username FROM users WHERE username=${username}`;
     res.locals.userExists = false;
     if (userResponse.length !== 0) {
       res.locals.userExists = true;
       return next();
     }
+
     // add user to db
-    const createUserResponse = await sql`INSERT INTO users (username, password) VALUES (${username}, ${password}) RETURNING id, username`;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const createUserResponse = await sql`INSERT INTO users (username, password) VALUES (${username}, ${hashedPassword}) RETURNING id, username`;
     const userInfo = createUserResponse[0];
     res.locals.userInfo = userInfo;
+
     // add users first joke to db
     const createFirstJokeResponse = await sql`INSERT INTO jokes (content, creator_id) VALUES (${joke}, ${res.locals.userInfo.id}) RETURNING id`;
     const firstJokeId = createFirstJokeResponse[0].id;
@@ -28,22 +33,18 @@ userController.createUser = async (req, res, next) => {
 userController.verifyUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;
-    res.locals.authenticated = false;
-
     const passwordResponse = await sql`SELECT password FROM users WHERE username=${username}`;
-    
-    // return falsy authentication if username does not exist
-    if (passwordResponse.length === 0) {
-      return next();
-    }
-    
-    const truePassword = passwordResponse[0].password;
-    
-    if (password === truePassword) {
+    const hashedPassword = passwordResponse[0].password;
+
+    // if password matches set authenticated to true
+    res.locals.authenticated = false;  
+    const isCorrectPassword = await bcrypt.compare(password, hashedPassword);
+    if (isCorrectPassword) {
       res.locals.authenticated = true;
       const userObjResponse = await sql`SELECT * FROM users WHERE username=${username}`;
       res.locals.userObj = userObjResponse[0];
     };
+
     return next();
   } catch (error) {console.log('error in userController verifyUser', error)}
 }
