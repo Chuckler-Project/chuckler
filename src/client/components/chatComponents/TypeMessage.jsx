@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 const TypeMessages = ({ usersData, socket }) => {
   const [error, setError] = useState('');
   const [messageContent, setMessageContent] = useState('');
-  // const [sender, receiver] = [usersData.sender, usersData.receiver]; // uncomment when defined
+  const [user, receiver] = [usersData.user, usersData.receiver]; 
 
   const sendMessage = async (e) => {
     e.preventDefault();
-
+ 
     // clear lingering error messages
     setError('');
 
@@ -23,8 +23,7 @@ const TypeMessages = ({ usersData, socket }) => {
 
     // create an object with the data to be sent in request to server
     const content = messageContent;
-    const [sender, receiver] = ['user1', 'user2']; // for testing only. delete once sender and reciever have actual values and uncomment declaration above
-    const requestBody = { content, sender, receiver };
+    const requestBody = { content, user, receiver };
 
     // send the request and clear the input field
     try {

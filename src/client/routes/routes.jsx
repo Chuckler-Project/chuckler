@@ -10,7 +10,7 @@ const Router = () => {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/main" element={<Main />} />
-      <Route path="/chat" element={<ChatContainer />} />
+      <Route path="/chat/*" element={<ChatContainer />} />
     </Routes>
   );
 };
