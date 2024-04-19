@@ -11,7 +11,7 @@ export default function Profile({userData}) {
                 <p>Username: {userData.username} </p>
                 <p>User ID: {userData.id}</p>
             </div>
-            <button onClick={() => navigate}>Metrics</button>
+            {/* <button onClick={() => navigate}>Metrics</button> */}
         </div>
     )
 }
