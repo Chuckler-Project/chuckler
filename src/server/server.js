@@ -12,7 +12,7 @@ const PORT = process.env.PORT;
 
 // require in controllers and routers
 const userController = require('./controllers/userController');
-const sessionController = require('./controllers/sessionController');
+const sessionController = require('./controllers/tokenController');
 const jokeRouter = require('./routes/jokeRouter');
 const userRouter = require('./routes/userRouter');
 const matchRouter = require('./routes/matchRouter');
