@@ -15,17 +15,6 @@ const SentMessages = ({ usersData, socket }) => {
   };
 
 
-
-
-  // content of div that stores messages
-  // const messagesDiv = messages.map((message, index) => {
-  //   // console.log('MESSAGE', message)
-  //   // give user's messages and receiver's messages different classnames for styling
-  //   const messageSender = message.from_user_id === user ? 'user' : 'sender';
-  //   return <div id='msg' key={index} className={`${messageSender}Message`}>{message.content}</div>;
-    
-  // });
-
   // handle recieving a message
   socket.onmessage = (e) => {
     try {
