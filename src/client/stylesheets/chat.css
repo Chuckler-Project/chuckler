@@ -1,17 +1,17 @@
 .msg-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 350px;
     height: 600px;
-    /* margin-top: 70px; */
-    margin-right: auto;
-    margin-left: auto;
-    margin-bottom: 35px;
+    margin: 0px auto;
     padding: 2%;
     background-color: white;
     border-radius: 10px;
     overflow-y:auto;
     overflow-x:hidden;
-    
 }
+
 .close-chat {
     width: 100%;
     text-align: end;
@@ -23,8 +23,7 @@
     border: 1px solid #ccc;
     padding: 10px 15px;
     max-width: 80%;
-    border-radius: 15px;
-    border-bottom-right-radius: 0px;
+   
     box-shadow: 0px 0px 1px rgb(98, 98, 98);
     color: white;
     margin-top: 3px;
@@ -34,62 +33,60 @@
     background-color: #43c0ea;
     text-align: end;
     margin-left: auto;
+    border-radius: 15px;
+    border-bottom-right-radius: 0px;
 }
 
 .senderMessage {
     background-color: #F0C322;
     margin-right: auto;
     text-align: start;
+    border-radius: 15px;
+    border-bottom-left-radius: 0px;
 }
 
 #input-chat {
-    /* margin-top: 15px; */
     width: 75%;
     height: 100%;
     border-radius: 5px;
     border-style: none;
     box-shadow: 0px 0px 5px rgb(98, 98, 98);
 }
+
 #chat-btn {
     margin-left: 10px;
     width: 20%;
 }
 
-
 .chat-container {
-    /* background-color: red; */
-  
+    height: 100%;
 }
 
 
 .messages-container {
-    /* background-color: blue; */
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px 0px;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+.input-container {
+    display: flex;
+    height: 100%;
+}
+
+.test {
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    /* flex: 1; */
-  overflow-y: auto;
-  padding: 10px;
+    justify-content: end;
 }
 
-
-
-/* .test {
-    position: relative;
-    overflow-y: auto;
-    background-color: green;
-    height: 100%;
-} */
 .messages-component {
-    /* background-color: red; */
-}
-.input-component {
-    /* position: absolute;
-    bottom: 0; Fix input box to the bottom */
-    /* width: calc(100% - 20px); Set width to fill container width minus padding */
-    /* padding: 8px;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 4px; */
-    /* background-color: blue; */
+    height: 100%;
 }
 

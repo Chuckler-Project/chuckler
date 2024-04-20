@@ -21,6 +21,8 @@ export default function Matches({userData}) {
         getMatches();
     }, [])
 
+    console.log('USER MATCHES', user)
+
     let renderMatches = [];
     if (Array.isArray(matches)) {
         matches.forEach((match, i) => {        
@@ -29,6 +31,8 @@ export default function Matches({userData}) {
                     <MatchProfile
                         key={i}
                         name={match.username}
+                        userId={user.id}
+                        username={user.username}
                         status='Online'
                     />
                 )
@@ -37,6 +41,8 @@ export default function Matches({userData}) {
                     <MatchProfile
                         key={i}
                         name={match.username}
+                        userId={user.id}
+                        username={user.username}
                         status='Offline'
                     />
                 )
