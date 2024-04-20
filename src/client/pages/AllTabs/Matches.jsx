@@ -29,6 +29,8 @@ export default function Matches({userData}) {
                     <MatchProfile
                         key={i}
                         name={match.username}
+                        matchId={match.id}
+                        userId={user.id}
                         status='Online'
                     />
                 )
@@ -37,6 +39,8 @@ export default function Matches({userData}) {
                     <MatchProfile
                         key={i}
                         name={match.username}
+                        matchId={match.id}
+                        userId={user.id}
                         status='Offline'
                     />
                 )
