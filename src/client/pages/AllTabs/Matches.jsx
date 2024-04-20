@@ -21,6 +21,8 @@ export default function Matches({userData}) {
         getMatches();
     }, [])
 
+    console.log('USER MATCHES', user)
+
     let renderMatches = [];
     if (Array.isArray(matches)) {
         matches.forEach((match, i) => {        

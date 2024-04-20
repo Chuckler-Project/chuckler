@@ -16,8 +16,6 @@ export default function LandingPage() {
     return (
         <div className="chuckler-container">
             <div className="about">
-                {/* <Link to='/about' className="link">About {test}</Link> */}
-
                 <button 
                     id='login-btn'
                     className='btn-login'  
