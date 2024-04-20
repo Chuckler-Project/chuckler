@@ -37,11 +37,16 @@ const TypeMessages = ({ usersData, socket }) => {
 
   return (
     <form onSubmit={sendMessage}>
-      <input type='text'
-      value={messageContent}
-      onChange={(e) => setMessageContent(e.target.value)}
-      />
-      {error && <p>{error}</p>}
+      <div className='input-container'>
+        <input 
+          id='input-chat'
+          type='text'
+          value={messageContent}
+          onChange={(e) => setMessageContent(e.target.value)}
+        />
+        {error && <p>{error}</p>}
+        <button id='chat-btn'>Enter</button>
+        </div>
     </form>
 
   );

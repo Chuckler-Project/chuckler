@@ -33,10 +33,15 @@ const ChatContainer = () => {
   // create connetion to wss to be used by all child props
   const socket = new WebSocket(`ws://localhost:3000/chat/${usersData.user}/${usersData.receiver}`);
 
+  console.log('helloooo', socket, usersData, usersData.user, usersData.receiver)
 return (
-  <div>
-    <SentMessages usersData={usersData} socket={socket} />
-    <TypeMessages usersData={usersData} socket={socket} />
+  <div className='test'>
+    <div className='messages-component'>
+      <SentMessages usersData={usersData} socket={socket} />
+    </div>
+    <div className='input-component'>
+      <TypeMessages usersData={usersData} socket={socket} />
+    </div>
   </div>
 
 );

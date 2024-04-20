@@ -6,6 +6,7 @@
     width: 370px;
     height: 410px;
     margin: auto;
+    padding: 5px;
     background-color: white;
     border-radius: 10px;
 }

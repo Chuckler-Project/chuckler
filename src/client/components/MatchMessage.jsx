@@ -2,8 +2,8 @@ import React from "react";
 import ReactDom from 'react-dom'
 import '../stylesheets/matchMessage.css';
 
-export default function MatchMessage({ match, userId, jokeCreator, closeModal }) {
-    if (!match) return null;
+export default function MatchMessage({ matches, userId, jokeCreator, closeModal }) {
+    if (matches) return null;
 
     return ReactDom.createPortal (
         <>
