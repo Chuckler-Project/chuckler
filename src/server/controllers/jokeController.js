@@ -12,7 +12,7 @@ jokeController.getJoke = async (req, res, next) => {
       let viewedJokesArray = viewedJokesResponse[0].jokes_viewed;
       // get all the jokes that the user didn't write
       const otherUsersJokesArrayOfIds = await sql`SELECT id FROM jokes WHERE creator_id != ${userId}`;
-      // shuffle the array into a random order to mix up the jokes
+      // shuffle the array into a random order to mix up the jokes using Fisher-Yates shuffle
       for (let i = otherUsersJokesArrayOfIds.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [otherUsersJokesArrayOfIds[i], otherUsersJokesArrayOfIds[j]] = [otherUsersJokesArrayOfIds[j], otherUsersJokesArrayOfIds[i]];
