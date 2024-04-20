@@ -127,7 +127,7 @@ matchController.findMatches = async (req, res, next) => {
       const allUsers = await sql`SELECT id, username, is_online FROM users`;
       allUsers.forEach(user => {
         if (matchesArr.includes(user.id)) {
-          allMatches.push({username: user.username, isOnline: user.is_online})
+          allMatches.push({username: user.username, isOnline: user.is_online, id: user.id})
         }
       })
       console.log('MIDDLEWARE MATCHES  ---->', allMatches)

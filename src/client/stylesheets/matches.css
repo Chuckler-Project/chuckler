@@ -18,6 +18,19 @@
     cursor: pointer;
 }
 
+.online {
+    display: flex;
+    margin: 10px 30px;
+    cursor: pointer;
+}
+
+.offline {
+    opacity: 50%;
+    display: flex;
+    margin: 10px 30px;
+    cursor: pointer;
+}
+
 .user-profile:hover {
     background-color: rgb(245, 244, 244);
 }
