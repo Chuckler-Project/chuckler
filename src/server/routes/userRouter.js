@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('../controllers/userController')
-const sessionController = require('../controllers/tokenController')
+const sessionController = require('../controllers/tokenController');
+const { useInRouterContext, UNSAFE_NavigationContext } = require('react-router-dom');
 
 const router = express.Router();
 
@@ -24,11 +25,18 @@ router.post('/login',
 );
 
 router.post('/logout',
-  sessionController.removeJWTCookie,
   userController.setIsOnlineFalse,
   (req, res) => {
     res.status(200).json('Logged out');
   }
 );
-
+router.get('/logout',
+  (req, res) => {
+    res.clearCookie('jwt')
+    res.send('Cookie cleared');
+  }
+);
+//verifies if user has a jwt cookie
+router.get('/verify',sessionController.verifySession);
+router.post('/username',userController.getUsername);
 module.exports = router;

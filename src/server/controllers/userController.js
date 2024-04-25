@@ -1,7 +1,6 @@
 const sql = require('../../db/db');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-
 const userController = {};
 
 userController.createUser = async (req, res, next) => {
@@ -29,7 +28,7 @@ userController.createUser = async (req, res, next) => {
     return next();
   } catch (error) {console.log('error in userController create User', error)};
 }
-
+//checks to see if user has a username/password saved in database
 userController.verifyUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;
@@ -48,7 +47,7 @@ userController.verifyUser = async (req, res, next) => {
     return next();
   } catch (error) {console.log('error in userController verifyUser', error)}
 }
-
+//set's user's online status to true
 userController.setIsOnlineTrue = async (req, res, next) => {
   try {
     const {username} = req.body;
@@ -61,12 +60,12 @@ userController.setIsOnlineTrue = async (req, res, next) => {
     });
   };
 };
-
+//set's user's online status to false
 userController.setIsOnlineFalse = async (req, res, next) => {
   try {
     const {username} = req.body;
     await sql`UPDATE users SET is_online=false WHERE username=${username} `;
-    return next();
+    return res.send('updated and cleared');
   } catch (err) {
     next({
       log: `Error in userController.setIsOnlineTrue middleware: ${err}`,
@@ -74,5 +73,16 @@ userController.setIsOnlineFalse = async (req, res, next) => {
     });
   };
 }
-
+userController.getUsername  = async(req,res,next)  => {
+  try{
+    const{id} = req.body;
+    const response = await sql`SELECT username from users where id=${id}`
+    return res.send(response);
+  }catch(err){
+    next({
+      log:`Error in userController.getUsername middleware: ${err}`,
+      message: `Error getting username : ${err}`
+    })
+  }
+}
 module.exports = userController;

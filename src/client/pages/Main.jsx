@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import { useLocation, useNavigate } from 'react-router-dom'
+import React, {useEffect, useState} from "react";
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import '../stylesheets/main.css';
 import homeIcon from '../images/home.png';
 import profileIcon from '../images/profileIcon.png';
@@ -10,23 +10,12 @@ import TabNavItem from "./Components/TabNavItem.jsx";
 import Axios from 'axios';
 
     
-export default function Main() {
+export default function Main({userData}) {
     const [activeTab, setActiveTab] = useState("tab1");
-    
-    const navigate = useNavigate();
-    const location = useLocation();
-    const userData = location.state;
-
-
-
     const handleLogOut = async () => {
+        Axios.get('/api/user/logout');
 		const response = Axios.post('/api/user/logout', { username: userData.username })
-	};
-
-
-
-   
-
+	}; 
     return (
         <div className='background'>
         <div className="main-container">

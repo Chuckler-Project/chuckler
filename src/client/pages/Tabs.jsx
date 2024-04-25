@@ -5,7 +5,6 @@ import Matches from "./AllTabs/Matches.jsx";
 import Profile from "./AllTabs/Profile.jsx";
  
 const Tabs = ({userData, activeTab}) => {
- 
   return (
     <div className="tabs">
       <div className="outlet">

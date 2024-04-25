@@ -4,15 +4,17 @@ import '../stylesheets/landing.css';
 import chuckler from '../images/chuckler-word.png';
 import Signup from '../components/Signup.jsx';
 import Signin from "../components/Signin.jsx";
-
+import  Axios  from 'axios';
+import { useEffect } from 'react';
 
 
 export default function LandingPage() {
     const [openSignUp, setOpenSignUp] = useState(false);
     const [openSignIn, setOpenSignIn] = useState(false);
-
-   
-
+    useEffect(()=>{Axios.get('/api/user/verify').then(request=>{if(request.data!=false)
+        location.assign('/main')
+        return;
+    })},[]);
     return (
         <div className="chuckler-container">
             <div className="about">

@@ -41,6 +41,7 @@ const Signin = ({closeModal}) => {
       //   setLoginStatus('');
       //   navigate('/main');
       // }
+      location.assign('/main');
       await setCurrUser({
         id: response.data.id, 
         username: response.data.username
@@ -80,7 +81,7 @@ const Signin = ({closeModal}) => {
                   </div>
               </div>
               <div  className="signup-btn">
-                  <button onClick={signinAction}>Sign in</button>
+                  <button onClick={()=>{signinAction()}}>Sign in</button>
               </div>
           </div>
       </div>
