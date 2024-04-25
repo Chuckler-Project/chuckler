@@ -5,6 +5,9 @@ import Matches from "./AllTabs/Matches.jsx";
 import Profile from "./AllTabs/Profile.jsx";
  
 const Tabs = ({userData, activeTab}) => {
+  // children components are passed down
+  // similarly to props
+  // in TabContent -> {children}
  
   return (
     <div className="tabs">
