@@ -14,14 +14,16 @@ export default function Home () {
         await Axios.get('/api/user/verify').then(request=>currUserId = request.data)
         console.log('CURRENT USER ID', currUserId );
         try {
-            const joke = await fetch('/api/joke/retrieveJoke', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: currUserId }) 
-            })
-            const parsedJoke = await joke.json();
-            console.log('joke here',parsedJoke);
-            setJoke(parsedJoke);
+            if(currUserId){
+                const joke = await fetch('/api/joke/retrieveJoke', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: currUserId }) 
+                })
+                const parsedJoke = await joke.json();
+                console.log('joke here',parsedJoke);
+                setJoke(parsedJoke);
+        }
         } catch (error) {console.log('Error trying to fetch joke', error)}
     };
     useEffect(() => {

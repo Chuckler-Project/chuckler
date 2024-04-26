@@ -13,9 +13,10 @@ import Axios from 'axios';
 export default function Main({userData}) {
     const [activeTab, setActiveTab] = useState("tab1");
     const handleLogOut = async () => {
-        Axios.get('/api/user/logout');
-		const response = Axios.post('/api/user/logout', { username: userData.username })
-	}; 
+        await Axios.get('/api/user/logout');
+		const response = Axios.post('/api/user/logout', { username: props.userData.username })
+	};
+    fetch('/api/user/verify').then(data=>data.json()).then(data=>{if(data===false)location.assign('/')})
     return (
         <div className='background'>
         <div className="main-container">
