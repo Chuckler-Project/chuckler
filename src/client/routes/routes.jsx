@@ -5,6 +5,7 @@ import LandingPage from '../pages/LandingPage.jsx';
 import ChatContainer from '../components/chatComponents/ChatContainer.jsx';
 import Chat from '../components/Chat.jsx';
 
+//These routes will be found in the 'pages' file.
 const Router = () => {
   return (
     <Routes>
