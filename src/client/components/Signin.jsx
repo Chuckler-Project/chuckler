@@ -8,7 +8,7 @@ import logo from "../images/logo.png";
 
 const Signin = ({ closeModal }) => {
   const navigate = useNavigate();
-
+  const [email,setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [currUser, setCurrUser] = useState({
@@ -22,12 +22,12 @@ const Signin = ({ closeModal }) => {
   }, [currUser]);
 
   const signinAction = async () => {
-    if (username === "" || password === "")
+    if (email.trim() === "" || password.trim() === "")
       alert("Please complete every field");
 
     try {
       const response = await Axios.post("api/user/login", {
-        username,
+        email,
         password,
       });
       console.log("response data: ", response.data);
@@ -35,11 +35,6 @@ const Signin = ({ closeModal }) => {
         alert("Incorrect username or password");
         return;
       }
-      //   setLoginStatus('Incorrect username password combination');
-      // } else {
-      //   setLoginStatus('');
-      //   navigate('/main');
-      // }
       location.assign("/main");
       setCurrUser({
         id: response.data.id,
@@ -74,7 +69,17 @@ const Signin = ({ closeModal }) => {
             <img src={userIcon} alt="" style={{ width: "30px" }} />
             <input
               type="text"
-              placeholder="Name"
+              placeholder="email"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+          </div>
+          <div className="input">
+            <img src={userIcon} alt="" style={{ width: "30px" }} />
+            <input
+              type="text"
+              placeholder="username"
               onChange={(e) => {
                 setUsername(e.target.value);
               }}

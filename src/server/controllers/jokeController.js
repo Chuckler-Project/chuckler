@@ -1,7 +1,5 @@
-const sql = require('../../db/db');
-
 const jokeController = {};
-
+const sql = require('../../db/db');
 // get a joke from the database that the requesting user did not write
 jokeController.getJoke = async (req, res, next) => {
   try {
@@ -36,7 +34,7 @@ jokeController.getJoke = async (req, res, next) => {
       await sql`UPDATE users SET jokes_viewed=null WHERE id=${userId}`;
       chosenJokeId = await lookForUnseenJoke();
     }
-    const jokeResponse = await sql`SELECT * FROM jokes WHERE id=${chosenJokeId}`;
+    const jokeResponse = await sql`SELECT id,content,creator_id FROM jokes WHERE id=${chosenJokeId}`;
 
     // working version wo seen jokes filetering
     // jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;

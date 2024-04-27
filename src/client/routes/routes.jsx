@@ -12,7 +12,7 @@ const Router = () => {
     Axios.get('/api/user/verify').then(request=>{
       if(request.data!=false){
         Axios.post('/api/user/username',{id:request.data}).then(requests=>{
-            updUserData({'username':requests.data[0].username,'id':request.data})
+            updUserData({'username':requests.data,'id':request.data})
           })
         }
     })},[])
