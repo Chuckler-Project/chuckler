@@ -18,7 +18,7 @@ sessionController.setJWTCookieLogin = (req, res, next) => {
 };
 //assigns a jwt cookie on sign up
 sessionController.setJWTCookieSignUp = (req, res, next) => {
-  if (res.locals.userExists === true) return next();
+  if (res.locals.userExists === true)return res.send(false)
   const { id } = res.locals.userInfo;
   const token = jwt.sign(id, secretKey);
   res.cookie("jwt", token, {
@@ -32,8 +32,8 @@ sessionController.setJWTCookieSignUp = (req, res, next) => {
 sessionController.verifySession = (req, res, next) => {
   const token = req.cookies.jwt;
   if (!token) return res.send(false);
-  res.locals.userID = jwt.verify(token, secretKey);
-  return res.send(res.locals.userID);
+  let userID = jwt.verify(token, secretKey);
+  return res.send(userID);
 };
 
 sessionController.removeJWTCookie = (req, res, next) => {

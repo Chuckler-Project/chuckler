@@ -11,6 +11,7 @@ const Signup = ({ closeModal }) => {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState('');
+  const [email,setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [signUpStatus, setSignUpStatus] = useState('');
   const [joke, setJoke] = useState('');
@@ -24,23 +25,24 @@ const Signup = ({ closeModal }) => {
   }, [currUser]);
 
   const signupAction = () => {
-    if (username === '' || password === '' || joke === '') alert('Please complete every field')
-
-    Axios.post('/api/user/signup', {
-      username,
-      password,
-      joke,
-    }).then((response) => {
-      if (response.data === 'username exists') alert('Username already exists')
-      else {
-        console.log('RESPONSE SIGNUP', response);
-        setCurrUser({
-          id: response.data.id,
-          username: response.data.username,
-        });
-      }
-    });
-    location.assign('/main');
+    if (username.trim() === '' || password.trim() === '' || joke.trim() === '' || email.trim()===''){alert('Please complete every field')}else{
+      Axios.post('/api/user/signup', {
+        username,
+        email,
+        password,
+        joke,
+      }).then(response => {
+        if (response.data === false) alert('Account with this email already exists')
+        else {
+          console.log('RESPONSE SIGNUP', response);
+          setCurrUser({
+            id: response.data.id,
+            username: response.data.username,
+          });
+          location.assign('/main');
+        }
+      });
+    }
   };
 
 
@@ -61,6 +63,16 @@ const Signup = ({ closeModal }) => {
           <div className="title">Get Started</div>
         </div>
         <div className="inputs">
+          <div className="input">
+            <img src={userIcon} alt="" style={{ width: '30px' }} />
+            <input
+              type="text"
+              placeholder="Email"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+          </div>
           <div className="input">
             <img src={userIcon} alt="" style={{ width: '30px' }} />
             <input

@@ -20,7 +20,7 @@ export default function Home () {
                 const joke = await fetch('/api/joke/retrieveJoke', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId: currUserId }) 
+                    body: JSON.stringify({ 'userId': currUserId }) 
                 })
                 const parsedJoke = await joke.json();
                 console.log('joke here',parsedJoke);
