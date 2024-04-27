@@ -48,7 +48,7 @@ describe('db unit test', () => {
     const useFunction = async () => {
     const result = await jokeController.getJoke(request, '', () => {
       return 'Success';
-    });
+    })};
 
     console.log("getJoke result in test ===> ", result);
 
