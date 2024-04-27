@@ -48,14 +48,14 @@ describe('db unit test', () => {
     const useFunction = async () => {
     const result = await jokeController.getJoke(request, '', () => {
       return 'Success';
-    });
+    })};
 
     console.log("getJoke result in test ===> ", result);
 
     // what do we expect?
     //receive obj with content & creater ID
     expect(result).toEqual('Success');
-  });
+});
 
   it('gotten joke should not be in jokes_viewed array', () => {
     
@@ -82,3 +82,4 @@ describe('db unit test', () => {
 // users => id, username, pw, created_at, jokes_liked, jokes_posted,
 //          jokes_viewed, matches, is_online
 // messages => id, created_at, from_user, to_user, content
+
