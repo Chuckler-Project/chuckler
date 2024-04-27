@@ -1,11 +1,11 @@
 
 
-/* .background {
+.background {
     display: flex;
     width: 100%;
     height: 100vh;
     background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
-} */
+}
 
 .main-container{ 
   height: 720px;
