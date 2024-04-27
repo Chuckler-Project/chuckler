@@ -3,11 +3,13 @@ import React, { createContext, useState, useEffect } from 'react';
 import SentMessages from './SentMessages.jsx';
 import TypeMessages from './TypeMessage.jsx';
 
+
+
 /*
 Looks at the url parameters of the page and returns and object of the form:
 {user: {userId}, receiver: {receiverId}}
 */
-const getParamsFromUrl = () => {
+const getParamsFromUrl = () => { // TODO: replace this with a function that gets auth data from the server
   try {
     const output = {};
 
@@ -21,7 +23,7 @@ const getParamsFromUrl = () => {
     }
     return output;
   } catch (err) {
-    return {user: undefined, receiver: undefined};
+    console.error('Error getting params from url', err);
   }
 };
 
@@ -31,20 +33,27 @@ const ChatContainer = () => {
   const [usersData] = useState(getParamsFromUrl());
 
   // create connetion to wss to be used by all child props
-  const socket = new WebSocket(`ws://localhost:3000/chat/${usersData.user}/${usersData.receiver}`);
+  const socket = new WebSocket( //
+    `ws://localhost:3000/chat/${usersData.user}/${usersData.receiver}`
+  );
 
-  console.log('helloooo', socket, usersData, usersData.user, usersData.receiver)
-return (
-  <div className='test'>
-    <div className='messages-component'>
-      <SentMessages usersData={usersData} socket={socket} />
+  console.log(
+    'helloooo',
+    socket,
+    usersData,
+    usersData.user,
+    usersData.receiver
+  );
+  return (
+    <div className="test">
+      <div className="messages-component">
+        <SentMessages usersData={usersData} socket={socket} />
+      </div>
+      <div className="input-component">
+        <TypeMessages usersData={usersData} socket={socket} />
+      </div>
     </div>
-    <div className='input-component'>
-      <TypeMessages usersData={usersData} socket={socket} />
-    </div>
-  </div>
-
-);
+  );
 };
 
 export default ChatContainer;
