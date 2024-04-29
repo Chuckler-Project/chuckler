@@ -6,7 +6,7 @@ import userIcon from "../images/user.png";
 import passwordIcon from "../images/password.png";
 import logo from "../images/logo.png";
 
-const Signin = ({ closeModal }) => {
+const Signin = ({ setIndex, closeModal }) => {
   const navigate = useNavigate();
   const [email,setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -55,7 +55,13 @@ const Signin = ({ closeModal }) => {
             className="logo"
             style={{ width: "150px" }}
           />
-          <button className="closeModal-btn" onClick={() => closeModal(false)}>
+          <button
+            className="closeModal-btn"
+            onClick={() => {
+              setIndex(null);
+              closeModal(false);
+            }} 
+          >
             {" "}
             X{" "}
           </button>

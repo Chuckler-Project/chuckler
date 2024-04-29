@@ -7,7 +7,7 @@ import passwordIcon from '../images/password.png';
 import jokeIcon from '../images/joke.png';
 import logo from '../images/logo.png';
 
-const Signup = ({ closeModal }) => {
+const Signup = ({ setIndex, closeModal }) => {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState('');
@@ -53,7 +53,10 @@ const Signup = ({ closeModal }) => {
           <img src={logo} alt="chuckler" className="logo" style={{ width: '150px' }} />
           <button
             className="closeModal-btn"
-            onClick={() => closeModal(false)}
+            onClick={() => {
+              setIndex(null);
+              closeModal(false);
+            }}
           >
             {' '}
             X
