@@ -54,7 +54,8 @@ router.get("/verify", tokenController.verifyToken, (req, res) => {
 router.post("/username", userController.getUsername);
 
 //verifies if user has a jwt cookie
-router.get("/verify", tokenController.verifySession);
-router.post("/username", userController.getUsername);
-router.get("/profile", userController.getProfileJokes);
+// router.get("/verify", tokenController.verifySession, (req, res) => {
+//   return res.status(200).json("User is authorized");
+// });
+
 module.exports = router;
