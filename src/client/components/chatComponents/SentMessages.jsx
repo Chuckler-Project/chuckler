@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ReactionMenu from './ReactionMenu.jsx';
+import Reaction from './reaction.jsx';
 
 const SentMessages = ({ usersData, socket }) => {
   const [messages, setMessages] = useState([]);
@@ -32,6 +34,17 @@ const SentMessages = ({ usersData, socket }) => {
     }
   };
 
+  const [showReactionMenu, setShowReactionMenu] = useState(false);
+  const [messageClicked, setMessageClicked] = useState();
+  function handleRightClick(e) {
+    e.preventDefault();
+    console.log('target: ', e.target.title);
+    setMessageClicked(e.target.title);
+    setShowReactionMenu(true);
+  }
+
+  const [newEmoji, setNewEmoji] = useState();
+
   // console.log('MESSAGES', messages, user)
 
   return (
@@ -39,7 +52,20 @@ const SentMessages = ({ usersData, socket }) => {
       <div className='messages-container'>
         {messages.map((message, index) => {
           const messageSender = message.from_user_id === user ? 'user' : 'sender';
-          return <div id='msg' key={index} className={`${messageSender}Message`}>{message.content}</div>;
+          // console.log('emoji number:', message.reaction_emoji, typeof message.reaction_emoji);
+          // console.log('message id:', message.id);
+          return (
+          <div>
+            <div id='msg' key={index} title={index} className={`${messageSender}Message`} onContextMenu={handleRightClick}>
+              {message.content}
+            </div>
+            <div title='reaction-container'>
+              <Reaction title={index} newEmoji={newEmoji} setNewEmoji={setNewEmoji} showReactionMenu={showReactionMenu} messageId={message.id}/>
+            </div>
+            {(showReactionMenu && (index === Number(messageClicked))) && (
+              <ReactionMenu setShowReactionMenu={setShowReactionMenu} setNewEmoji={setNewEmoji} messageId={message.id}/>
+            )}
+          </div>);
         })
         }
         <div ref={messagesEndRef}></div>

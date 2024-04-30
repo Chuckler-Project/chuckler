@@ -90,3 +90,13 @@
     height: 100%;
 }
 
+.reaction-menu {
+    margin-top: 2px;
+    width: 30%;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: rgb(233, 233, 233);
+    border-radius: 20px;
+}
