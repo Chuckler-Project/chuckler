@@ -6,6 +6,7 @@ import userIcon from '../images/user.png';
 import passwordIcon from '../images/password.png';
 import jokeIcon from '../images/joke.png';
 import logo from '../images/logo.png';
+import { AuthContext } from '../context/AuthContext.jsx';
 
 const Signup = ({ setIndex, closeModal }) => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const Signup = ({ setIndex, closeModal }) => {
     id: '',
     username: '',
   });
+  const { user, setUser } = React.useContext(AuthContext);
 
   useEffect(() => {
     if (currUser.username !== '') navigate('/main', { state: currUser });
@@ -32,12 +34,18 @@ const Signup = ({ setIndex, closeModal }) => {
         password,
         joke,
       }).then(response => {
+        console.log('RESPONSE', response);
         if (response.data === false) alert('Account with this email already exists')
         else {
           console.log('RESPONSE SIGNUP', response);
           setCurrUser({
             id: response.data.id,
             username: response.data.username,
+          });
+          setUser({
+            id: response.data.id,
+            username: response.data.username,
+            token: response.data.token,
           });
           location.assign('/main');
         }

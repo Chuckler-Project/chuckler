@@ -6,9 +6,19 @@ import SentMessages from "./chatComponents/SentMessages.jsx";
 import { useEffect } from "react";
 import Axios from "axios";
 import { useLocation } from "react-router-dom";
-export default function Chat() {
+import { AuthContext } from "../context/AuthContext.jsx";
 
-    useEffect(()=>{Axios.get('/api/user/verify').then(request=>{if(request.data==false) location.assign('/')})},[]);  
+export default function Chat() {
+    const {user} = React.useContext(AuthContext); // these lines add the current token to the header of the request
+    const token = user.token;
+    const header = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    };
+    useEffect(()=>{
+        Axios.get('/api/user/verify', header).then(request=>{if(request.data==false) location.assign('/')})
+    },[]);  
     return (
         <div className="background">
             <div className="main-container">

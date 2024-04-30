@@ -4,16 +4,23 @@ import '../../stylesheets/home.css';
 import InputJoke from "../../components/InputJoke.jsx";
 import MatchMessage from '../../components/MatchMessage.jsx';
 import Axios from 'axios';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext.jsx';
 
 export default function Home () {
     const [joke, setJoke] = useState('');
     const [userId,setUser] = useState(15);
     const [match, setMatch] = useState(false);
     let currUserId;
+    
+    const { user } = useContext(AuthContext);
+    const token = user.token;
+    const header = { headers: { Authorization: `Bearer ${token}` } };
+
     const getJoke = async () => {
         const noobRes = await fetch('/api/user/verify');
 
-        await Axios.get('/api/user/verify').then(request=>currUserId = request.data)
+        await Axios.get('/api/user/verify', header).then(request=>currUserId = request.data)
         console.log('CURRENT USER ID', currUserId );
         try {
             if(currUserId){
@@ -36,7 +43,9 @@ export default function Home () {
         try {
             const likeResponse = await fetch('/api/joke/like', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 
+                Authorization : `Bearer ${token}`
+            },
                 body: JSON.stringify({ userId: currUserId, jokeId: joke.id }) 
             });
 
@@ -48,7 +57,9 @@ export default function Home () {
         try {
             const matchResponse = await fetch('/api/match', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json',
+                    'Authorization' : `Bearer ${token}`
+            },
                 body: JSON.stringify({ userId: currUserId, creatorId: joke.creator_id }) 
             });
             if (!matchResponse.ok) {
