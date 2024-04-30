@@ -4,6 +4,8 @@ const jokeModel = require("../models/jokeModel");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const userController = {};
+const jwt = require("jsonwebtoken");
+const secretKey = process.env.JWT_SECRET;
 
 userController.createUser = async (req, res, next) => {
   try {

@@ -11,7 +11,7 @@ import Axios from "axios";
 
 export default function Main({ userData }) {
   const [activeTab, setActiveTab] = useState("tab1");
-  fetch('/api/user/verify').then(data=>data.json()).then(data=>{if(data===false)location.assign('/')})
+  fetch('/api/user/verify').then(data=>data.text()).then(data=>{if(data==='false') location.assign('/')})
   const handleLogOut = async (e) => {
     e.preventDefault();
     try {
@@ -21,7 +21,7 @@ export default function Main({ userData }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username: userData.username }),
+        body: JSON.stringify({ id: userData.id }),
       });
       if (res.ok) {
         localStorage.clear();

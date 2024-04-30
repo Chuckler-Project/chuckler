@@ -55,7 +55,7 @@ const config = {
             },
             {
                 test: /\.css$/i,
-                use: [stylesHandler,'css-loader'],
+                use: [stylesHandler,{loader: 'css-loader', options: {importLoaders: 1}}, 'postcss-loader'],
             },
             {
                 test: /\.s[ac]ss$/i,

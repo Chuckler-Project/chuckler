@@ -4,43 +4,53 @@ import "../stylesheets/landing.css";
 import chuckler from "../images/chuckler-word.png";
 import Signup from "../components/Signup.jsx";
 import Signin from "../components/Signin.jsx";
-import Axios from "axios";
-import { useEffect } from "react";
+import Axios from 'axios';
+import { useEffect } from 'react';
+
 
 export default function LandingPage() {
   const [openSignUp, setOpenSignUp] = useState(false);
   const [openSignIn, setOpenSignIn] = useState(false);
-  useEffect( () => {
-    Axios.get("/api/user/verify").then((request) => {
-      if (request.data != false) location.assign("/main");
-      return;
-    });
+  const [activeIndex, setActiveIndex] = useState(null);
+  
+  useEffect(() => {
+    Axios.get('/api/user/verify')
+      .then((request) => {
+        if (request.data) {
+          location.assign('/main');
+          return;
+        }
+      });
   }, []);
+
   return (
-    <div className="chuckler-container">
-      <div className="about">
+    <div className='chuckler-container'>
+      <div className='about'>
         <button
-          id="login-btn"
-          className="btn-login"
+          id='login-btn'
+          className='btn-login'
           onClick={() => {
+            setActiveIndex(0);
             setOpenSignIn(true);
           }}
         >
           Login
         </button>
       </div>
-      <div className="create">
-        <img src={chuckler} alt="logo" style={{ width: "500px" }} />
+      <div className='create'>
+        <img src={chuckler} alt='logo' style={{ width: '500px' }} />
         <button
-          className="btn-login"
+          id='signup-btn'
+          className='btn-login'
           onClick={() => {
+            setActiveIndex(1);
             setOpenSignUp(true);
           }}
         >
           Get Started
         </button>
-        {openSignUp && <Signup closeModal={setOpenSignUp} />}
-        {openSignIn && <Signin closeModal={setOpenSignIn} />}
+        {openSignIn && <Signin setIndex={setActiveIndex} closeModal={setOpenSignIn} />}
+        {activeIndex && openSignUp && <Signup setIndex={setActiveIndex} closeModal={setOpenSignUp} />}
       </div>
     </div>
   );

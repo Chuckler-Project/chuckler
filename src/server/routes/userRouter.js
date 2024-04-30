@@ -53,4 +53,8 @@ router.get("/verify", tokenController.verifyToken, (req, res) => {
 // Legacy - Get username by id
 router.post("/username", userController.getUsername);
 
+//verifies if user has a jwt cookie
+router.get("/verify", tokenController.verifySession);
+router.post("/username", userController.getUsername);
+router.get("/profile", userController.getProfileJokes);
 module.exports = router;

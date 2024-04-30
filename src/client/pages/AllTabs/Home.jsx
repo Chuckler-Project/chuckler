@@ -11,6 +11,8 @@ export default function Home () {
     const [match, setMatch] = useState(false);
     let currUserId;
     const getJoke = async () => {
+        const noobRes = await fetch('/api/user/verify');
+
         await Axios.get('/api/user/verify').then(request=>currUserId = request.data)
         console.log('CURRENT USER ID', currUserId );
         try {
@@ -18,7 +20,7 @@ export default function Home () {
                 const joke = await fetch('/api/joke/retrieveJoke', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId: currUserId }) 
+                    body: JSON.stringify({ 'userId': currUserId }) 
                 })
                 const parsedJoke = await joke.json();
                 console.log('joke here',parsedJoke);
