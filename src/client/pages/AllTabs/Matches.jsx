@@ -6,8 +6,6 @@ import MatchProfile from "../../components/MatchProfile.jsx";
 export default function Matches({userData}) {
     const [user, setUser] = useState(userData);
     const [matches, setMatches] = useState([]);
-   
-    console.log('CURRENT USER INFO (MATCHES.JSX)', user)
     useEffect(() => {
         setMatches([]);
         const getMatches = async () => {

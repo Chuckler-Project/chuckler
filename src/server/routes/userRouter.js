@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('../controllers/userController')
-const sessionController = require('../controllers/tokenController')
+const sessionController = require('../controllers/tokenController');
+const { useInRouterContext, UNSAFE_NavigationContext } = require('react-router-dom');
 
 const router = express.Router();
 
@@ -31,4 +32,8 @@ router.post('/logout',
   }
 );
 
+//verifies if user has a jwt cookie
+router.get('/verify',sessionController.verifySession);
+router.post('/username',userController.getUsername);
+router.get('/profile',userController.getProfileJokes);
 module.exports = router;

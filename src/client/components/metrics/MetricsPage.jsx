@@ -2,7 +2,7 @@ import * as Plot from "@observablehq/plot";
 import PlotFigure from "./PlotFigure.js";
 import penguins from "./penguins.json";
 
-const MetricsPage = () {
+const MetricsPage = () =>{
   return (
     <div>
       <h1>Penguins</h1>

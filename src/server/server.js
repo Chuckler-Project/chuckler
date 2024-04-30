@@ -24,7 +24,7 @@ const server = http.createServer(app);
 
 // parse incoming json
 app.use(express.json());
-
+app.use(cookieParser());
 // serve static files from the build file
 app.use(express.static('build'));
 
@@ -59,5 +59,4 @@ wss.on('connection', (socket, request) => {
 server.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
 });
-
 module.exports = app;

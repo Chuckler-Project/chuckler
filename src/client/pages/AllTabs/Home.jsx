@@ -3,42 +3,41 @@ import {useLocation} from 'react-router-dom';
 import '../../stylesheets/home.css';
 import InputJoke from "../../components/InputJoke.jsx";
 import MatchMessage from '../../components/MatchMessage.jsx';
-
+import Axios from 'axios';
 
 export default function Home () {
     const [joke, setJoke] = useState('');
-    const [userId, setUser] = useState(15);
+    const [userId,setUser] = useState(15);
     const [match, setMatch] = useState(false);
-    
-    //CHECK IF WE NEED THIS 
-    const location = useLocation();
-    const userData = location.state;
-
+    let currUserId;
     const getJoke = async () => {
-        // console.log('CURRENT USER DATA', userData)
+        const noobRes = await fetch('/api/user/verify');
+
+        await Axios.get('/api/user/verify').then(request=>currUserId = request.data)
+        console.log('CURRENT USER ID', currUserId );
         try {
-            const joke = await fetch('/api/joke/retrieveJoke', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: userData.id }) 
-            });
-            const parsedJoke = await joke.json();
-            console.log('joke here ->', parsedJoke);
-            setJoke(parsedJoke);
+            if(currUserId){
+                const joke = await fetch('/api/joke/retrieveJoke', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 'userId': currUserId }) 
+                })
+                const parsedJoke = await joke.json();
+                console.log('joke here',parsedJoke);
+                setJoke(parsedJoke);
+        }
         } catch (error) {console.log('Error trying to fetch joke', error)}
     };
-
     useEffect(() => {
         getJoke();
     }, [])
-
     const handleYesClick = async (e) => {
         e.preventDefault();
         try {
             const likeResponse = await fetch('/api/joke/like', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: userData.id, jokeId: joke.id }) 
+                body: JSON.stringify({ userId: currUserId, jokeId: joke.id }) 
             });
 
             const likeResponseMessage = await likeResponse.json();
@@ -50,7 +49,7 @@ export default function Home () {
             const matchResponse = await fetch('/api/match', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: userData.id, creatorId: joke.creator_id }) 
+                body: JSON.stringify({ userId: currUserId, creatorId: joke.creator_id }) 
             });
             if (!matchResponse.ok) {
                 throw new Error('Failed to fetch match data');
@@ -77,7 +76,7 @@ export default function Home () {
             </div>
             {match && <MatchMessage 
                 match={match} 
-                userId={userData.userId} 
+                userId={currUserId} 
                 jokeCreator={joke.creator_id}
                 closeModal={setMatch}
                 />}
