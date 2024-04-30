@@ -1,18 +1,13 @@
 const express = require('express');
-
-require('dotenv').config();
-
 const WebSocket = require('ws');
 const path = require('path');
 const http = require('http');
-require('dotenv').config();
 const cookieParser = require('cookie-parser');
+require('dotenv').config();
 
 const PORT = process.env.PORT;
 
-// require in controllers and routers
-const userController = require('./controllers/userController');
-const sessionController = require('./controllers/tokenController');
+// Routers
 const jokeRouter = require('./routes/jokeRouter');
 const userRouter = require('./routes/userRouter');
 const matchRouter = require('./routes/matchRouter');
@@ -24,7 +19,7 @@ const server = http.createServer(app);
 
 // parse incoming json
 app.use(express.json());
-
+app.use(cookieParser());
 // serve static files from the build file
 app.use(express.static('build'));
 

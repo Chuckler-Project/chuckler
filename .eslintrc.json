@@ -1,36 +1,25 @@
 {
   "root": true,
-  "extends": [
-    "airbnb",
-    "eslint:recommended",
-    "plugin:import/errors",
-    "plugin:react/recommended",
-    "plugin:jsx-a11y/recommended"
-  ],
-  "plugins": [
-    "react",
-    "import",
-    "jsx-a11y"
-  ],
+  "ignorePatterns": ["**/test", "**/__tests__"],
   "env": {
-    "browser": true,
-    "node": true
+    "node": true,
+    "es2021": true
   },
-  "parserOptions": {
-    "sourceType": "module",
-    "ecmaVersion": 2015,
-    "ecmaFeatures": {
-      "jsx": true
-    }
-  },
+  "extends": "eslint:recommended",
+  "parserOptions": { "sourceType": "module" },
   "rules": {
-    "arrow-body-style": ["error", "always"],
-    "react/function-component-definition": [
-      2,
-      {
-        "namedComponents": "arrow-function",
-        "unnamedComponents": "arrow-function"
+    "indent": ["warn", 2],
+    "no-unused-vars": ["off", { "vars": "local" }],
+    "prefer-const": "warn",
+    "semi": ["warn", "always"],
+    "space-infix-ops": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["src/tests/**/*"],
+      "env": {
+        "jest": true
       }
-    ]
-  }
+    }
+  ]
 }

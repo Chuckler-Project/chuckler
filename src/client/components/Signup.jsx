@@ -40,6 +40,7 @@ const Signup = ({ closeModal }) => {
         });
       }
     });
+    location.assign('/main');
   };
 
 
@@ -93,7 +94,7 @@ const Signup = ({ closeModal }) => {
         </div>
         <p className='signUpStatus'>{signUpStatus}</p>
         <div className="signup-btn">
-          <button onClick={signupAction}>Sign up</button>
+          <button onClick={()=>{signupAction()}}>Sign up</button>
         </div>
       </div>
     </div>
