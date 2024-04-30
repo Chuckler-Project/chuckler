@@ -1,33 +1,101 @@
-const sql = require('../../db/db');
+const sql = require("../../db/db");
+const jokeModel = require("../models/jokeModel");
+const userModel = require("../models/userModel");
 
 const jokeController = {};
 
-// get a joke from the database that the requesting user did not write
+// post a joke to the database
+jokeController.postJoke = async (req, res, next) => {
+  try {
+    const { id } = res.locals.userInfo;
+    const { content } = req.body;
+
+    // Create joke
+    const jokeInfo = await jokeModel.createJoke(content, id);
+    if (!jokeInfo) throw new Error("Error creating joke");
+    res.locals.joke = jokeInfo;
+
+    return next();
+  } catch (err) {
+    return next({
+      log: `Error in postJoke middleware: ${err}`,
+      message: `Error posting joke: ${err}`,
+    });
+  }
+};
+
+// Update user's joke by id
+jokeController.updateJoke = async (req, res, next) => {
+  try {
+    const { id } = res.locals.userInfo; // For future user auth
+    const { joke_id } = req.query;
+    const { content } = req.body;
+
+    // Update joke
+    const updatedJokeInfo = await jokeModel.updateJoke(content, joke_id);
+    if (!updatedJokeInfo) throw new Error("Error updating joke");
+    res.locals.joke = updatedJokeInfo;
+
+    return next();
+  } catch (err) {
+    return next({
+      log: `Error in updateJoke middleware: ${err}`,
+      message: `Error updating joke: ${err}`,
+    });
+  }
+};
+
+jokeController.deleteJoke = async (req, res, next) => {
+  try {
+    const { id } = res.locals.userInfo; // For future user auth
+    const { joke_id } = req.query;
+
+    // Delete joke
+    const deletedJokeInfo = await jokeModel.deleteJoke(joke_id);
+    if (!deletedJokeInfo) throw new Error("Error deleting joke");
+    res.locals.joke = deletedJokeInfo;
+
+    return next();
+  } catch (err) {
+    return next({
+      log: `Error in deleteJoke middleware: ${err}`,
+      message: `Error updating joke: ${err}`,
+    });
+  }
+};
+
+// Legacy - get a joke from the database that the requesting user did not write
 jokeController.getJoke = async (req, res, next) => {
   try {
-    const {userId} = req.body;
+    const { userId } = req.body;
     const lookForUnseenJoke = async () => {
       // get the jokes that the user has already seen
-      const viewedJokesResponse = await sql`SELECT jokes_viewed FROM users WHERE id=${userId}`;
-      let viewedJokesArray = viewedJokesResponse[0].jokes_viewed;
+      const viewedJokesResponse =
+        await sql`SELECT jokes_viewed FROM users WHERE id=${userId}`;
+      const viewedJokesArray = viewedJokesResponse[0].jokes_viewed;
       // get all the jokes that the user didn't write
-      const otherUsersJokesArrayOfIds = await sql`SELECT id FROM jokes WHERE creator_id != ${userId}`;
+      const otherUsersJokesArrayOfIds =
+        await sql`SELECT id FROM jokes WHERE creator_id != ${userId}`;
       // shuffle the array into a random order to mix up the jokes using Fisher-Yates shuffle
       for (let i = otherUsersJokesArrayOfIds.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [otherUsersJokesArrayOfIds[i], otherUsersJokesArrayOfIds[j]] = [otherUsersJokesArrayOfIds[j], otherUsersJokesArrayOfIds[i]];
-      };
+        [otherUsersJokesArrayOfIds[i], otherUsersJokesArrayOfIds[j]] = [
+          otherUsersJokesArrayOfIds[j],
+          otherUsersJokesArrayOfIds[i],
+        ];
+      }
       // loop through the jokes that the user didn't write until reaching one the user hasn't seen
       let chosenJokeId;
-      if (viewedJokesArray === null) chosenJokeId = otherUsersJokesArrayOfIds[0].id
+      if (viewedJokesArray === null)
+        chosenJokeId = otherUsersJokesArrayOfIds[0].id;
       else {
         for (const joke of otherUsersJokesArrayOfIds) {
           if (!viewedJokesArray.includes(joke.id)) {
             chosenJokeId = joke.id;
             break;
           }
-        };
-      };
+        }
+      }
       return chosenJokeId;
     };
     let chosenJokeId = await lookForUnseenJoke();
@@ -36,88 +104,77 @@ jokeController.getJoke = async (req, res, next) => {
       await sql`UPDATE users SET jokes_viewed=null WHERE id=${userId}`;
       chosenJokeId = await lookForUnseenJoke();
     }
-    const jokeResponse = await sql`SELECT * FROM jokes WHERE id=${chosenJokeId}`;
+    const jokeResponse =
+      await sql`SELECT id, creator_id, content FROM jokes WHERE id=${chosenJokeId}`;
 
     // working version wo seen jokes filetering
     // jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
-   
+
     res.locals.joke = jokeResponse[0];
     return next();
-  } catch (err) { 
+  } catch (err) {
     next({
       log: `Error in getJoke middleware: ${err}`,
-      message: 'An error occurred getting the joke'
-    }) 
+      message: "An error occurred getting the joke",
+    });
   }
 };
 
+// Legacy - match function
 jokeController.addJokeToViewed = async (req, res, next) => {
   try {
-    const {userId} = req.body;
+    const { userId } = req.body;
     await sql`UPDATE users SET jokes_viewed=ARRAY_APPEND(jokes_viewed, ${res.locals.joke.id}) WHERE id=${userId}`;
     return next();
   } catch (err) {
     next({
       log: `Error in addJokeToViewed middleware: ${err}`,
-      message: 'An error occurred adding the joke to the users jokes viewed list'
-    }) 
-  };
+      message:
+        "An error occurred adding the joke to the users jokes viewed list",
+    });
+  }
 };
 
-// post a joke to the database
-jokeController.postJoke = async (req, res, next) => {
-  try {
-      const { userId, content } = req.body;
-      // add joke to db and return the joke id
-      const jokeIdResponse = await sql`INSERT INTO jokes (content, creator_id) VALUES (${content}, ${userId}) RETURNING id`;
-      const jokeId = jokeIdResponse[0].id;
-      // add joke to user jokes_posted array
-      await sql`UPDATE users SET jokes_posted=ARRAY_APPEND(jokes_posted, ${jokeId}) WHERE id=${userId}`;
-      return next();
-    } catch (err) { 
-      next({
-        log: `Error in postJoke middleware: ${err}`,
-        message: `Error posting joke: ${err}`
-      }) 
-    }
-}
-
-// like a joke in the database
+// Legacy - like a joke in the database
 jokeController.likeJoke = async (req, res, next) => {
   try {
     // get stored ids from front end,
     const { userId, jokeId } = req.body;
+    console.log("req body", req.body);
     // check if joke is already in joke's liked_by array
-    const likedByResponse = await sql`SELECT liked_by FROM jokes WHERE id=${jokeId}`;
+    const likedByResponse =
+      await sql`SELECT liked_by FROM jokes WHERE id=${jokeId}`;
     const likedByArray = likedByResponse[0].liked_by;
     if (likedByArray === null) {
       // add userId to joke's liked_by array
       await sql`UPDATE jokes SET liked_by=ARRAY_APPEND(liked_by, ${userId}) WHERE id=${jokeId}`;
-    }
-    else if (!(likedByArray.includes(userId))) {
+    } else if (!likedByArray.includes(userId)) {
       // add userId to joke's liked_by array
       await sql`UPDATE jokes SET liked_by=ARRAY_APPEND(liked_by, ${userId}) WHERE id=${jokeId}`;
-    };
+    }
     // check to see if joke is already in user's jokes_liked array
-    const jokesLikedResponse = await sql`SELECT jokes_liked FROM users WHERE id=${userId}`;
+    const jokesLikedResponse =
+      await sql`SELECT jokes_liked FROM users WHERE id=${userId}`;
     const jokesLikedArray = jokesLikedResponse[0].jokes_liked;
     if (jokesLikedArray === null) {
       // add jokeId to users jokes_liked array
       await sql`UPDATE users SET jokes_liked=ARRAY_APPEND(jokes_liked, ${jokeId}) WHERE id=${userId}`;
       res.locals.likeMessage = `User ${userId} liked joke ${jokeId}`;
-    }
-    else if (!jokesLikedArray.includes(jokeId)) {
-    // add jokeId to users jokes_liked array
+    } else if (!jokesLikedArray.includes(jokeId)) {
+      // add jokeId to users jokes_liked array
       await sql`UPDATE users SET jokes_liked=ARRAY_APPEND(jokes_liked, ${jokeId}) WHERE id=${userId}`;
       res.locals.likeMessage = `User ${userId} liked joke ${jokeId}`;
-    } else res.locals.likeMessage = `User ${userId} already liked joke ${jokeId}`
+    } else
+      res.locals.likeMessage = `User ${userId} already liked joke ${jokeId}`;
+
+    console.log("mesage: ", res.locals.likeMessage);
     return next();
   } catch (err) {
     next({
       log: `Error in likeJoke middleware: ${err}`,
-      message: `Error liking joke: ${err}`
+      message: `Error liking joke: ${err}`,
     });
-  };  
+  }
 };
 
 module.exports = jokeController;

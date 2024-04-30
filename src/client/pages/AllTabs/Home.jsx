@@ -11,8 +11,6 @@ export default function Home () {
     const [match, setMatch] = useState(false);
     let currUserId;
     const getJoke = async () => {
-        const noobRes = await fetch('/api/user/verify');
-
         await Axios.get('/api/user/verify').then(request=>currUserId = request.data)
         console.log('CURRENT USER ID', currUserId );
         try {
