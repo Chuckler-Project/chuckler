@@ -1,39 +1,61 @@
-const express = require('express');
-const userController = require('../controllers/userController')
-const sessionController = require('../controllers/tokenController');
-const { useInRouterContext, UNSAFE_NavigationContext } = require('react-router-dom');
+const express = require("express");
+const userController = require("../controllers/userController");
+const jokeController = require("../controllers/jokeController");
+const tokenController = require("../controllers/tokenController");
 
 const router = express.Router();
 
-router.post('/signup',
+router.post(
+  "/signup",
   userController.createUser,
-  sessionController.setJWTCookieSignUp,
+  tokenController.setJWTCookie,
   userController.setIsOnlineTrue,
   (req, res) => {
-    res.locals.userExists ? res.status(200).json('username exists') :
-      res.status(200).json(res.locals.userInfo)
+    return res.status(200).json("User signed up successfully!");
   }
 );
 
-router.post('/login',
+router.post(
+  "/login",
   userController.verifyUser,
-  sessionController.setJWTCookieLogin,
+  tokenController.setJWTCookie,
   userController.setIsOnlineTrue,
   (req, res) => {
-    res.locals.authenticated ? res.status(200).json(res.locals.userObj) : res.status(200).json('incorrect password or username');
+    return res.status(200).json("User logged in successfully!");
   }
 );
 
-router.post('/logout',
-  sessionController.removeJWTCookie,
+router.post(
+  "/logout",
+  tokenController.verifyToken,
   userController.setIsOnlineFalse,
+  tokenController.removeJWTCookie,
   (req, res) => {
-    res.status(200).json('Logged out');
+    return res.status(200).json("User logged out successfully!");
   }
 );
+
+// Get requesting user's jokes
+router.post(
+  "/jokes",
+  tokenController.verifyToken,
+  userController.getUserJokes,
+  (req, res) => {
+    return res.status(200).json(res.locals.jokes);
+  }
+);
+
+// Legacy - verifies if user has a jwt cookie
+router.get("/verify", tokenController.verifyToken, (req, res) => {
+  return res.status(200).json("Requesting user is authorized");
+});
+
+// Legacy - Get username by id
+router.post("/username", userController.getUsername);
 
 //verifies if user has a jwt cookie
-router.get('/verify',sessionController.verifySession);
-router.post('/username',userController.getUsername);
-router.get('/profile',userController.getProfileJokes);
+// router.get("/verify", tokenController.verifySession, (req, res) => {
+//   return res.status(200).json("User is authorized");
+// });
+
 module.exports = router;
