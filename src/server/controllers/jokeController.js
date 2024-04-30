@@ -9,7 +9,7 @@ jokeController.getJoke = async (req, res, next) => {
       const viewedJokesResponse = await sql`SELECT jokes_viewed FROM users WHERE id=${userId}`;
       let viewedJokesArray = viewedJokesResponse[0].jokes_viewed;
       // get all the jokes that the user didn't write
-      const otherUsersJokesArrayOfIds = await sql`SELECT id FROM jokes WHERE creator_id != ${userId}`;
+      const otherUsersJokesArrayOfIds = await sql`SELECT joke_id FROM jokes WHERE creator_id != ${userId}`;
       // shuffle the array into a random order to mix up the jokes using Fisher-Yates shuffle
       for (let i = otherUsersJokesArrayOfIds.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -17,7 +17,7 @@ jokeController.getJoke = async (req, res, next) => {
       };
       // loop through the jokes that the user didn't write until reaching one the user hasn't seen
       let chosenJokeId;
-      if (viewedJokesArray === null) chosenJokeId = otherUsersJokesArrayOfIds[0].id
+      if (viewedJokesArray === null) chosenJokeId = otherUsersJokesArrayOfIds[0].joke_id
       else {
         for (const joke of otherUsersJokesArrayOfIds) {
           if (!viewedJokesArray.includes(joke.id)) {
@@ -34,8 +34,7 @@ jokeController.getJoke = async (req, res, next) => {
       await sql`UPDATE users SET jokes_viewed=null WHERE id=${userId}`;
       chosenJokeId = await lookForUnseenJoke();
     }
-    const jokeResponse = await sql`SELECT id,content,creator_id FROM jokes WHERE id=${chosenJokeId}`;
-
+    const jokeResponse = await sql`SELECT joke_id,content,creator_id FROM jokes WHERE joke_id=${chosenJokeId}`;
     // working version wo seen jokes filetering
     // jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
    
@@ -52,7 +51,7 @@ jokeController.getJoke = async (req, res, next) => {
 jokeController.addJokeToViewed = async (req, res, next) => {
   try {
     const {userId} = req.body;
-    await sql`UPDATE users SET jokes_viewed=ARRAY_APPEND(jokes_viewed, ${res.locals.joke.id}) WHERE id=${userId}`;
+    await sql`UPDATE users SET jokes_viewed=ARRAY_APPEND(jokes_viewed, ${res.locals.joke.joke_id}) WHERE id=${userId}`;
     return next();
   } catch (err) {
     next({

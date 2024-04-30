@@ -35,4 +35,5 @@ router.post('/logout',
 //verifies if user has a jwt cookie
 router.get('/verify',sessionController.verifySession);
 router.post('/username',userController.getUsername);
+router.get('/profile',userController.getProfileJokes);
 module.exports = router;

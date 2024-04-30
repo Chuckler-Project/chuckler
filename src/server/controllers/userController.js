@@ -2,6 +2,8 @@ const sql = require('../../db/db')
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const userController = {};
+const jwt = require("jsonwebtoken");
+const secretKey = process.env.JWT_SECRET;
 
 userController.createUser = async (req, res, next) => {
   try {
@@ -102,4 +104,17 @@ userController.getUsername = async (req, res, next) => {
     });
   }
 };
+userController.getProfileJokes = async(req,res,next) =>{
+  const token = req.cookies.jwt;
+  const userID = jwt.verify(token, secretKey);
+  const jokesArr = [];
+  const joinTable = await sql`
+  SELECT username,bio,id,content 
+  FROM users
+  INNER JOIN jokes ON ${userID}=creator_id`
+  for(const {id,content} of joinTable){
+    if(id==userID) jokesArr.push(content);
+  }
+  res.send(jokesArr);
+}
 module.exports = userController;
