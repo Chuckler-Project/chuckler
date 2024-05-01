@@ -75,4 +75,19 @@ userController.setIsOnlineFalse = async (req, res, next) => {
   };
 }
 
+userController.viewUser = (req, res, next) => {
+  const userID = parseInt(req.params.userId)
+  const user = users.find(user => user.id === userID)
+
+  if (!user) {
+    return res.status(404).json({error: 'User not found'})
+  }
+
+  res.json(user)
+}
+
+userController.updateUserBio = (req, res, next) => {
+
+}
+
 module.exports = userController;

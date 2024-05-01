@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('../controllers/userController')
 const sessionController = require('../controllers/tokenController')
+const sql = require('../../db/db');
 
 const router = express.Router();
 
@@ -29,6 +30,13 @@ router.post('/logout',
   (req, res) => {
     res.status(200).json('Logged out');
   }
+);
+
+router.get('/bio/:userId',
+  userController.viewUser,
+  (req, res) => {
+    res.status(200).json('User bio logic here');
+  },
 );
 
 module.exports = router;
