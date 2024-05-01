@@ -4,8 +4,6 @@ const jokeModel = require("../models/jokeModel");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const userController = {};
-const jwt = require("jsonwebtoken");
-const secretKey = process.env.JWT_SECRET;
 
 userController.createUser = async (req, res, next) => {
   try {
@@ -34,7 +32,10 @@ userController.createUser = async (req, res, next) => {
 
     return next();
   } catch (err) {
-    return next(err);
+    return next({
+      log: `Error in createUser middleware: ${err}`,
+      message: `Error creating user: ${err}`,
+    });
   }
 };
 
@@ -59,11 +60,32 @@ userController.verifyUser = async (req, res, next) => {
 
     return next();
   } catch (err) {
-    return next(err);
+    return next({
+      log: `Error in verifyUser middleware: ${err}`,
+      message: `Error verifying user: ${err}`,
+    });
   }
 };
 
-// Returns requesting users jokes
+// Returns requesting user's matches
+userController.getUserMatches = async (req, res, next) => {
+  try {
+    const { id } = res.locals.userInfo;
+
+    // Get matches by user id
+    const user_matches = await userModel.getUserMatches(id);
+    res.locals.matches = user_matches;
+
+    return next();
+  } catch (err) {
+    return next({
+      log: `Error in getUserMatches middleware: ${err}`,
+      message: `Error getting user matches: ${err}`,
+    });
+  }
+};
+
+// Returns requesting user's jokes
 userController.getUserJokes = async (req, res, next) => {
   try {
     const { id } = res.locals.userInfo;
@@ -74,7 +96,27 @@ userController.getUserJokes = async (req, res, next) => {
 
     return next();
   } catch (err) {
-    return next(err);
+    return next({
+      log: `Error in getUserJokes middleware: ${err}`,
+      message: `Error fetching user jokes: ${err}`,
+    });
+  }
+};
+
+// Returns requesting user's profile info - currently returning all user data
+userController.getUserProfile = async (req, res, next) => {
+  try {
+    const { id } = res.locals.userInfo;
+
+    const userInfo = await userModel.getUserById(id);
+    res.locals.userInfo = userInfo;
+
+    return next();
+  } catch (err) {
+    return next({
+      log: `Error in getUserProfile middleware: ${err}`,
+      message: `Error fetching user profile: ${err}`,
+    });
   }
 };
 
@@ -107,7 +149,7 @@ userController.setIsOnlineFalse = async (req, res, next) => {
 };
 
 // legacy
-userController.getUsername = async (req, res, next) => {
+userController.getUsernameLegacy = async (req, res, next) => {
   try {
     const { id } = req.body;
     const response = await db.query(`SELECT username from users where id=$1`, [
