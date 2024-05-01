@@ -11,22 +11,14 @@ userModel.createUser = async (email, username, password) => {
   return result.rows[0];
 };
 
-userModel.getUserByEmail = async (email) => {
-  const getUserQuery = `
-  SELECT id, username, password
-  FROM users WHERE email = $1`;
+userModel.getUserMatches = async (id) => {
+  const getUserMatchesQuery = `
+  SELECT user_matches
+  FROM users
+  WHERE id = $1`;
 
-  const result = await db.query(getUserQuery, [email]);
-  return result.rows[0];
-};
-
-userModel.getPrefById = async (id) => {
-  const getPrefByIdQuery = `
-  SELECT user_preferences
-  FROM users WHERE id = $1`;
-
-  const result = await db.query(getPrefByIdQuery, [id]);
-  return result.rows[0];
+  const result = await db.query(getUserMatchesQuery, [id]);
+  return result.rows[0].user_matches;
 };
 
 userModel.getUserJokes = async (id) => {
@@ -55,6 +47,7 @@ userModel.getUserJokes = async (id) => {
 
 /**
  * Only for use on protected routes
+ * returning all data
  */
 userModel.getUserById = async (id) => {
   const getUserQuery = `
@@ -62,6 +55,26 @@ userModel.getUserById = async (id) => {
   FROM users WHERE id = $1`;
 
   const result = await db.query(getUserQuery, [id]);
+  return result.rows[0];
+};
+
+// Legacy
+userModel.getUserByEmail = async (email) => {
+  const getUserQuery = `
+  SELECT id, username, password
+  FROM users WHERE email = $1`;
+
+  const result = await db.query(getUserQuery, [email]);
+  return result.rows[0];
+};
+
+// Stretch feature
+userModel.getPrefById = async (id) => {
+  const getPrefByIdQuery = `
+  SELECT user_preferences
+  FROM users WHERE id = $1`;
+
+  const result = await db.query(getPrefByIdQuery, [id]);
   return result.rows[0];
 };
 
