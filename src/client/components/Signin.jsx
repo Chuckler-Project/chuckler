@@ -5,6 +5,7 @@ import "../stylesheets/signup.css";
 import userIcon from "../images/user.png";
 import passwordIcon from "../images/password.png";
 import logo from "../images/logo.png";
+import { AuthContext } from "../context/AuthContext.jsx";
 
 const Signin = ({ setIndex, closeModal }) => {
   const navigate = useNavigate();
@@ -15,6 +16,9 @@ const Signin = ({ setIndex, closeModal }) => {
     id: "",
     username: "",
   });
+  const { user, setUser } = React.useContext(AuthContext); 
+  const token = user.token;
+
 
   useEffect(() => {
     // console.log('user state', currUser);
@@ -39,6 +43,11 @@ const Signin = ({ setIndex, closeModal }) => {
       setCurrUser({
         id: response.data.id,
         username: response.data.username,
+      });// TODO: refactor to remove redundant user state
+      setUser({
+        id: response.data.id,
+        username: response.data.username,
+        token: response.data.token,
       });
     } catch (err) {
       console.log(err);
