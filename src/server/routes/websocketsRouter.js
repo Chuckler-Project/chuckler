@@ -15,17 +15,17 @@ const handleWebsocketConnections = (socket, request, wss) => {
   };
 
   switch (path) {
-    case 'chat':
-      invokeMiddleware(
-        chatController.setClientId,
-        chatController.getPreviousMessages,
-        chatController.listenForNewMessages
-      );
-      break;
-    default:
-      console.log('Error in websocketRouter. Websocket connection path not recognized');
-      socket.send('Websocket connection path not recognized')
-      break;
+  case 'chat':
+    invokeMiddleware(
+      chatController.setClientId,
+      chatController.getPreviousMessages,
+      chatController.listenForNewMessages
+    );
+    break;
+  default:
+    console.log('Error in websocketRouter. Websocket connection path not recognized');
+    socket.send('Websocket connection path not recognized');
+    break;
   }
 };
 
