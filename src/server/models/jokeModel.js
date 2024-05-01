@@ -1,5 +1,4 @@
 const db = require("../../db/db");
-const userModel = require("../models/userModel");
 const jokeModel = {};
 
 jokeModel.createJoke = async (content, creator_id) => {
