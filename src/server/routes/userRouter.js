@@ -2,7 +2,7 @@ const express = require("express");
 const userController = require("../controllers/userController");
 const jokeController = require("../controllers/jokeController");
 const tokenController = require("../controllers/tokenController");
-
+const chatController = require("../controllers/chatController");
 const router = express.Router();
 
 router.post(
@@ -69,6 +69,6 @@ router.post(
 router.get("/verify", tokenController.verifyToken, (req, res) => {
   return res.status(200).json("Requesting user is authorized");
 });
-
-
+router.get("/chat",chatController.getPreviousMessages)
+router.post('/send',chatController.sendMessage);
 module.exports = router;

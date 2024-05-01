@@ -4,7 +4,6 @@ const jokeModel = require("../models/jokeModel");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const userController = {};
-
 userController.createUser = async (req, res, next) => {
   try {
     const { email, username, password, joke } = req.body;
