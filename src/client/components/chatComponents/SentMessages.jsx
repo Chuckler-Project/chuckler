@@ -59,9 +59,9 @@ const SentMessages = ({ usersData, socket }) => {
             <div id='msg' key={index} title={index} className={`${messageSender}Message`} onContextMenu={handleRightClick}>
               {message.content}
             </div>
-            <div title='reaction-container'>
-              <Reaction title={index} newEmoji={newEmoji} setNewEmoji={setNewEmoji} showReactionMenu={showReactionMenu} messageId={message.id}/>
-            </div>
+            {/* <div title='reaction-container'> */}
+              <Reaction title={index} className={`${messageSender}Reaction`} newEmoji={newEmoji} setNewEmoji={setNewEmoji} showReactionMenu={showReactionMenu} messageId={message.id}/>
+            {/* </div> */}
             {(showReactionMenu && (index === Number(messageClicked))) && (
               <ReactionMenu setShowReactionMenu={setShowReactionMenu} setNewEmoji={setNewEmoji} messageId={message.id}/>
             )}

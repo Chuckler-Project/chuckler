@@ -22,8 +22,8 @@ reactionController.updateReaction = async (req, res, next) => {
   try {
     const {messageId, reaction} = req.body;
     const reactionEmojiResponse = await sql`UPDATE messages SET reaction_emoji=${reaction} WHERE id=${messageId} RETURNING reaction_emoji`;
-    let data = reactionEmojiResponse[0];
-    res.locals.emoji = data.reaction_emoji;
+    let reactionEmoji = reactionEmojiResponse[0].reaction_emoji;
+    res.locals.emoji = reactionEmoji;
     return next();
   } catch (err) { 
     next({

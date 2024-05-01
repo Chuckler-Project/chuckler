@@ -32,6 +32,7 @@
 .userMessage {
     background-color: #43c0ea;
     text-align: end;
+    text-wrap: wrap;
     margin-left: auto;
     border-radius: 15px;
     border-bottom-right-radius: 0px;
@@ -40,6 +41,7 @@
 .senderMessage {
     background-color: #F0C322;
     margin-right: auto;
+    text-wrap: wrap;
     text-align: start;
     border-radius: 15px;
     border-bottom-left-radius: 0px;
@@ -50,6 +52,7 @@
     height: 100%;
     border-radius: 5px;
     border-style: none;
+    padding-left: 5px;
     box-shadow: 0px 0px 5px rgb(98, 98, 98);
 }
 
@@ -61,7 +64,6 @@
 .chat-container {
     height: 100%;
 }
-
 
 .messages-container {
     display: flex;
@@ -99,4 +101,34 @@
     justify-content: space-around;
     background-color: rgb(233, 233, 233);
     border-radius: 20px;
+}
+
+.userReaction {
+    width: 30px;
+    height: 30px;
+    background-color: #F0C322;
+    /* text-align: end; */
+    margin-left: auto;
+    margin-top: -10px;
+    margin-right: 3px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.senderReaction {
+    width: 30px;
+    height: 30px;
+    background-color: #43c0ea;
+    margin-right: auto;
+    margin-top: -10px;
+    margin-left: 3px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* text-align: start; */
+    border-radius: 10px;
 }

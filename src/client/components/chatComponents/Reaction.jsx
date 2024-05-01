@@ -34,21 +34,24 @@ const Reaction = (props) => {
         if(reaction === '1') {
           console.log('thumb');
           setCurrentEmoji(thumbsEmoji);
+          setShowEmoji(true);
         } else if(reaction === '2') {
           console.log('heart');
           setCurrentEmoji(heartEmoji);
+          setShowEmoji(true);
         } else if(reaction === '3') {
           console.log('laughing');
           setCurrentEmoji(laughingEmoji);
+          setShowEmoji(true);
         } else {
           setCurrentEmoji('');
+          setShowEmoji(false);
         }
     } catch (error) {console.log('Error trying to fetch reaction', error)}
   };
 
   useEffect(() => {
     getReaction();
-    setShowEmoji(true);
   }, [props.newEmoji]);
 
   function removeClick() {
@@ -60,15 +63,21 @@ const Reaction = (props) => {
               body: JSON.stringify({ messageId: props.messageId, reaction: '0'}) 
           });
           let reaction = await reactionResponse.json();
+          console.log(reaction);
           setCurrentEmoji('');
+          setShowEmoji(false);
       } catch (error) {console.log('Error trying to fetch reaction', error)}
     };
     updateReaction();
   }
 
   return (
-    <div id='reaction'>
-      {showEmoji ? <img src={currentEmoji} onClick={removeClick}/> : null}
+    <div>
+      {showEmoji ? 
+        <div id='reaction' className={props.className}>
+          <img src={currentEmoji} onClick={removeClick} style={{width: '20px', height: '20px'}}/>
+        </div> 
+      : null }
     </div>
   );
 };
