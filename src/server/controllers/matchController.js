@@ -37,8 +37,9 @@ matchController.createMatch = async (req, res, next) => {
 
     // Create and add match to both user's matches column
     const matchInfo = await matchModel.createMatch(id, likedUserId);
-    await matchModel.addMatchToUser(id);
-    await matchModel.addMatchToUser(likedUserId);
+    const matchId = matchInfo.match_id;
+    await matchModel.addMatchToUser(id, matchId);
+    await matchModel.addMatchToUser(likedUserId, matchId);
     res.locals.match = matchInfo;
 
     return next();
@@ -50,16 +51,31 @@ matchController.createMatch = async (req, res, next) => {
   }
 };
 
+matchController.getPotentialMatch = async (req, res, next) => {
+  try {
+    const { id } = res.locals.userInfo;
+    const fetchedUser = await matchModel.getPotentialMatch(id);
+    console.log("fetched User: ", fetchedUser);
+    res.locals.fetchedUser = fetchedUser;
+    return next();
+  } catch (err) {
+    return next({
+      log: `Error in getPotentialMatch middleware: ${err}`,
+      message: `Error fetching potential match: ${err}`,
+    });
+  }
+};
+
 // Swipe right, add to liked and seen
 matchController.likeUser = async (req, res, next) => {
   try {
     const { id } = res.locals.userInfo;
-    const { userId } = req.body;
+    const { likedUserId } = req.body;
 
     // Update users_seen and users_liked with likedUser
-    await matchModel.addUserToSeen(id, userId);
-    await matchModel.addLike(id, userId);
-    res.locals.message = `Liked user ${userId}`;
+    await matchModel.addUserToSeen(id, likedUserId);
+    await matchModel.addLike(id, likedUserId);
+    res.locals.message = `Liked user ${likedUserId}`;
 
     return next();
   } catch (err) {
@@ -90,13 +106,13 @@ matchController.skipUser = async (req, res, next) => {
 };
 
 // removeMatch middleware to remove likes from user
-matchController.dislikeUser = async (req, res, next) => {
+matchController.removeLikes = async (req, res, next) => {
   try {
-    const { id } = res.locals.userInfo;
-    const { userId } = req.body;
+    const { user_id_1, user_id_2 } = res.locals.match;
 
-    await matchModel.removeLike(id, userId);
-    // decide if both users should unlike each other
+    // Remove from each other's likes
+    await matchModel.removeLike(user_id_1, user_id_2);
+    await matchModel.removeLike(user_id_2, user_id_1);
 
     return next();
   } catch (err) {
@@ -115,8 +131,11 @@ matchController.deleteMatch = async (req, res, next) => {
 
     // NEED to make sure that deletion of match row cascades user_matches column
     // otherwise remove match from both user_matches columns
-    const matchInfo = await matchModel.deleteMatch(match_id);
-    res.locals.matchId = matchInfo.matchId;
+    const match = await matchModel.deleteMatch(match_id);
+    res.locals.match = match;
+    await matchModel.removeMatchFromUser(match.user_id_1, match_id);
+    await matchModel.removeMatchFromUser(match.user_id_2, match_id);
+    res.locals.message = `Unmatched ${match.user_id_1} from ${match.user_id_2}`;
 
     return next();
   } catch (err) {

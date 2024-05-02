@@ -5,10 +5,33 @@ matchModel.createMatch = async (user_id_1, user_id_2) => {
   const createMatchQuery = `
   INSERT INTO matches(user_id_1, user_id_2)
   VALUES ($1, $2)
-  RETURNING match_id`;
+  RETURNING *`;
 
-  const match = await db.query(createMatchQuery, [user_id_1, user_id_2]);
-  return match.results[0];
+  const result = await db.query(createMatchQuery, [user_id_1, user_id_2]);
+  return result.rows[0];
+};
+
+matchModel.getPotentialMatch = async (id) => {
+  const getPotentialMatchQuery = `
+  SELECT id, username, jokes_posted_id, bio
+  FROM users
+  WHERE id <> $1
+  AND id NOT IN (SELECT unnest(users_seen) FROM users WHERE id = $1)
+  ORDER BY RANDOM()`;
+
+  const result = await db.query(getPotentialMatchQuery, [id]);
+  return result.rows[0];
+};
+
+matchModel.getMatchByUserIds = async (user_id_1, user_id_2) => {
+  const getMatchByUsersQuery = `
+  SELECT *
+  FROM matches
+  WHERE (user_id_1 = $1 AND user_id_2 = $2)
+  OR (user_id_1 = $2 AND user_id_2 = $1);`;
+
+  const result = await db.query(getMatchByUsersQuery, [user_id_1, user_id_2]);
+  return result.rows[0];
 };
 
 matchModel.addMatchToUser = async (id, match_id) => {
@@ -18,7 +41,7 @@ matchModel.addMatchToUser = async (id, match_id) => {
   WHERE id = $2
   RETURNING user_matches`;
 
-  const result = db.query(addNewMatchQuery, [match_id, id]);
+  const result = await db.query(addNewMatchQuery, [match_id, id]);
   return result.rows[0];
 };
 
@@ -29,7 +52,7 @@ matchModel.removeMatchFromUser = async (id, match_id) => {
   WHERE id = $2
   RETURNING user_matches`;
 
-  const result = db.query(addNewMatchQuery, [match_id, id]);
+  const result = await db.query(addNewMatchQuery, [match_id, id]);
   return result.rows[0];
 };
 
@@ -66,21 +89,11 @@ matchModel.removeLike = async (id, unlikedUserId) => {
 matchModel.getMatchById = async (match_id) => {
   const getMatchByIdQuery = `
   SELECT * 
-  FROM users
+  FROM matches
   WHERE match_id = $1`;
 
   const match = await db.query(getMatchByIdQuery, [match_id]);
   return match.results[0];
-};
-
-matchModel.checkMatch = async (user_id_1, user_id_2) => {
-  const checkMatchQuery = `
-  SELECT * FROM matches
-  `;
-
-  // LEFT OFF HERE
-  // Finish swipe right, swipe left
-
 };
 
 matchModel.deleteMatch = async (match_id) => {
