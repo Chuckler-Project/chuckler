@@ -50,20 +50,12 @@ module.exports = {
 
       // get previous messages in this chat. only 10 for faster load times 
       // (need to add functionality later for loading more comments)
-      // const storedMessages = await sql`SELECT * FROM messages WHERE 
-      // (from_user_id=${userId} AND to_user_id=${receiverId}) 
-      // OR (from_user_id=${receiverId} AND to_user_id=${userId})
-      // ORDER BY created_at ASC LIMIT 10`;
-      const storedMessages = await sql`SELECT messages.*, from_user.username as sender_username, to_user.username as receiver_username
-      FROM messages
-      LEFT JOIN users as from_user ON messages.from_user_id = from_user.id
-      LEFT JOIN users as to_user ON messages.to_user_id = to_user.id
-      WHERE 
-        messages.from_user_id=${userId} AND messages.to_user_id=${receiverId}
-        OR messages.from_user_id=${receiverId} AND messages.to_user_id=${userId}
-      ORDER BY messages.created_at ASC LIMIT 10`;
-
-    
+      const storedMessages = await sql`SELECT * FROM messages WHERE 
+      (from_user_id=${userId} AND to_user_id=${receiverId}) 
+      OR (from_user_id=${receiverId} AND to_user_id=${userId})
+      ORDER BY created_at ASC LIMIT 10`;
+      
+      
       socket.send(JSON.stringify(storedMessages)); 
       return true;
       
@@ -77,12 +69,12 @@ module.exports = {
     try {
       socket.on('message', async (data) => {
         const {content, user, receiver} = JSON.parse(data.toString());
-
+        
         // store message data in db
         const storeMessageResponse = await sql`INSERT INTO messages (content, from_user_id, to_user_id) 
         VALUES(${content}, ${user}, ${receiver}) 
         RETURNING *`; 
-
+        
         // send message back to both parties (if they're connected to wss)
         wss.clients.forEach((client) => {
           if (client.id === `messages${user}/${receiver}` || client.id === `messages${receiver}/${user}`) {
@@ -95,4 +87,15 @@ module.exports = {
       socket.send(err);
     }
   }
+
+
+  // REMOVED BELOW FROM SOCKET.ONMESSAGE
+  // const storedMessages = await sql`SELECT messages.*, from_user.username as sender_username, to_user.username as receiver_username
+  // FROM messages
+  // LEFT JOIN users as from_user ON messages.from_user_id = from_user.id
+  // LEFT JOIN users as to_user ON messages.to_user_id = to_user.id
+  // WHERE 
+  //   messages.from_user_id=${userId} AND messages.to_user_id=${receiverId}
+  //   OR messages.from_user_id=${receiverId} AND messages.to_user_id=${userId}
+  // ORDER BY messages.created_at ASC LIMIT 10`;
 } 

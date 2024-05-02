@@ -43,7 +43,7 @@ const SentMessages = ({ usersData, socket }) => {
 
   return (
     <div className='chat-container'>
-      <div className='receiverName'>{receiverNameState}</div>
+      {/* <div className='receiverName'>{receiverNameState}</div> */}
       <div className='messages-container'>
         {messages.map((message, index) => {
           const messageSender = message.from_user_id === user ? 'user' : 'sender';
