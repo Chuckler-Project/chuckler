@@ -7,7 +7,7 @@ import userProfileIcon from '../../images/userProfile.png';
 // eslint-disable-next-line react/function-component-definition
 export default function Profile({ userData }) {
   const navigate = useNavigate();
-  const goToBio = () => { return navigate('/bio/:userID'); };
+  const goToBio = () => { return navigate(`/bio/${userData.id}`); };
   return (
     <div className="profile-container">
       <img src={userProfileIcon} alt="user-profile" style={{ width: '370px' }} />

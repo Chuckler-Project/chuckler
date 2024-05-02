@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../../stylesheets/profile.css';
 
 const BioPage = () => {
   const [age, setAge] = useState('');
@@ -13,9 +14,9 @@ const BioPage = () => {
   };
 
   return (
-    <div className="biography-page">
+    <div className="profile-container">
       <h1>About Me</h1>
-      <div className="form-group">
+      <div className="info">
         <label htmlFor="age">Age:</label>
         <input
           type="number"
