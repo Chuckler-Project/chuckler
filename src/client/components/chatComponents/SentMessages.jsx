@@ -18,7 +18,7 @@ const SentMessages = ({ usersData, socket }) => {
 
   //get name from usernameController
 const fetchUsername = async ()=>{
-
+//NOTE: cannot get the parsed data properly
 //   const usernameResponse = await fetch('http://localhost:8080/api/username/getname',{
 //   method: 'POST',
 //   headers: {'Content-Type':'application/json'},
@@ -58,11 +58,10 @@ fetch('http://localhost:8080/api/username/getname',{
     }
   };
   
-  // console.log('MESSAGES', messages, user)
   
   return (
     <div className='chat-container'>
-     <div className='revName'>Receiver Name: {receiverNameState} </div>
+     <div className='revNamefield'> Receiver Name : <span className='revNameValue'>{receiverNameState}</span> </div>
       <div className='messages-container'>
         {messages.map((message, index) => {
           const messageSender = message.from_user_id === user ? 'user' : 'sender';
@@ -77,8 +76,3 @@ fetch('http://localhost:8080/api/username/getname',{
 };
 
 export default SentMessages;
-// removed these codes because we no longer alter the query in ChatController
-// const receiverName = receivedMessages[0].receiver_username
-// setReceiverNameState(receiverName)
-// console.log('line 29 receiverNameState',receiverNameState)
-// console.log('line 30 receiverName',receiverName)
