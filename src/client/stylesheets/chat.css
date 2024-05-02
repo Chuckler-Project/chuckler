@@ -56,6 +56,15 @@
 #chat-btn {
     margin-left: 10px;
     width: 20%;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 18px;
+    background: rgb(80, 105, 226);
+    color: white;
+border-color:white;
+    overflow: hidden;
+    transition: all 0.2s;
+    cursor: pointer;
 }
 
 .chat-container {
@@ -90,3 +99,12 @@
     height: 100%;
 }
 
+.receiverName{
+    color:#f6d86e;
+    font-weight: bolder;
+    font-size: larger;
+    display: flex;
+    justify-content: center;
+    background-color: #fbf6e3;
+
+}

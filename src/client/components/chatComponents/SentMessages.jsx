@@ -4,6 +4,7 @@ const SentMessages = ({ usersData, socket }) => {
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);  //PALOMA
   const [user, receiver] = [usersData.user, usersData.receiver];
+  const [receiverNameState, setReceiverNameState] =  useState('')
 
   //paloma
   useEffect(() => {
@@ -20,7 +21,13 @@ const SentMessages = ({ usersData, socket }) => {
     try {
       const receivedMessages = JSON.parse(e.data);
       const newMessage = receivedMessages[0];
-      console.log('NEW MESSAGE---->', receivedMessages[0].content)
+      console.log('line 24 receivedMessages[0]',receivedMessages[0])
+      console.log('line 25 NEW MESSAGE---->', receivedMessages[0].content)
+      
+      const receiverName = receivedMessages[0].receiver_username
+      setReceiverNameState(receiverName)
+      console.log('line 29 receiverNameState',receiverNameState)
+      console.log('line 30 receiverName',receiverName)
 
 
       if (Array.isArray(receivedMessages)) {
@@ -36,6 +43,7 @@ const SentMessages = ({ usersData, socket }) => {
 
   return (
     <div className='chat-container'>
+      <div className='receiverName'>{receiverNameState}</div>
       <div className='messages-container'>
         {messages.map((message, index) => {
           const messageSender = message.from_user_id === user ? 'user' : 'sender';

@@ -29,10 +29,14 @@ const ChatContainer = () => {
   // specifies chatroom context - user ids of user who is sending messages and user who is recieving
   // Logic still has to be implmented to set values of sender and reciever from auth data
   const [usersData] = useState(getParamsFromUrl());
+  const [users, setUsers] = useState([]);
+
+
 
   // create connetion to wss to be used by all child props
   const socket = new WebSocket(`ws://localhost:3000/chat/${usersData.user}/${usersData.receiver}`);
 
+  console.log('userdata=>>>', usersData)
   console.log('helloooo', socket, usersData, usersData.user, usersData.receiver)
 return (
   <div className='test'>
