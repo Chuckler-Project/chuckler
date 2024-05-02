@@ -17,7 +17,7 @@ const Router = () => {
     if (token) {
       Axios.get("/api/user/verify", { Authorization: `bearer${token}` }).then(
         (request) => {
-          console.log("insede verify route", request.data);
+          console.log("inside verify route", request.data);
           if (request.data != false) {
             Axios.post("/api/user/username", { id: request.data }).then(
               (requests) => {
