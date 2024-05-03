@@ -12,8 +12,8 @@ reactionController.getReaction = async (req, res, next) => {
     return next();
   } catch (err) { 
     next({
-      log: `Error in getJoke middleware: ${err}`,
-      message: 'An error occurred getting the joke'
+      log: `Error in getReaction middleware: ${err}`,
+      message: 'An error occurred getting the reaction'
     }) 
   }
 }
@@ -27,8 +27,8 @@ reactionController.updateReaction = async (req, res, next) => {
     return next();
   } catch (err) { 
     next({
-      log: `Error in getJoke middleware: ${err}`,
-      message: 'An error occurred getting the joke'
+      log: `Error in updateReaction middleware: ${err}`,
+      message: 'An error occurred updating reaction'
     }) 
   }
 }

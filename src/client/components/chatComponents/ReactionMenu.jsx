@@ -13,27 +13,28 @@ const ReactionMenu = (props) => {
             body: JSON.stringify({ messageId: props.messageId, reaction: newReaction }) 
         });
         let reaction = await reactionResponse.json();
+        // props.socket.send(JSON.parse(reaction));
         props.setNewEmoji(reaction);
     } catch (error) {console.log('Error trying to fetch reaction', error)}
   };
 
   function handleThumbClick() {
     console.log('Thumb Emoji Clicked!');
-    updateReaction('1');
+    updateReaction(`${props.messageId}/1`);
     // props.setNewEmoji(true);
     props.setShowReactionMenu(false);
   }
   
   function handleHeartClick() {
     console.log('Heart Emoji Clicked!');
-    updateReaction('2');
+    updateReaction(`${props.messageId}/2`);
     // props.setNewEmoji(true);
     props.setShowReactionMenu(false);
   }
   
   function handleLaughClick() {
     console.log('Laugh Emoji Clicked!');
-    updateReaction('3');
+    updateReaction(`${props.messageId}/3`);
     // props.setNewEmoji(true);
     props.setShowReactionMenu(false);
   }

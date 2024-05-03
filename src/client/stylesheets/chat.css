@@ -32,7 +32,6 @@
 .userMessage {
     background-color: #43c0ea;
     text-align: end;
-    text-wrap: wrap;
     margin-left: auto;
     border-radius: 15px;
     border-bottom-right-radius: 0px;
@@ -41,7 +40,6 @@
 .senderMessage {
     background-color: #F0C322;
     margin-right: auto;
-    text-wrap: wrap;
     text-align: start;
     border-radius: 15px;
     border-bottom-left-radius: 0px;
@@ -106,11 +104,10 @@
 .userReaction {
     width: 30px;
     height: 30px;
-    background-color: #F0C322;
-    /* text-align: end; */
+    background-color: #bababa;
     margin-left: auto;
     margin-top: -10px;
-    margin-right: 3px;
+    /* margin-right: 3px; */
     position: relative;
     display: flex;
     align-items: center;
@@ -124,11 +121,16 @@
     background-color: #43c0ea;
     margin-right: auto;
     margin-top: -10px;
-    margin-left: 3px;
+    /* margin-left: 3px; */
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* text-align: start; */
     border-radius: 10px;
+}
+
+.message-and-reaction {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
