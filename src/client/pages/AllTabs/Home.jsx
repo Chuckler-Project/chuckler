@@ -5,11 +5,11 @@ import InputJoke from "../../components/InputJoke.jsx";
 import MatchMessage from '../../components/MatchMessage.jsx';
 
 
-export default function Home () {
+export default function Home ({hasNewMatches, setHasNewMatches}) {
     const [joke, setJoke] = useState('');
     const [userId, setUser] = useState(15);
     const [match, setMatch] = useState(false);
-    
+
     //CHECK IF WE NEED THIS 
     const location = useLocation();
     const userData = location.state;
@@ -31,6 +31,8 @@ console.log('location.state;',location)
         } catch (error) {console.log('Error trying to fetch joke', error)}
     };
 
+  
+
     useEffect(() => {
         getJoke();
     }, []);
@@ -45,7 +47,7 @@ console.log('location.state;',location)
             });
 
             const likeResponseMessage = await likeResponse.json();
-
+            // console.log("has new match ???? => ", hasNewMatches);
             console.log('likeResponse',likeResponseMessage);
         } catch (err) { console.log('error liking joke', err) };
 
@@ -61,10 +63,15 @@ console.log('location.state;',location)
         
             const message = await matchResponse.json();
             console.log('Match message:', message);
-            if (message !== 'No new matches') alert(message);
+            if (message !== 'No new matches') {
+                setMatch(true)
+                setHasNewMatches(true);
+            }
         } catch (err) { console.log('error checking for match', err) };
         getJoke();
-    }
+    };
+
+
     
     return (
         <div>
@@ -78,12 +85,7 @@ console.log('location.state;',location)
                 </div>
                 <InputJoke userId={userId}/>
             </div>
-            {match && <MatchMessage 
-                match={match} 
-                userId={userData.userId} 
-                jokeCreator={joke.creator_id}
-                closeModal={setMatch}
-                />}
+
         </div>
     ); 
 }

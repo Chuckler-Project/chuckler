@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { useLocation, useNavigate } from 'react-router-dom'
 import '../stylesheets/main.css';
 import homeIcon from '../images/home.png';
@@ -11,6 +11,7 @@ import Axios from 'axios';
 
     
 export default function Main() {
+
     const [activeTab, setActiveTab] = useState("tab1");
     const [userId, setUserId] = useState(userData)
     
@@ -18,15 +19,9 @@ export default function Main() {
     const location = useLocation();
     const userData = location.state;
 
-
-
     const handleLogOut = async () => {
 		const response = Axios.post('/api/user/logout', { username: userData.username })
-	};
-
-
-
-   
+	}; 
 
     return (
         <div className='background'>

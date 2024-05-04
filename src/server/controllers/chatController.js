@@ -44,7 +44,7 @@ module.exports = {
       // verify that the user and receiver are matched
       const getMatches = await sql`SELECT matches FROM users WHERE id=${userId}`;
       const userMatches = getMatches[0].matches;
-      console.log(receiverId.toString(), userMatches);
+      // console.log(receiverId.toString(), userMatches);
       if (!userMatches.includes(receiverId)) throw new Error('user is not matched with recipient');
 
 
@@ -67,6 +67,11 @@ module.exports = {
     try {
       socket.on('message', async (data) => {
         const {content, user, receiver} = JSON.parse(data.toString());
+
+        // const setNewMessageFlag = async (userId, receiverId) => {
+        //   await sql`UPDATE users SET new_messages = TRUE WHERE id=${receiverId}`;
+        //   await sql`UPDATE users ARRAY_APPEND(new_messages_users, ${userId}) WHERE id=${receiverId}`
+        // };
 
         if(content !== '') {
           // store message data in db
@@ -97,6 +102,38 @@ module.exports = {
       console.log(`Error in chatController.listenForNewMessages, ${err}`);
       socket.send(err);
     }
+  },
+
+  // not used currently due to errors
+  getNewMessagesStatus: async (req, res, next) => {
+    const { userId } = req.body;
+    try {
+      const user = await sql`SELECT new_messages FROM users WHERE id = ${userId}`;
+      if (user.length === 0) {
+        throw new Error('User not found');
+      }
+      const newMessageStatus = user[0].new_messages;
+      res.locals.newMessageStatus = newMessageStatus;
+      const newMessageId = user[0].new_messages_users;
+      res.locals.newMessageId = newMessageId;
+      return next();
+    } catch (err) {
+      console.log(`Error in chatController.getNewMessageStatus, ${err}`);
+    }
+  },
+
+  // not used currently because I had to change some stuff
+  markMessagesAsRead: async (req, res, next) => {
+    const { userId } = req.body;
+    try {
+      await sql`UPDATE users SET new_messages = FALSE WHERE id = ${userId}`;
+      await sql`UPDATE users SET new_messages_users = NULL where id = ${userId}`;
+      return next();
+    } catch (err) {
+      next({
+      log: `Error in markMessagesAsRead middleware: ${err}`,
+      message: `Error marking message as read`})
+    };
   }
 
 

@@ -18,6 +18,11 @@ const SentMessages = ({ usersData, socket }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // useEffect(() => {
+  //   Notification.requestPermission();
+  // }, []);
+
+
   //get name from usernameController
 const fetchUsername = async ()=>{
 //NOTE: cannot get the parsed data properly
