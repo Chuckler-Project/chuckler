@@ -8,52 +8,44 @@ import '../../stylesheets/bio.css';
 // import TabNavItem from '../Components/TabNavItem.jsx';
 
 const BioPage = () => {
-  const [age, setAge] = useState('');
   const [interests, setInterests] = useState('');
-
-  const handleAgeChange = (e) => {
-    setAge(e.target.value);
-  };
 
   const handleInterestsChange = (e) => {
     setInterests(e.target.value);
   };
 
+  function saveFormData() {
+    const userBio = document.getElementById('userBio');
+
+    fetch('/user-bio', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userBio }),
+    })
+    .then(response => {
+      if (response.ok) {
+        console.log('Data saved successfully!');
+      } else {
+        console.error('Failed to save data.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }
+  
+
   return (
-  // <div className="background">
-  //   <div className="main-container">
-  //      <div className="navigation">
-  //       <a className="button" href="/" onClick={handleLogOut}>
-  //           <img src={logout} style={{width:'30px'}}/>
-  //           <div className="logout">LOGOUT</div>
-  //       </a>
-  //      </div>
-  //           <Tabs userData={userData} activeTab={activeTab}/>
-  //       <ul className="nav">
-  //           <TabNavItem title={homeIcon} id="tab1" activeTab={activeTab} setActiveTab={setActiveTab}/>
-  //           <TabNavItem title={chatIcon} id="tab2" activeTab={activeTab} setActiveTab={setActiveTab}/>
-  //           <TabNavItem title={profileIcon} id="tab3" activeTab={activeTab} setActiveTab={setActiveTab}/>
-  //       </ul>
-  //    </div>
-  // </div>
+
     <div className='background'>
     <div className="main-container">
       <h1>About Me</h1>
-      {/* <div className="info">
-        <label htmlFor="age">Age:</label>
-        <input
-          type="number"
-          id="age"
-          name="age"
-          value={age}
-          onChange={handleAgeChange}
-          placeholder="Enter your age"
-          required
-        />
-      </div> */}
       <div className="">
         <label htmlFor="interests">Interests:</label>
         <textarea
+        className="text-box"
           id="interests"
           name="interests"
           value={interests}
@@ -62,7 +54,7 @@ const BioPage = () => {
           required
         />
       </div>
-      <button type="submit">Save</button>
+      <button className="save-button" type="submit" onClick={saveFormData}>Save</button>
     </div>
     </div>
   );

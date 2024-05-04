@@ -39,5 +39,15 @@ router.get('/bio/:userId',
   },
 );
 
+router.post('/save-data', async (req, res) => {
+  const { user_bio } = req.body;
+  try {
+    const result = await sql`INSERT INTO users VALUES ${user_bio}`;
+    res.sendStatus(200);
+  } catch (err) {
+    console.error('Error executing query', err);
+    res.sendStatus(500);
+  }
+});
 
 module.exports = router;
