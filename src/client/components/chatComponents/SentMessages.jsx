@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactionMenu from './ReactionMenu.jsx';
-import Reaction from './reaction.jsx';
+import Reaction from './Reaction.jsx';
 
 const SentMessages = ({ usersData, socket }) => {
   const [messages, setMessages] = useState([]);
