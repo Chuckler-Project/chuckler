@@ -1,4 +1,5 @@
 .msg-container {
+    position: relative; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,16 +9,28 @@
     padding: 2%;
     background-color: white;
     border-radius: 10px;
-    overflow-y:auto;
-    overflow-x:hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .close-chat {
     width: 100%;
     text-align: end;
-    padding: 15px;
+    padding: 25px;
+    position: sticky;
+      
 }
+.new-close-chat {
+    position: absolute;
+    top: 0.1rem;
+    right:0.1rem;
+    z-index: 999; 
+    cursor: pointer; 
 
+}
+.x-btn{
+    cursor: pointer;
+}
 #msg {
     display: inline-block;
     border: 1px solid #ccc;
@@ -100,25 +113,18 @@
 }
 
 .revNamefield{
-    color:#f6d86e;
+    color:#43c0ea;
     font-weight: bolder;
     font-size: larger;
     display: flex;
     justify-content: center;
     background-color: #fbf6e3;
-    position: relative;
-    top: 15px;
-    overflow:hidden
-
+    top: 1px;
+    position:sticky
 }
-.revNameValue{
-    color:#43c0ea;
-    display: flex;
-    justify-content: center;
-    font-weight: bolder;
-    font-size: 24px;
-    padding-left: 0.5em;    
-}.reaction-menu {
+
+
+.reaction-menu {
     margin-top: 2px;
     width: 30%;
     height: 35px;

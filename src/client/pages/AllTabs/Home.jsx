@@ -13,8 +13,8 @@ export default function Home () {
     //CHECK IF WE NEED THIS 
     const location = useLocation();
     const userData = location.state;
-console.log('location.state;',location.state)
-console.log('location.state;',location)
+console.log('HOME.JSX location.state;',location.state)
+console.log('HOME.JSX location;',location)
     const getJoke = async () => {
         // console.log('CURRENT USER DATA', userData)
 

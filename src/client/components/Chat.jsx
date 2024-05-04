@@ -16,7 +16,7 @@ export default function Chat() {
         <div className="background">
             <div className="main-container">
                 <div className='close-chat'>
-                < Link to={{ pathname: '/main', state: { id: 7 } }}>x</Link>
+                {/* < Link to={{ pathname: '/main', state: { id: 7 } }}>x</Link> */}
                 </div>
                 <div className="msg-container">
                         <ChatContainer />

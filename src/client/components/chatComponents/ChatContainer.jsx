@@ -1,7 +1,9 @@
 /* eslint-disable no-restricted-syntax */
 import React, { createContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
 import SentMessages from './SentMessages.jsx';
 import TypeMessages from './TypeMessage.jsx';
+import {Link} from 'react-router-dom'
 
 /*
 Looks at the url parameters of the page and returns and object of the form:
@@ -38,13 +40,19 @@ const ChatContainer = () => {
 
   console.log('userdata=>>>', usersData)
   console.log('helloooo', socket, usersData, usersData.user, usersData.receiver)
+
+  const navigate = useNavigate();
+  function xClick() {
+    navigate('/main', {state: {id: usersData.user}})
+  }
+
 return (
   <div className='test'>
-    {/* <div className='close-chat'>
-     <a style={{color:"red"}  } href='/main' >
-   X
- </a>
-     </div> */}
+    <div>
+    {/* <Link to={{ pathname: '/main', state: { id: usersData.user } }}>close!</Link> */}
+      <div className='new-close-chat' onClick={xClick}><span className='x-btn'>X</span></div>
+
+     </div>
 
     <div className='messages-component'>
       <SentMessages usersData={usersData} socket={socket} />

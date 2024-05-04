@@ -88,7 +88,7 @@ fetch('http://localhost:8080/api/username/getname',{
 
   return (
     <div className='chat-container'>
-     <div className='revNamefield'> Receiver Name : <span className='revNameValue'>{receiverNameState}</span> </div>
+     <div className='revNamefield'> {receiverNameState} </div>
       <div className='messages-container'>
         {messages.map((message, index) => {
           const messageSender = message.from_user_id === user ? 'user' : 'sender';
