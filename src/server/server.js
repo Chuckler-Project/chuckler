@@ -16,6 +16,7 @@ const sessionController = require('./controllers/tokenController');
 const jokeRouter = require('./routes/jokeRouter');
 const userRouter = require('./routes/userRouter');
 const matchRouter = require('./routes/matchRouter');
+const reactionRouter = require('./routes/reactionRouter');
 const websocketRouter = require('./routes/websocketsRouter');
 
 // create the express server
@@ -32,6 +33,7 @@ app.use(express.static('build'));
 app.use('/api/user', userRouter);
 app.use('/api/joke', jokeRouter);
 app.use('/api/match', matchRouter);
+app.use('/api/reaction', reactionRouter);
 
 // catch-all route handler
 app.use((req, res) => { res.status(404).send('!!Page not found!!'); });
