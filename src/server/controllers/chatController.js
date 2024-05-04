@@ -47,12 +47,13 @@ module.exports = {
       console.log(receiverId.toString(), userMatches);
       if (!userMatches.includes(receiverId)) throw new Error('user is not matched with recipient');
 
+
       // get previous messages in this chat. only 10 for faster load times 
       // (need to add functionality later for loading more comments)
-      const storedMessages = await sql`SELECT * FROM messages WHERE 
+      const storedMessages = await sql`SELECT * FROM (SELECT * FROM messages WHERE 
       (from_user_id=${userId} AND to_user_id=${receiverId}) 
       OR (from_user_id=${receiverId} AND to_user_id=${userId})
-      ORDER BY created_at ASC LIMIT 10`;
+      ORDER BY created_at DESC LIMIT 12) AS sub ORDER BY created_at ASC`;
       socket.send(JSON.stringify(storedMessages));
       return true;
       
@@ -67,21 +68,45 @@ module.exports = {
       socket.on('message', async (data) => {
         const {content, user, receiver} = JSON.parse(data.toString());
 
-        // store message data in db
-        const storeMessageResponse = await sql`INSERT INTO messages (content, from_user_id, to_user_id) 
-        VALUES(${content}, ${user}, ${receiver}) 
-        RETURNING *`; 
-
-        // send message back to both parties (if they're connected to wss)
-        wss.clients.forEach((client) => {
-          if (client.id === `messages${user}/${receiver}` || client.id === `messages${receiver}/${user}`) {
-            client.send(JSON.stringify(storeMessageResponse));
-          }
-        })
+        if(content !== '') {
+          // store message data in db
+          const storeMessageResponse = await sql`INSERT INTO messages (content, from_user_id, to_user_id) 
+          VALUES(${content}, ${user}, ${receiver}) 
+          RETURNING *`; 
+          // send message back to both parties (if they're connected to wss)
+          wss.clients.forEach((client) => {
+            if (client.id === `messages${user}/${receiver}` || client.id === `messages${receiver}/${user}`) {
+              client.send(JSON.stringify(storeMessageResponse));
+            }
+          })
+        } else {
+          // get previous messages in this chat. only 10 for faster load times 
+          // (need to add functionality later for loading more comments)
+          const storedMessages = await sql`SELECT * FROM (SELECT * FROM messages WHERE 
+          (from_user_id=${user} AND to_user_id=${receiver}) 
+          OR (from_user_id=${receiver} AND to_user_id=${user})
+          ORDER BY created_at DESC LIMIT 12) AS sub ORDER BY created_at ASC`;  
+          wss.clients.forEach((client) => {
+            if (client.id === `messages${user}/${receiver}` || client.id === `messages${receiver}/${user}`) {
+              client.send(JSON.stringify([...storedMessages, {content: ''}]));
+            }
+          })
+        }
       })  
     } catch (err) {
       console.log(`Error in chatController.listenForNewMessages, ${err}`);
       socket.send(err);
     }
   }
+
+
+  // REMOVED BELOW FROM SOCKET.ONMESSAGE
+  // const storedMessages = await sql`SELECT messages.*, from_user.username as sender_username, to_user.username as receiver_username
+  // FROM messages
+  // LEFT JOIN users as from_user ON messages.from_user_id = from_user.id
+  // LEFT JOIN users as to_user ON messages.to_user_id = to_user.id
+  // WHERE 
+  //   messages.from_user_id=${userId} AND messages.to_user_id=${receiverId}
+  //   OR messages.from_user_id=${receiverId} AND messages.to_user_id=${userId}
+  // ORDER BY messages.created_at ASC LIMIT 10`;
 } 

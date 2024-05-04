@@ -32,6 +32,7 @@ jokeController.getJoke = async (req, res, next) => {
     };
     let chosenJokeId = await lookForUnseenJoke();
     // if there is no chosen joke, reset the users jokes_viewed array and try again
+    // we wanna change this
     if (!chosenJokeId) {
       await sql`UPDATE users SET jokes_viewed=null WHERE id=${userId}`;
       chosenJokeId = await lookForUnseenJoke();

@@ -75,4 +75,19 @@ userController.setIsOnlineFalse = async (req, res, next) => {
   };
 }
 
+userController.viewUser = async (req, res, next) => {
+ try{
+  const userID = await sql`SELECT id FROM users WHERE username=${username} `
+  const user = users.find(user => user.id === userID)
+  console.log('this is the stored User ID ===>', userID)
+  return next()
+ } catch (err) {
+  next({
+    log: `Error in userController.viewUser middleware: ${err}`,
+    message: `Unable to find user: ${err}`
+  })
+ }
+  res.json(user)
+}
+
 module.exports = userController;

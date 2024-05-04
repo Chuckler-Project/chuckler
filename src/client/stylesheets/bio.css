@@ -1,0 +1,34 @@
+.background {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+}
+
+.main-container{ 
+  height: 720px;
+  border: 1px solid black; 
+  border-radius: 15px;
+  width: 450px;
+  margin: auto;
+}
+
+.main-container {
+    background-image: url('../images/haha.png');
+    background-color: #f6d86e;
+    background-size: 20%;
+} 
+
+.text-box {
+  display: flex;
+  width: 400px;
+  height: 400px;
+  resize: none;
+  margin-left: 25px;
+  
+
+}
+
+.save-button {
+  margin-left: 25px;
+}

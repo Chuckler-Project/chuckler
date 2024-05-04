@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('../controllers/userController')
 const sessionController = require('../controllers/tokenController')
+const sql = require('../../db/db');
 
 const router = express.Router();
 
@@ -31,4 +32,27 @@ router.post('/logout',
   }
 );
 
+router.get('/bio/:userId',
+  userController.viewUser,
+  (req, res) => {
+    res.status(200).json('User bio logic here');
+  },
+);
+
+router.post('/bio/:userId', async (req, res) => {
+  console.log(req.params);
+  const { userBio } = req.body;
+  const userId = req.params.userId;
+  console.log(userBio);
+  console.log(userId);
+  try {
+    const result = await sql`UPDATE users SET user_bio=${userBio} WHERE id=${userId}`;
+    res.sendStatus(200);
+  } catch (err) {
+    console.error('Error executing query', err);
+    res.sendStatus(500);
+  }
+});
+
 module.exports = router;
+

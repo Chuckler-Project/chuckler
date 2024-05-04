@@ -13,9 +13,12 @@ export default function Home () {
     //CHECK IF WE NEED THIS 
     const location = useLocation();
     const userData = location.state;
-
+console.log('location.state;',location.state)
+console.log('location.state;',location)
     const getJoke = async () => {
         // console.log('CURRENT USER DATA', userData)
+
+        // why a post request? need to investigate
         try {
             const joke = await fetch('/api/joke/retrieveJoke', {
                 method: 'POST',
@@ -30,7 +33,7 @@ export default function Home () {
 
     useEffect(() => {
         getJoke();
-    }, [])
+    }, []);
 
     const handleYesClick = async (e) => {
         e.preventDefault();
