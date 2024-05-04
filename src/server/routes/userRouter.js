@@ -39,10 +39,14 @@ router.get('/bio/:userId',
   },
 );
 
-router.post('/save-data', async (req, res) => {
-  const { user_bio } = req.body;
+router.post('/bio/:userId', async (req, res) => {
+  console.log(req.params);
+  const { userBio } = req.body;
+  const userId = req.params.userId;
+  console.log(userBio);
+  console.log(userId);
   try {
-    const result = await sql`INSERT INTO users VALUES ${user_bio}`;
+    const result = await sql`UPDATE users SET user_bio=${userBio} WHERE id=${userId}`;
     res.sendStatus(200);
   } catch (err) {
     console.error('Error executing query', err);
@@ -51,3 +55,4 @@ router.post('/save-data', async (req, res) => {
 });
 
 module.exports = router;
+

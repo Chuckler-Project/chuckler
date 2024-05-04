@@ -90,8 +90,4 @@ userController.viewUser = async (req, res, next) => {
   res.json(user)
 }
 
-userController.updateUserBio = (req, res, next) => {
-
-}
-
 module.exports = userController;
