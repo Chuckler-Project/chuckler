@@ -33,6 +33,29 @@ const ChatContainer = () => {
   // create connetion to wss to be used by all child props
   const socket = new WebSocket(`ws://localhost:3000/chat/${usersData.user}/${usersData.receiver}`);
 
+  useEffect(() => {
+    const markMessagesAsRead = async () => {
+      try {
+        await fetch('/markMessagesAsRead', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userId: usersData.receiver }),
+        });
+      } catch (err) {
+        console.error('Error marking messages as read: ', err);
+      }
+    };
+    markMessagesAsRead();
+
+    socket.removeEventListener('messagesRead', { userId: usersData.receiver });
+
+    // return () => {
+
+    // }
+  })
+
   console.log('helloooo', socket, usersData, usersData.user, usersData.receiver)
 return (
   <div className='test'>

@@ -3,12 +3,14 @@ import '../../stylesheets/matches.css';
 import MatchProfile from "../../components/MatchProfile.jsx";
 
 
-export default function Matches({userData}) {
+export default function Matches({userData, hasNewMatches, setHasNewMatches, newMessages, setNewMessages}) {
     const [user, setUser] = useState(userData);
     const [matches, setMatches] = useState([]);
    
     console.log('CURRENT USER INFO (MATCHES.JSX)', user)
     useEffect(() => {
+        setHasNewMatches(false);
+        // setNewMessages(false);
         setMatches([]);
         const getMatches = async () => {
             try {

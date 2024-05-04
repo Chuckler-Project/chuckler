@@ -14,6 +14,10 @@ const SentMessages = ({ usersData, socket }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // useEffect(() => {
+  //   Notification.requestPermission();
+  // }, []);
+
 
   // handle recieving a message
   socket.onmessage = (e) => {
@@ -25,6 +29,10 @@ const SentMessages = ({ usersData, socket }) => {
 
       if (Array.isArray(receivedMessages)) {
         setMessages((previousMessages) => [...previousMessages, ...JSON.parse(e.data)]);
+        // if (document.visibilityState !== 'visible') {
+        //   const notification = new Notification('New Message', {
+        //     body: newMessage.content,
+        //   });
       }
       else throw new Error(`Failed to load new messages\n${receivedMessages}`);
     } catch (err) {

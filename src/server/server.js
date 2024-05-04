@@ -17,6 +17,7 @@ const jokeRouter = require('./routes/jokeRouter');
 const userRouter = require('./routes/userRouter');
 const matchRouter = require('./routes/matchRouter');
 const websocketRouter = require('./routes/websocketsRouter');
+const messagesRouter = require('./routes/messagesRouter');
 
 // create the express server
 const app = express();
@@ -32,9 +33,11 @@ app.use(express.static('build'));
 app.use('/api/user', userRouter);
 app.use('/api/joke', jokeRouter);
 app.use('/api/match', matchRouter);
+app.use('/api/messages', messagesRouter);
 
 // catch-all route handler
 app.use((req, res) => { res.status(404).send('!!Page not found!!'); });
+
 
 // global error handler
 app.use((err, req, res) => {
