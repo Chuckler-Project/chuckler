@@ -21,16 +21,25 @@ const SentMessages = ({ usersData, socket }) => {
     socket.onmessage = (e) => {
       try {
         const receivedMessages = JSON.parse(e.data);
-        const newMessage = receivedMessages[0];
-        console.log('NEW MESSAGE---->', receivedMessages[0].content)
-        console.log('line 26 msg obj', receivedMessages[0]);
-        console.log('line 27 emoji:', receivedMessages[0].reaction_emoji);
-        setNewEmoji(receivedMessages[0].reaction_emoji);
-  
-        if (Array.isArray(receivedMessages)) {
-          setMessages((previousMessages) => [...previousMessages, ...JSON.parse(e.data)]);
+        console.log(receivedMessages);
+        // [ {} ]
+        if (receivedMessages.length === 1) {
+          // const newMessage = receivedMessages[0];
+          // console.log('NEW MESSAGE---->', receivedMessages[0].content)
+          console.log('line 26 msg obj', receivedMessages[0]);
+          // console.log('line 27 emoji:', receivedMessages[0].reaction_emoji);
+          // setNewEmoji(receivedMessages[0].reaction_emoji);
+          setNewEmoji(`${receivedMessages[0].id}/${receivedMessages[0].reaction_emoji.split('/')[1]}`);
+    
+          if (Array.isArray(receivedMessages)) {
+            setMessages((previousMessages) => [...previousMessages, ...JSON.parse(e.data)]);
+          }
+          else throw new Error(`Failed to load new messages\n${receivedMessages}`);
+        } else {
+          console.log(receivedMessages.pop());
+          setMessages(receivedMessages);
+          setNewEmoji(`emoji refresh update`);
         }
-        else throw new Error(`Failed to load new messages\n${receivedMessages}`);
       } catch (err) {
         console.log(err);
       }
@@ -40,8 +49,8 @@ const SentMessages = ({ usersData, socket }) => {
   const [messageClicked, setMessageClicked] = useState();
   function handleRightClick(e) {
     e.preventDefault();
-    console.log('target: ', e.target);
-    console.log('class: ', e.target.className)
+    // console.log('target: ', e.target);
+    // console.log('class: ', e.target.className)
     if(e.target.className === 'senderMessage') {
       setMessageClicked(e.target.title);
       setShowReactionMenu(true);
@@ -65,10 +74,10 @@ const SentMessages = ({ usersData, socket }) => {
               {message.content}
             </div>
             <div title='reaction-container'>
-              <Reaction title={index} className={`${messageSender}Reaction`} newEmoji={newEmoji} setNewEmoji={setNewEmoji} messageId={message.id}/>
+              <Reaction title={index} className={`${messageSender}Reaction`} newEmoji={newEmoji} setNewEmoji={setNewEmoji} messageId={message.id} messages={messages} usersData={usersData} socket={socket}/>
             </div>
             {(showReactionMenu && (index === Number(messageClicked))) && (
-              <ReactionMenu setShowReactionMenu={setShowReactionMenu} setNewEmoji={setNewEmoji} messageId={message.id} socket={socket}/>
+              <ReactionMenu setShowReactionMenu={setShowReactionMenu} setNewEmoji={setNewEmoji} messageId={message.id} usersData={usersData} socket={socket}/>
             )}
           </div>);
         })

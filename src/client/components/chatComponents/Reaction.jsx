@@ -16,19 +16,19 @@ const Reaction = (props) => {
             body: JSON.stringify({ messageId: props.messageId }) 
         });
         const reaction = await reactionResponse.json();
-        console.log('line 19 reaction:', reaction);
+        // console.log('line 19 reaction:', reaction);
         const reactionNumber = reaction.split('/')[1];
-        console.log('reactionNumber here ->', reactionNumber);
+        // console.log('reactionNumber here ->', reactionNumber);
         if(reactionNumber === '1') {
-          console.log('thumb');
+          // console.log('thumb');
           setCurrentEmoji(thumbsEmoji);
           setShowEmoji(true);
         } else if(reactionNumber === '2') {
-          console.log('heart');
+          // console.log('heart');
           setCurrentEmoji(heartEmoji);
           setShowEmoji(true);
         } else if(reactionNumber === '3') {
-          console.log('laughing');
+          // console.log('laughing');
           setCurrentEmoji(laughingEmoji);
           setShowEmoji(true);
         } else {
@@ -40,7 +40,7 @@ const Reaction = (props) => {
 
   useEffect(() => {
     getReaction();
-  }, [props.newEmoji]);
+  }, [props.newEmoji, props.messages]);
 
   function removeClick() {
     const updateReaction = async () => {
@@ -51,15 +51,16 @@ const Reaction = (props) => {
               body: JSON.stringify({ messageId: props.messageId, reaction: `${props.messageId}/0`}) 
           });
           let reaction = await reactionResponse.json();
-          console.log(reaction);
+          // console.log(reaction);
           setCurrentEmoji('');
           props.setNewEmoji(`${props.messageId}/0`);
           setShowEmoji(false);
-      } catch (error) {console.log('Error trying to fetch reaction', error)}
-    };
-    console.log(props.className);
-    if(props.className === 'senderReaction') {
-      updateReaction();
+          props.socket.send(JSON.stringify({content: '', user: props.usersData.user, receiver: props.usersData.receiver}));
+        } catch (error) {console.log('Error trying to fetch reaction', error)}
+      };
+      // console.log(props.className);
+      if(props.className === 'senderReaction') {
+        updateReaction();
     }
   }
 
