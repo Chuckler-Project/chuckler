@@ -18,3 +18,17 @@
     background-color: #f6d86e;
     background-size: 20%;
 } 
+
+.text-box {
+  display: flex;
+  width: 400px;
+  height: 400px;
+  resize: none;
+  margin-left: 25px;
+  
+
+}
+
+.save-button {
+  margin-left: 25px;
+}

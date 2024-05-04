@@ -19,6 +19,7 @@ const matchRouter = require('./routes/matchRouter');
 const usernameRouter = require('./routes/usernameRouter');
 const reactionRouter = require('./routes/reactionRouter');
 const websocketRouter = require('./routes/websocketsRouter');
+const messagesRouter = require('./routes/messagesRouter');
 
 // create the express server
 const app = express();
@@ -36,6 +37,7 @@ app.use('/api/joke', jokeRouter);
 app.use('/api/match', matchRouter);
 app.use('/api/username', usernameRouter);
 app.use('/api/reaction', reactionRouter);
+app.use('/api/messages', messagesRouter);
 
 // catch-all route handler
 app.use((req, res) => {

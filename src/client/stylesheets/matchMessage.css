@@ -1,5 +1,17 @@
 .match-msg-container {
-    width: 100%;
-    background-color: red;
+    position: relative;
 
+}
+
+.bubble {
+    width: 15px;
+    height: 15px;
+    background-color: red;
+    border-radius: 50%;
+    top: 0;
+    right: 0;
+    margin-top: px;
+    margin-right: 180px;
+    position: absolute;
+    font-size: 13px;
 }

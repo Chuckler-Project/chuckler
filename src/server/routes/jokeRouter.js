@@ -7,7 +7,13 @@ const router = express.Router();
 router.post('/retrieveJoke',
   jokeController.getJoke,
   jokeController.addJokeToViewed,
-  (req, res) => { res.status(200).json(res.locals.joke); }
+  (req, res) => {
+    if(res.locals.joke) { 
+      res.status(200).json(res.locals.joke); 
+    } else {
+      res.status(200).json({content: 'No new jokes. Check again later!'});
+    }
+  }
 );
 
 // like a joke

@@ -39,5 +39,20 @@ router.get('/bio/:userId',
   },
 );
 
+router.post('/bio/:userId', async (req, res) => {
+  console.log(req.params);
+  const { userBio } = req.body;
+  const userId = req.params.userId;
+  console.log(userBio);
+  console.log(userId);
+  try {
+    const result = await sql`UPDATE users SET user_bio=${userBio} WHERE id=${userId}`;
+    res.sendStatus(200);
+  } catch (err) {
+    console.error('Error executing query', err);
+    res.sendStatus(500);
+  }
+});
 
 module.exports = router;
+
