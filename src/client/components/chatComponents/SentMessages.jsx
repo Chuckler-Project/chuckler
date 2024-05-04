@@ -30,7 +30,6 @@ fetch('http://localhost:8080/api/username/getname',{
   body: JSON.stringify({to_user_id: receiver})
 }).then((response)=>response.text()).then((result)=>setReceiverNameState(result)
 ).catch((error)=>console.log(error))
- console.log('receiverNameState',receiverNameState)
 
 // catch(err){
 //   console.error('err in fetchUsername',err)

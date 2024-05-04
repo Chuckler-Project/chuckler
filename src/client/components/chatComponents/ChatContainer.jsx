@@ -40,6 +40,12 @@ const ChatContainer = () => {
   console.log('helloooo', socket, usersData, usersData.user, usersData.receiver)
 return (
   <div className='test'>
+    {/* <div className='close-chat'>
+     <a style={{color:"red"}  } href='/main' >
+   X
+ </a>
+     </div> */}
+
     <div className='messages-component'>
       <SentMessages usersData={usersData} socket={socket} />
     </div>

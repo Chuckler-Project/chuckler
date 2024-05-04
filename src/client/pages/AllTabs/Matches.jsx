@@ -4,6 +4,7 @@ import MatchProfile from "../../components/MatchProfile.jsx";
 
 
 export default function Matches({userData}) {
+    console.log('userData=>>>',userData)
     const [user, setUser] = useState(userData);
     const [matches, setMatches] = useState([]);
    
