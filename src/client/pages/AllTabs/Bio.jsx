@@ -15,9 +15,9 @@ const BioPage = () => {
   };
 
   function saveFormData() {
-    const userBio = document.getElementById('userBio');
+    const userBio = document.getElementById('interests').value;
 
-    fetch('/user-bio', {
+    fetch('/bio', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
