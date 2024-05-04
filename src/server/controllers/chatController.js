@@ -73,20 +73,30 @@ module.exports = {
         //   await sql`UPDATE users ARRAY_APPEND(new_messages_users, ${userId}) WHERE id=${receiverId}`
         // };
 
-        // store message data in db
-        const storeMessageResponse = await sql`INSERT INTO messages (content, from_user_id, to_user_id) 
-        VALUES(${content}, ${user}, ${receiver}) 
-        RETURNING *`; 
-
-        // await setNewMessageFlag(user, receiver);
-    
-        // send message back to both parties (if they're connected to wss)
-        wss.clients.forEach((client) => {
-          if (client.id === `messages${user}/${receiver}` || client.id === `messages${receiver}/${user}`) {
-            // client.emit('newMessage', { userId: receiver });
-            client.send(JSON.stringify(storeMessageResponse));
-          }
-        })
+        if(content !== '') {
+          // store message data in db
+          const storeMessageResponse = await sql`INSERT INTO messages (content, from_user_id, to_user_id) 
+          VALUES(${content}, ${user}, ${receiver}) 
+          RETURNING *`; 
+          // send message back to both parties (if they're connected to wss)
+          wss.clients.forEach((client) => {
+            if (client.id === `messages${user}/${receiver}` || client.id === `messages${receiver}/${user}`) {
+              client.send(JSON.stringify(storeMessageResponse));
+            }
+          })
+        } else {
+          // get previous messages in this chat. only 10 for faster load times 
+          // (need to add functionality later for loading more comments)
+          const storedMessages = await sql`SELECT * FROM (SELECT * FROM messages WHERE 
+          (from_user_id=${user} AND to_user_id=${receiver}) 
+          OR (from_user_id=${receiver} AND to_user_id=${user})
+          ORDER BY created_at DESC LIMIT 12) AS sub ORDER BY created_at ASC`;  
+          wss.clients.forEach((client) => {
+            if (client.id === `messages${user}/${receiver}` || client.id === `messages${receiver}/${user}`) {
+              client.send(JSON.stringify([...storedMessages, {content: ''}]));
+            }
+          })
+        }
       })  
     } catch (err) {
       console.log(`Error in chatController.listenForNewMessages, ${err}`);

@@ -33,16 +33,17 @@ jokeController.getJoke = async (req, res, next) => {
     let chosenJokeId = await lookForUnseenJoke();
     // if there is no chosen joke, reset the users jokes_viewed array and try again
     // we wanna change this
-    if (!chosenJokeId) {
-      await sql`UPDATE users SET jokes_viewed=null WHERE id=${userId}`;
-      chosenJokeId = await lookForUnseenJoke();
+    // await sql`UPDATE users SET jokes_viewed=null WHERE id=${userId}`;
+    // chosenJokeId = await lookForUnseenJoke();
+    
+    if (chosenJokeId) {
+      const jokeResponse = await sql`SELECT * FROM jokes WHERE id=${chosenJokeId}`;
+      res.locals.joke = jokeResponse[0];
     }
-    const jokeResponse = await sql`SELECT * FROM jokes WHERE id=${chosenJokeId}`;
 
     // working version wo seen jokes filetering
     // jokeResponse = await sql`SELECT * FROM jokes WHERE creator_id != ${userId} ORDER BY RANDOM() LIMIT 1`;
    
-    res.locals.joke = jokeResponse[0];
     return next();
   } catch (err) { 
     next({
@@ -55,7 +56,9 @@ jokeController.getJoke = async (req, res, next) => {
 jokeController.addJokeToViewed = async (req, res, next) => {
   try {
     const {userId} = req.body;
-    await sql`UPDATE users SET jokes_viewed=ARRAY_APPEND(jokes_viewed, ${res.locals.joke.id}) WHERE id=${userId}`;
+    if(res.locals.joke) {
+      await sql`UPDATE users SET jokes_viewed=ARRAY_APPEND(jokes_viewed, ${res.locals.joke.id}) WHERE id=${userId}`;
+    }
     return next();
   } catch (err) {
     next({
