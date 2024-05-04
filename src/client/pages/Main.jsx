@@ -13,6 +13,8 @@ import Axios from 'axios';
 export default function Main() {
 
     const [activeTab, setActiveTab] = useState("tab1");
+    const [userId, setUserId] = useState(userData)
+    
     const navigate = useNavigate();
     const location = useLocation();
     const userData = location.state;

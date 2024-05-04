@@ -13,7 +13,8 @@ export default function Home ({hasNewMatches, setHasNewMatches}) {
     //CHECK IF WE NEED THIS 
     const location = useLocation();
     const userData = location.state;
-
+console.log('location.state;',location.state)
+console.log('location.state;',location)
     const getJoke = async () => {
         // console.log('CURRENT USER DATA', userData)
 

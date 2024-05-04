@@ -18,11 +18,12 @@ const Signin = ({closeModal}) => {
   })
 
 
-
+//NOTE: Paloma!!
   useEffect(() => {
-    // console.log('user state', currUser);
+    console.log('before user state of currUser', currUser);
     if (currUser.username != '') navigate("/main", { state: currUser });
   }, [currUser]);
+  console.log('after user state of currUser', currUser);
 
   const signinAction = async () => {
     if (username === '' || password === '') alert('Please complete every field')
